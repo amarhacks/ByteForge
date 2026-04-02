@@ -1,0 +1,55 @@
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS — VectorMind Design System
+   Single source of truth for colors, typography, spacing, etc.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+    /* ── Color Palette (Light Theme) ── */
+    --bg: #faf9f7;
+    --surface: #ffffff;
+    --surface2: #f3f1ee;
+    --surface3: #ebe8e4;
+    --border: #e2dfd9;
+    --border2: #ccc8c0;
+    --text: #1a1815;
+    --muted: #6b665c;
+    --muted2: #8a857b;
+
+    /* Accent Colors */
+    --accent: #c8850a;
+    --accent2: #2b7de9;
+    --accent3: #0fb86f;
+    --accent4: #e04545;
+    --accent5: #8a40e6;
+    --accent-cyan: #149090;
+
+    /* ── Typography ── */
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Lora', Georgia, serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* ── Spacing ── */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 40px;
+    --space-2xl: 60px;
+    --space-3xl: 80px;
+
+    /* ── Radii ── */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-pill: 999px;
+
+    /* ── Transitions ── */
+    --ease-default: cubic-bezier(.25, .46, .45, .94);
+    --transition-fast: .2s;
+    --transition-med: .3s;
+
+    /* ── Layout ── */
+    --max-width: 1300px;
+    --nav-height: 64px;
+}

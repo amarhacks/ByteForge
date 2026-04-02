@@ -1,0 +1,74 @@
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT — Section Headers
+   Reusable section header with eyebrow, title, and optional link
+   ═══════════════════════════════════════════════════════════════ */
+
+.section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: var(--space-3xl) 0 var(--space-xl);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+}
+
+.section-head-left {}
+
+.section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+}
+
+.section-head h2 {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3.5vw, 48px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+}
+
+.section-head h2 em {
+    color: var(--accent);
+    font-style: italic;
+}
+
+.view-all {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    transition: color var(--transition-fast);
+    padding-bottom: var(--space-xs);
+}
+
+.view-all:hover {
+    color: var(--accent);
+}
+
+.view-all::after {
+    content: '→';
+    transition: transform var(--transition-fast);
+}
+
+.view-all:hover::after {
+    transform: translateX(4px);
+}

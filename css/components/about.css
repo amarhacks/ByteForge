@@ -1,0 +1,38 @@
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT — About Strip
+   ═══════════════════════════════════════════════════════════════ */
+
+.about-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--space-3xl);
+}
+
+.about-cell {
+    background: var(--surface);
+    padding: var(--space-xl) 36px;
+}
+
+.about-cell-icon {
+    font-size: 28px;
+    margin-bottom: var(--space-md);
+}
+
+.about-cell h4 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+}
+
+.about-cell p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+}

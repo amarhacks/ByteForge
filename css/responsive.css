@@ -1,0 +1,57 @@
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — Mobile & Tablet Breakpoints
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+    .hero {
+        padding: 120px 28px var(--space-3xl);
+    }
+
+    .section-wrap {
+        padding: 0 20px;
+    }
+
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-feat {
+        grid-row: auto;
+    }
+
+    .hero-stats {
+        position: static;
+        margin-top: 48px;
+        justify-content: flex-start;
+    }
+
+    .newsletter {
+        flex-direction: column;
+        padding: 36px 28px;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .newsletter-input {
+        width: 100%;
+    }
+
+    .about-strip {
+        grid-template-columns: 1fr;
+    }
+
+    nav {
+        padding: 0 20px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .scroll-hint {
+        display: none;
+    }
+}

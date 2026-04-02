@@ -1,0 +1,71 @@
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT — Series Cards
+   ═══════════════════════════════════════════════════════════════ */
+
+.series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-3xl);
+}
+
+.series-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    text-decoration: none;
+    display: block;
+    transition: all .25s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.series-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--c1), var(--c2));
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.series-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-3px);
+}
+
+.series-card:hover::before {
+    opacity: 1;
+}
+
+.series-num {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 900;
+    opacity: .2;
+    line-height: 1;
+    margin-bottom: var(--space-sm);
+    color: var(--text);
+}
+
+.series-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: var(--space-sm);
+    line-height: 1.25;
+}
+
+.series-count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+}

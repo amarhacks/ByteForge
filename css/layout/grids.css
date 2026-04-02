@@ -1,0 +1,18 @@
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT — Grid Systems
+   Featured grid and articles archive grid
+   ═══════════════════════════════════════════════════════════════ */
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+    margin-bottom: var(--space-3xl);
+}

@@ -1,0 +1,45 @@
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT — Ticker Band
+   ═══════════════════════════════════════════════════════════════ */
+
+.ticker {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+    position: relative;
+    z-index: 1;
+}
+
+.ticker-inner {
+    display: inline-block;
+    animation: ticker 40s linear infinite;
+}
+
+@keyframes ticker {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.ticker span {
+    margin: 0 var(--space-lg);
+    color: var(--muted2);
+}
+
+.ticker strong {
+    color: var(--accent);
+    margin-right: 6px;
+}
+
+.ticker .sep {
+    color: var(--border2);
+}
