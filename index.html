@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VectorMind — AI Engineering Deep Dives</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0c0b09;
+            --surface: #131210;
+            --surface2: #1a1916;
+            --surface3: #222018;
+            --border: #2a2820;
+            --border2: #363430;
+            --text: #f0ece4;
+            --muted: #7a756a;
+            --muted2: #5a5650;
+            --accent: #e8a020;
+            --accent2: #4a9eff;
+            --accent3: #1adf8a;
+            --accent4: #ff6b6b;
+            --accent5: #b06aff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Lora', Georgia, serif;
+            overflow-x: hidden;
+        }
+
+        /* ── NOISE TEXTURE OVERLAY ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: .4;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 0 40px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(12, 11, 9, .85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 12px var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .4;
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color .2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(74, 158, 255, .4);
+            color: var(--accent2);
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .nav-tag:hover {
+            background: rgba(74, 158, 255, .1);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 120px 80px 80px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 70% 50%, rgba(74, 158, 255, .06) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 20% 70%, rgba(232, 160, 32, .04) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 60% at 85% 20%, rgba(176, 106, 255, .05) 0%, transparent 50%);
+        }
+
+        /* Animated grid */
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 80% 80% at 60% 50%, black 0%, transparent 70%);
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            animation: drift 12s ease-in-out infinite;
+        }
+
+        .orb1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(74, 158, 255, .06);
+            top: 10%;
+            right: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(232, 160, 32, .05);
+            bottom: 20%;
+            left: 5%;
+            animation-delay: -4s;
+        }
+
+        .orb3 {
+            width: 250px;
+            height: 250px;
+            background: rgba(176, 106, 255, .06);
+            top: 50%;
+            right: 30%;
+            animation-delay: -8s;
+        }
+
+        @keyframes drift {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            33% {
+                transform: translate(30px, -20px);
+            }
+
+            66% {
+                transform: translate(-20px, 30px);
+            }
+        }
+
+        .hero-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .35em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(42px, 7vw, 96px);
+            font-weight: 900;
+            line-height: 1.0;
+            max-width: 820px;
+            position: relative;
+            margin-bottom: 32px;
+        }
+
+        .hero h1 .line2 {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .hero h1 .line3 {
+            color: var(--muted);
+            font-size: .55em;
+            font-style: normal;
+            font-weight: 400;
+            display: block;
+            margin-top: 8px;
+            letter-spacing: .02em;
+        }
+
+        .hero-desc {
+            font-size: 18px;
+            color: var(--muted);
+            max-width: 560px;
+            line-height: 1.75;
+            position: relative;
+            margin-bottom: 48px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .btn-primary {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            letter-spacing: .08em;
+            padding: 14px 28px;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #0c0b09;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all .2s;
+            box-shadow: 0 0 24px rgba(232, 160, 32, .3);
+        }
+
+        .btn-primary:hover {
+            background: #f5b030;
+            box-shadow: 0 0 36px rgba(232, 160, 32, .5);
+        }
+
+        .btn-outline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            letter-spacing: .08em;
+            padding: 14px 28px;
+            border-radius: 8px;
+            border: 1px solid var(--border2);
+            color: var(--muted);
+            cursor: pointer;
+            background: transparent;
+            text-decoration: none;
+            transition: all .2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--muted);
+            color: var(--text);
+        }
+
+        /* Hero stats */
+        .hero-stats {
+            position: absolute;
+            right: 80px;
+            bottom: 80px;
+            display: flex;
+            gap: 40px;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat .sn {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--text);
+            display: block;
+        }
+
+        .hero-stat .sl {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* Scroll indicator */
+        .scroll-hint {
+            position: absolute;
+            bottom: 32px;
+            left: 80px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--muted2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .scroll-arrow {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--muted2), transparent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-arrow::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--accent));
+            animation: scrolldown 2s ease-in-out infinite;
+        }
+
+        @keyframes scrolldown {
+            0% {
+                top: -100%;
+            }
+
+            100% {
+                top: 200%;
+            }
+        }
+
+        /* ── TICKER BAND ── */
+        .ticker {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: .08em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ticker-inner {
+            display: inline-block;
+            animation: ticker 40s linear infinite;
+        }
+
+        @keyframes ticker {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .ticker span {
+            margin: 0 24px;
+            color: var(--muted2);
+        }
+
+        .ticker strong {
+            color: var(--accent);
+            margin-right: 6px;
+        }
+
+        .ticker .sep {
+            color: var(--border2);
+        }
+
+        /* ── MAIN LAYOUT ── */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-wrap {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* ── SECTION HEADERS ── */
+        .section-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 80px 0 40px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 48px;
+        }
+
+        .section-head-left {}
+
+        .section-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-eyebrow::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .section-head h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(28px, 3.5vw, 48px);
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.1;
+        }
+
+        .section-head h2 em {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .view-all {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color .2s;
+            padding-bottom: 4px;
+        }
+
+        .view-all:hover {
+            color: var(--accent);
+        }
+
+        .view-all::after {
+            content: '→';
+            transition: transform .2s;
+        }
+
+        .view-all:hover::after {
+            transform: translateX(4px);
+        }
+
+        /* ── FEATURED ARTICLE (large) ── */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .article-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+            position: relative;
+            transition: all .3s cubic-bezier(.25, .46, .45, .94);
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            border-color: var(--border2);
+            transform: translateY(-4px);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .4);
+        }
+
+        .article-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        .card-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity .3s;
+            pointer-events: none;
+        }
+
+        /* featured card */
+        .card-feat {
+            grid-row: 1/3;
+        }
+
+        .card-feat .card-visual {
+            height: 260px;
+        }
+
+        .card-sm .card-visual {
+            height: 160px;
+        }
+
+        .card-visual {
+            position: relative;
+            overflow: hidden;
+            background: var(--surface2);
+        }
+
+        .card-visual-inner {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Each card has its own gradient theme */
+        .theme-orange .card-visual {
+            background: linear-gradient(135deg, #1a0e00 0%, #2a1a00 40%, #1a0e00 100%);
+        }
+
+        .theme-orange .card-visual-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 60% 40%, rgba(232, 160, 32, .18) 0%, transparent 65%);
+        }
+
+        .theme-blue .card-visual {
+            background: linear-gradient(135deg, #001220 0%, #001830 40%, #001220 100%);
+        }
+
+        .theme-blue .card-visual-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(74, 158, 255, .18) 0%, transparent 65%);
+        }
+
+        .theme-green .card-visual {
+            background: linear-gradient(135deg, #001810 0%, #002018 40%, #001810 100%);
+        }
+
+        .theme-green .card-visual-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 40% 60%, rgba(26, 223, 138, .15) 0%, transparent 65%);
+        }
+
+        .theme-purple .card-visual {
+            background: linear-gradient(135deg, #100018 0%, #180022 40%, #100018 100%);
+        }
+
+        .theme-purple .card-visual-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 60% 40%, rgba(176, 106, 255, .18) 0%, transparent 65%);
+        }
+
+        .theme-red .card-visual {
+            background: linear-gradient(135deg, #180808 0%, #200c0c 40%, #180808 100%);
+        }
+
+        .theme-red .card-visual-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(255, 107, 107, .15) 0%, transparent 65%);
+        }
+
+        .theme-cyan .card-visual {
+            background: linear-gradient(135deg, #001818 0%, #002022 40%, #001818 100%);
+        }
+
+        .theme-cyan .card-visual-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 45% 55%, rgba(32, 220, 220, .14) 0%, transparent 65%);
+        }
+
+        /* Visual SVG icon in card */
+        .card-icon {
+            position: relative;
+            z-index: 1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .08em;
+            color: rgba(255, 255, 255, .3);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .card-icon .big-num {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 1;
+            opacity: .12;
+            letter-spacing: -.04em;
+        }
+
+        .card-icon .icon-label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            opacity: .5;
+            margin-top: 8px;
+        }
+
+        /* Card body */
+        .card-body {
+            padding: 24px 28px 28px;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .card-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid;
+        }
+
+        .tag-orange {
+            color: var(--accent);
+            border-color: rgba(232, 160, 32, .35);
+            background: rgba(232, 160, 32, .08);
+        }
+
+        .tag-blue {
+            color: var(--accent2);
+            border-color: rgba(74, 158, 255, .35);
+            background: rgba(74, 158, 255, .08);
+        }
+
+        .tag-green {
+            color: var(--accent3);
+            border-color: rgba(26, 223, 138, .35);
+            background: rgba(26, 223, 138, .08);
+        }
+
+        .tag-purple {
+            color: var(--accent5);
+            border-color: rgba(176, 106, 255, .35);
+            background: rgba(176, 106, 255, .08);
+        }
+
+        .tag-red {
+            color: var(--accent4);
+            border-color: rgba(255, 107, 107, .35);
+            background: rgba(255, 107, 107, .08);
+        }
+
+        .tag-cyan {
+            color: #20dcdc;
+            border-color: rgba(32, 220, 220, .35);
+            background: rgba(32, 220, 220, .08);
+        }
+
+        .card-read {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: .08em;
+            color: var(--muted2);
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--text);
+            margin-bottom: 12px;
+            transition: color .2s;
+        }
+
+        .card-feat .card-title {
+            font-size: 26px;
+        }
+
+        .card-sm .card-title {
+            font-size: 18px;
+        }
+
+        .article-card:hover .card-title {
+            color: var(--accent);
+        }
+
+        .card-excerpt {
+            font-size: 14px;
+            line-height: 1.65;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+        .card-sm .card-excerpt {
+            display: none;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+
+        .card-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted2);
+        }
+
+        .card-arrow {
+            font-size: 16px;
+            color: var(--muted2);
+            transition: all .2s;
+        }
+
+        .article-card:hover .card-arrow {
+            color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        /* ── ALL ARTICLES GRID ── */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+            margin-bottom: 80px;
+        }
+
+        .article-card.card-list {
+            cursor: pointer;
+        }
+
+        .card-list .card-visual {
+            height: 130px;
+        }
+
+        .card-list .card-title {
+            font-size: 17px;
+        }
+
+        .card-list .card-body {
+            padding: 18px 22px 22px;
+        }
+
+        /* ── SERIES SECTION ── */
+        .series-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 80px;
+        }
+
+        .series-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            display: block;
+            transition: all .25s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .series-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--c1), var(--c2));
+            opacity: 0;
+            transition: opacity .2s;
+        }
+
+        .series-card:hover {
+            border-color: var(--border2);
+            transform: translateY(-3px);
+        }
+
+        .series-card:hover::before {
+            opacity: 1;
+        }
+
+        .series-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 900;
+            opacity: .08;
+            line-height: 1;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .series-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+            line-height: 1.25;
+        }
+
+        .series-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted2);
+        }
+
+        /* ── NEWSLETTER ── */
+        .newsletter {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 0 0 80px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .newsletter::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(232, 160, 32, .06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .newsletter-text {}
+
+        .newsletter-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .newsletter h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .newsletter p {
+            font-size: 15px;
+            color: var(--muted);
+            line-height: 1.65;
+            max-width: 400px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+            align-items: center;
+        }
+
+        .newsletter-input {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            padding: 14px 20px;
+            border-radius: 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            color: var(--text);
+            width: 280px;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .newsletter-input::placeholder {
+            color: var(--muted2);
+        }
+
+        .newsletter-input:focus {
+            border-color: var(--accent);
+        }
+
+        /* ── ABOUT STRIP ── */
+        .about-strip {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 80px;
+        }
+
+        .about-cell {
+            background: var(--surface);
+            padding: 40px 36px;
+        }
+
+        .about-cell-icon {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .about-cell h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .about-cell p {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 48px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-logo .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .footer-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted2);
+            text-decoration: none;
+            transition: color .2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        .footer-copy {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted2);
+            letter-spacing: .06em;
+        }
+
+        /* ── CURSOR GLOW (optional aesthetic) ── */
+        .cursor-glow {
+            pointer-events: none;
+            position: fixed;
+            z-index: 9999;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(232, 160, 32, .04) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: transform .1s;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:900px) {
+            .hero {
+                padding: 120px 28px 80px;
+            }
+
+            .section-wrap {
+                padding: 0 20px;
+            }
+
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-feat {
+                grid-row: auto;
+            }
+
+            .hero-stats {
+                position: static;
+                margin-top: 48px;
+                justify-content: flex-start;
+            }
+
+            .newsletter {
+                flex-direction: column;
+                padding: 36px 28px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .newsletter-input {
+                width: 100%;
+            }
+
+            .about-strip {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .scroll-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">
+            <span class="dot"></span>
+            VectorMind
+        </a>
+        <div class="nav-links">
+            <a href="#articles">Articles</a>
+            <a href="#series">Series</a>
+            <a href="#about">About</a>
+            <a href="#newsletter">Newsletter</a>
+        </div>
+        <div class="nav-tag">AI Engineering</div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+
+        <div class="hero-eyebrow">Research-level AI Engineering</div>
+        <h1>
+            Where Production AI<br>
+            <span class="line2">Gets Brutally Honest.</span>
+            <span class="line3">Deep dives into RAG, vector search, LLM systems &amp; the gaps between demos and
+                reality.</span>
+        </h1>
+        <p class="hero-desc">
+            No tutorials. No fluff. Research-grade articles on the hard problems in building AI systems that actually
+            work at scale — written by engineers who have hit the walls.
+        </p>
+        <div class="hero-actions">
+            <a href="#articles" class="btn-primary">Read the Latest</a>
+            <a href="#newsletter" class="btn-outline">Get Notified</a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="sn">9</span>
+                <span class="sl">Deep Dives</span>
+            </div>
+            <div class="hero-stat">
+                <span class="sn">82K</span>
+                <span class="sl">Words Written</span>
+            </div>
+            <div class="hero-stat">
+                <span class="sn">47</span>
+                <span class="sl">Diagrams</span>
+            </div>
+        </div>
+
+        <div class="scroll-hint">
+            <div class="scroll-arrow"></div>
+            Scroll to explore
+        </div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="ticker">
+        <div class="ticker-inner">
+            <strong>NEW</strong>You're Chunking Your Documents Wrong<span class="sep"> · </span>
+            <strong>NEW</strong>LLM Said 95% Confident. Completely Wrong.<span class="sep"> · </span>
+            <strong></strong>RAG Pipeline Fails in Production<span class="sep"> · </span>
+            <strong></strong>Hidden Cost of Vector Search at Scale<span class="sep"> · </span>
+            <strong></strong>Embeddings Are Biased and You Don't Know It<span class="sep"> · </span>
+            <strong></strong>Knowledge Cutoff Problem in RAG Systems<span class="sep"> · </span>
+            <strong></strong>Vector Search Mismatch Problem<span class="sep"> · </span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <strong>NEW</strong>You're Chunking Your Documents Wrong<span class="sep"> · </span>
+            <strong>NEW</strong>LLM Said 95% Confident. Completely Wrong.<span class="sep"> · </span>
+            <strong></strong>RAG Pipeline Fails in Production<span class="sep"> · </span>
+            <strong></strong>Hidden Cost of Vector Search at Scale<span class="sep"> · </span>
+            <strong></strong>Embeddings Are Biased and You Don't Know It<span class="sep"> · </span>
+            <strong></strong>Knowledge Cutoff Problem in RAG Systems<span class="sep"> · </span>
+            <strong></strong>Vector Search Mismatch Problem<span class="sep"> · </span>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <main>
+        <div class="section-wrap">
+
+            <!-- FEATURED -->
+            <div class="section-head" id="articles">
+                <div class="section-head-left">
+                    <div class="section-eyebrow">Latest &amp; Featured</div>
+                    <h2>Recent <em>Deep Dives</em></h2>
+                </div>
+                <a href="#" class="view-all">View all articles</a>
+            </div>
+
+            <div class="featured-grid">
+
+                <!-- FEATURED LARGE -->
+                <a href="#" class="article-card card-feat theme-orange">
+                    <div class="card-glow"
+                        style="background:radial-gradient(ellipse at 50% 0%,rgba(232,160,32,.08) 0%,transparent 60%)">
+                    </div>
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">01</span>
+                                <span class="icon-label">Chunking · NLP · RAG</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-orange">RAG Systems</span>
+                            <span class="card-read">15 min read · 4,000 words</span>
+                        </div>
+                        <h3 class="card-title">You're Chunking Your Documents Wrong</h3>
+                        <p class="card-excerpt">How naive text splitting destroys semantic meaning before it even
+                            reaches the vector database — and the five strategies that preserve it. From fixed-size
+                            failures to proposition-level retrieval.</p>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- SMALL TOP RIGHT -->
+                <a href="#" class="article-card card-sm theme-purple">
+                    <div class="card-glow"
+                        style="background:radial-gradient(ellipse at 50% 0%,rgba(176,106,255,.08) 0%,transparent 60%)">
+                    </div>
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">02</span>
+                                <span class="icon-label">Calibration · Hallucination</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-purple">LLM Safety</span>
+                            <span class="card-read">15 min</span>
+                        </div>
+                        <h3 class="card-title">The LLM Said It Was 95% Confident. It Was Completely Wrong.</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- SMALL BOTTOM RIGHT -->
+                <a href="#" class="article-card card-sm theme-red">
+                    <div class="card-glow"
+                        style="background:radial-gradient(ellipse at 50% 0%,rgba(255,107,107,.08) 0%,transparent 60%)">
+                    </div>
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">03</span>
+                                <span class="icon-label">Production · Gaps · RAG</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-red">Production AI</span>
+                            <span class="card-read">15 min</span>
+                        </div>
+                        <h3 class="card-title">Why Your RAG Pipeline Works in Testing and Fails in Production</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- ALL ARTICLES GRID -->
+            <div class="section-head" style="padding-top:0;">
+                <div class="section-head-left">
+                    <div class="section-eyebrow">Full Archive</div>
+                    <h2>All <em>Articles</em></h2>
+                </div>
+            </div>
+
+            <div class="articles-grid">
+
+                <a href="#" class="article-card card-list theme-blue">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">04</span>
+                                <span class="icon-label">Vector Search · Scale</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-blue">Vector Search</span>
+                            <span class="card-read">54 min</span>
+                        </div>
+                        <h3 class="card-title">The Hidden Cost of Vector Search at Scale</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="article-card card-list theme-orange">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">05</span>
+                                <span class="icon-label">Bias · Embeddings · Production</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-orange">AI Bias</span>
+                            <span class="card-read">52 min</span>
+                        </div>
+                        <h3 class="card-title">Your Embeddings Are Biased and You Don't Know It</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="article-card card-list theme-cyan">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">06</span>
+                                <span class="icon-label">Freshness · RAG · Real-Time</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-cyan">Real-Time AI</span>
+                            <span class="card-read">50 min</span>
+                        </div>
+                        <h3 class="card-title">You Asked the AI a Question. It Answered From 2023.</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="article-card card-list theme-green">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">07</span>
+                                <span class="icon-label">Vector · Mismatch · Search</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-green">Semantic Search</span>
+                            <span class="card-read">45 min</span>
+                        </div>
+                        <h3 class="card-title">You Searched for an Apple. The Database Returned a Carrot.</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="article-card card-list theme-purple">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">08</span>
+                                <span class="icon-label">Fine-tuning · RAG · Strategy</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-purple">Architecture</span>
+                            <span class="card-read">40 min</span>
+                        </div>
+                        <h3 class="card-title">Fine-Tuning vs. RAG: You're Probably Choosing the Wrong One</h3>
+                        <div class="card-footer">
+                            <span class="card-date">Coming Soon</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="article-card card-list theme-red">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">09</span>
+                                <span class="icon-label">Prompt · Retrieval · Failure</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-red">LLM Engineering</span>
+                            <span class="card-read">38 min</span>
+                        </div>
+                        <h3 class="card-title">The Prompt Looked Perfect. The Output Was Garbage.</h3>
+                        <div class="card-footer">
+                            <span class="card-date">Coming Soon</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- SERIES -->
+            <div class="section-head" id="series" style="padding-top:20px;">
+                <div class="section-head-left">
+                    <div class="section-eyebrow">Curated Collections</div>
+                    <h2>Article <em>Series</em></h2>
+                </div>
+            </div>
+
+            <div class="series-grid">
+                <a href="#" class="series-card" style="--c1:#e8a020;--c2:#ff6b6b;">
+                    <div class="series-num">01</div>
+                    <div class="series-title">The RAG Engineering Series</div>
+                    <div class="series-count">4 articles · Chunking, retrieval, context, evaluation</div>
+                </a>
+                <a href="#" class="series-card" style="--c1:#4a9eff;--c2:#1adf8a;">
+                    <div class="series-num">02</div>
+                    <div class="series-title">Vector Search at Scale</div>
+                    <div class="series-count">3 articles · ANN, indexing, production architecture</div>
+                </a>
+                <a href="#" class="series-card" style="--c1:#b06aff;--c2:#4a9eff;">
+                    <div class="series-num">03</div>
+                    <div class="series-title">LLM Reliability &amp; Safety</div>
+                    <div class="series-count">2 articles · Hallucination, calibration, confidence</div>
+                </a>
+                <a href="#" class="series-card" style="--c1:#1adf8a;--c2:#20dcdc;">
+                    <div class="series-num">04</div>
+                    <div class="series-title">AI Bias in Production</div>
+                    <div class="series-count">1 article · Embedding bias, detection, mitigation</div>
+                </a>
+            </div>
+
+            <!-- ABOUT STRIP -->
+            <div class="section-head" id="about" style="padding-top:20px;">
+                <div class="section-head-left">
+                    <div class="section-eyebrow">The Philosophy</div>
+                    <h2>Why This <em>Blog Exists</em></h2>
+                </div>
+            </div>
+
+            <div class="about-strip" style="margin-bottom:80px;">
+                <div class="about-cell">
+                    <div class="about-cell-icon">🔬</div>
+                    <h4>Research-Grade Depth</h4>
+                    <p>Every article cites primary research, includes original diagrams built from scratch, and goes
+                        beyond surface-level tutorials. If it's already in the LangChain docs, it's not here.</p>
+                </div>
+                <div class="about-cell">
+                    <div class="about-cell-icon">⚙️</div>
+                    <h4>Production-First Perspective</h4>
+                    <p>All articles are written from the perspective of systems that must run reliably under real load,
+                        with real users, on real data — not synthetic benchmarks designed to make things look better
+                        than they are.</p>
+                </div>
+                <div class="about-cell">
+                    <div class="about-cell-icon">📐</div>
+                    <h4>Code That Actually Runs</h4>
+                    <p>Every code sample is production-quality Python with real error handling, real configuration, and
+                        comments that explain the why — not just the what. No pseudocode.</p>
+                </div>
+            </div>
+
+            <!-- NEWSLETTER -->
+            <div class="newsletter" id="newsletter">
+                <div class="newsletter-text">
+                    <div class="newsletter-eyebrow">Stay Sharp</div>
+                    <h3>New deep dives, twice a month.<br>No noise. No sponsorships.</h3>
+                    <p>Get notified when the next research-level article drops. Unsubscribe any time — no dark patterns,
+                        no re-engagement campaigns.</p>
+                </div>
+                <div class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="your@email.com">
+                    <a href="#" class="btn-primary">Subscribe</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-logo">
+                <span class="dot"></span>
+                VectorMind
+            </div>
+            <div class="footer-links">
+                <a href="#">Articles</a>
+                <a href="#">Series</a>
+                <a href="#">Medium</a>
+                <a href="#">GitHub</a>
+                <a href="#">Twitter / X</a>
+            </div>
+            <div class="footer-copy">© 2025 VectorMind · All rights reserved</div>
+        </div>
+    </footer>
+
+    <script>
+        // Cursor glow follow
+        const glow = document.getElementById('cursorGlow');
+        document.addEventListener('mousemove', e => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+
+        // Card hover color sync
+        document.querySelectorAll('.article-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const g = card.querySelector('.card-glow');
+                if (g) g.style.opacity = '1';
+            });
+            card.addEventListener('mouseleave', () => {
+                const g = card.querySelector('.card-glow');
+                if (g) g.style.opacity = '0';
+            });
+        });
+
+        // Smooth number count-up on hero stats
+        const statsEl = document.querySelectorAll('.hero-stat .sn');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const raw = el.textContent;
+                    const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+                    const suffix = raw.replace(/[0-9.]/g, '');
+                    let start = 0, duration = 1200;
+                    const step = timestamp => {
+                        if (!start) start = timestamp;
+                        const p = Math.min((timestamp - start) / duration, 1);
+                        const ease = 1 - Math.pow(1 - p, 3);
+                        el.textContent = (num < 100 ? Math.round(ease * num) : Math.round(ease * num)) + suffix;
+                        if (p < 1) requestAnimationFrame(step);
+                    };
+                    requestAnimationFrame(step);
+                    observer.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        statsEl.forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
