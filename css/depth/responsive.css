@@ -89,11 +89,6 @@
         grid-template-columns: 1fr;
     }
 
-    .ep-item {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-    }
-
     .nl {
         grid-template-columns: 1fr;
         padding: 36px 28px;
