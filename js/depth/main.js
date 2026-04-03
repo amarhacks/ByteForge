@@ -51,3 +51,39 @@ if (countEls.length) {
 
     countEls.forEach(el => obs.observe(el));
 }
+
+const initGridHover = () => {
+    const root = document.body;
+    if (!root) return;
+    let raf = null;
+    let x = null;
+    let y = null;
+
+    const apply = () => {
+        raf = null;
+        if (x === null || y === null) return;
+        root.style.setProperty('--mx', `${x}px`);
+        root.style.setProperty('--my', `${y}px`);
+    };
+
+    const onMove = (e) => {
+        x = e.clientX;
+        y = e.clientY;
+        if (!raf) raf = requestAnimationFrame(apply);
+    };
+
+    const reset = () => {
+        root.style.setProperty('--mx', '50%');
+        root.style.setProperty('--my', '50%');
+    };
+
+    reset();
+    document.addEventListener('pointermove', onMove, { passive: true });
+    document.addEventListener('pointerdown', onMove, { passive: true });
+    document.addEventListener('pointerout', (e) => {
+        if (!e.relatedTarget) reset();
+    });
+    window.addEventListener('blur', reset);
+};
+
+initGridHover();
