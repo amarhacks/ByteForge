@@ -4,6 +4,10 @@
     background: var(--surface);
 }
 
+body.subtopic-page {
+    --accent: var(--topic-accent);
+}
+
 .page-hero-inner {
     max-width: var(--max-width);
     margin: 0 auto;

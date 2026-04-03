@@ -73,6 +73,9 @@
     color: var(--muted);
     background: transparent;
     cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
     transition: all var(--transition-fast);
     white-space: nowrap;
     flex-shrink: 0;

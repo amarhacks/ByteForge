@@ -78,14 +78,20 @@
 
 .ac-visual-num {
     font-family: var(--font-display);
-    font-size: 64px;
+    font-size: 40px;
     font-weight: 900;
-    opacity: .07;
+    opacity: .5;
     color: var(--text);
     line-height: 1;
     letter-spacing: -.04em;
     position: absolute;
+    top: 8px;
+    left: 12px;
+    right: auto;
+    bottom: auto;
     user-select: none;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .ac-visual-tags {
@@ -277,7 +283,7 @@
     font-family: var(--font-display);
     font-size: 80px;
     font-weight: 900;
-    opacity: .08;
+    opacity: .5;
     color: var(--text);
     line-height: 1;
 }
