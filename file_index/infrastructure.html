@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infrastructure — Depth</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/depth/tokens.css">
+<link rel="stylesheet" href="../css/depth/base.css">
+<link rel="stylesheet" href="../css/depth/layout/grids.css">
+<link rel="stylesheet" href="../css/depth/components/nav.css">
+<link rel="stylesheet" href="../css/depth/components/hero.css">
+<link rel="stylesheet" href="../css/depth/components/ticker.css">
+<link rel="stylesheet" href="../css/depth/components/section-head.css">
+<link rel="stylesheet" href="../css/depth/components/filters.css">
+<link rel="stylesheet" href="../css/depth/components/cards.css">
+<link rel="stylesheet" href="../css/depth/components/topics.css">
+<link rel="stylesheet" href="../css/depth/components/newsletter.css">
+<link rel="stylesheet" href="../css/depth/components/about.css">
+<link rel="stylesheet" href="../css/depth/components/footer.css">
+<link rel="stylesheet" href="../css/depth/components/page.css">
+<link rel="stylesheet" href="../css/depth/components/article.css">
+<link rel="stylesheet" href="../css/depth/responsive.css">
+</head>
+<body class="topic-page theme-infra" data-nav="infrastructure">
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    Depth
+  </a>
+  <div class="nav-center">
+    <a href="../index.html" class="nav-pill" data-nav="all">All</a>
+    <a href="system_design.html" class="nav-pill" data-nav="system-design">System Design</a>
+    <a href="ai_ml.html" class="nav-pill" data-nav="ai-ml">AI / ML</a>
+    <a href="infrastructure.html" class="nav-pill" data-nav="infrastructure">Infrastructure</a>
+    <a href="databases.html" class="nav-pill" data-nav="databases">Databases</a>
+    <a href="security.html" class="nav-pill" data-nav="security">Security</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-search">⌘K&nbsp; Search</div>
+    <a href="#newsletter" class="nav-subscribe">Subscribe</a>
+  </div>
+</nav>
+
+<!-- TOPIC HERO -->
+<section class="topic-hero">
+  <div class="topic-hero-inner">
+    <div class="topic-hero-left">
+      <div class="breadcrumb">
+        <a href="../index.html">Depth</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Infrastructure</span>
+      </div>
+      <div class="topic-hero-eyebrow">Topic Archive</div>
+      <h1 class="topic-hero-title">Infrastructure That <em>Stays Up.</em></h1>
+      <p class="topic-hero-desc">
+        Kubernetes internals, messaging systems, observability, and the operational decisions that keep high-throughput systems stable under pressure.
+      </p>
+    </div>
+    <div class="topic-hero-right">
+      <div class="topic-stat-stack">
+        <div class="topic-stat">
+          <span class="ts-n count-up">3</span>
+          <span class="ts-l">Articles Published</span>
+        </div>
+        <div class="topic-stat">
+          <span class="ts-n count-up">120K</span>
+          <span class="ts-l">Words of Research</span>
+        </div>
+        <div class="topic-stat">
+          <span class="ts-n count-up">18</span>
+          <span class="ts-l">Original Diagrams</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBTOPIC FILTER BAR -->
+<div class="subtopic-bar">
+  <div class="subtopic-bar-inner">
+    <span class="sub-label">Filter by</span>
+    <button class="sub-pill active">All</button>
+    <button class="sub-pill">Streaming</button>
+    <button class="sub-pill">Kubernetes</button>
+    <button class="sub-pill">Observability</button>
+    <button class="sub-pill">Capacity</button>
+    <button class="sub-pill">Reliability</button>
+    <button class="sub-pill">Deployment</button>
+    <button class="sub-pill">Incident Response</button>
+  </div>
+</div>
+
+<main>
+<div class="wrap">
+
+  <!-- CONCEPTS INDEX -->
+  <div class="sh" id="concepts">
+    <div class="sh-left">
+      <div class="sh-eye">Navigate by Concept</div>
+      <h2>Core <em>Subtopics</em></h2>
+    </div>
+  </div>
+
+  <div class="concept-grid">
+    <a href="articles/kafka_pulsar_redpanda.html" class="concept-card">
+      <span class="concept-icon">📡</span>
+      <div class="concept-name">Streaming Systems</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">Throughput, latency, and the operational cost hidden behind benchmark charts.</p>
+    </a>
+    <a href="articles/kubectl_apply.html" class="concept-card">
+      <span class="concept-icon">🧰</span>
+      <div class="concept-name">Kubernetes Control Plane</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">What actually happens when you apply a manifest — and where it can go wrong.</p>
+    </a>
+    <a href="articles/chaos_engineering_practice.html" class="concept-card">
+      <span class="concept-icon">🧯</span>
+      <div class="concept-name">Resilience Practices</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">Failure injection, steady-state testing, and the difference between noise and signal.</p>
+    </a>
+    <a href="articles/designing_10m_users.html" class="concept-card">
+      <span class="concept-icon">📊</span>
+      <div class="concept-name">Capacity Planning</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">Budgeting latency, throughput, and scale without buying your way out.</p>
+    </a>
+  </div>
+
+  <!-- READING PATH -->
+  <div class="sh" style="padding-top:0;">
+    <div class="sh-left">
+      <div class="sh-eye">Structured Learning</div>
+      <h2>Recommended <em>Reading Path</em></h2>
+    </div>
+  </div>
+
+  <div class="path-section" style="margin-bottom:72px;">
+    <div class="path-header">
+      <div>
+        <div class="path-title">From PagerDuty to Stability</div>
+        <div class="path-subtitle">3 articles · ~2 hours of reading · Practical to Advanced</div>
+      </div>
+      <span class="path-badge">Curated Series</span>
+    </div>
+    <div class="path-items">
+      <a href="articles/kafka_pulsar_redpanda.html" class="path-item">
+        <div class="path-step">01</div>
+        <div class="path-body">
+          <div class="path-item-title">Kafka vs. Pulsar vs. Redpanda: What the Benchmarks Don't Tell You</div>
+          <div class="path-item-meta">
+            <span>Streaming</span><span class="ep-dot"></span>
+            <span>35 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/kubectl_apply.html" class="path-item">
+        <div class="path-step">02</div>
+        <div class="path-body">
+          <div class="path-item-title">What Kubernetes Actually Does When You Run kubectl apply</div>
+          <div class="path-item-meta">
+            <span>Operations</span><span class="ep-dot"></span>
+            <span>42 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/chaos_engineering_practice.html" class="path-item">
+        <div class="path-step">03</div>
+        <div class="path-body">
+          <div class="path-item-title">Chaos Engineering in Practice: What Breaking Things Teaches You</div>
+          <div class="path-item-meta">
+            <span>Resilience</span><span class="ep-dot"></span>
+            <span>52 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ALL ARTICLES -->
+  <div class="sh" id="articles" style="padding-top:0;">
+    <div class="sh-left">
+      <div class="sh-eye">Complete Archive</div>
+      <h2>All <em>Articles</em></h2>
+    </div>
+    <a href="../index.html#topics" class="sh-right">View all topics</a>
+  </div>
+
+  <!-- SORT BAR -->
+  <div class="sort-bar">
+    <div class="sort-left">Showing <strong>3 articles</strong> in Infrastructure</div>
+    <div class="sort-right">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active">Latest</button>
+      <button class="sort-btn">Most Read</button>
+      <button class="sort-btn">Reading Time</button>
+    </div>
+  </div>
+
+  <!-- FEATURED ARTICLE -->
+  <div class="feat-card" style="margin-bottom:40px;">
+    <div class="feat-card-inner">
+      <div class="feat-card-body">
+        <div class="feat-badge">Featured Article</div>
+        <h2 class="feat-title">Kafka vs. Pulsar vs. Redpanda: What the Benchmarks Don't Tell You</h2>
+        <p class="feat-excerpt">Most comparisons stop at throughput numbers. This deep dive shows the replication model, disk I/O patterns, consumer group semantics, and the operational complexity you'll actually face at scale.</p>
+        <div class="feat-footer">
+          <div class="feat-meta-item">
+            <span class="ac-tag t-inf" style="margin:0;">Infrastructure</span>
+          </div>
+          <div class="feat-meta-item">
+            <span class="ep-dot"></span>
+            35 min read
+          </div>
+          <div class="feat-meta-item">
+            <span class="ep-dot"></span>
+            Messaging Systems · Streaming
+          </div>
+          <a href="articles/kafka_pulsar_redpanda.html" class="feat-read-btn">Read Article →</a>
+        </div>
+      </div>
+      <div class="feat-card-aside">
+        <div class="feat-tags">
+          <span class="ac-visual-tag">Streaming</span>
+          <span class="ac-visual-tag">Brokers</span>
+          <span class="ac-visual-tag">Latency</span>
+          <span class="ac-visual-tag">Ops</span>
+          <span class="ac-visual-tag">Throughput</span>
+        </div>
+        <div class="feat-num">01</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <a href="articles/kubectl_apply.html" class="ac" style="--ac1:var(--accent3);--ac2:var(--accent2);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#eefaf4,#eef4ee);">
+        <span class="ac-visual-num">02</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Kubernetes</span>
+          <span class="ac-visual-tag">Control Plane</span>
+          <span class="ac-visual-tag">Ops</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-inf">Infrastructure</span>
+        <span class="ac-read">42 min read</span>
+      </div>
+      <h3 class="ac-title">What Kubernetes Actually Does When You Run kubectl apply</h3>
+      <p class="ac-excerpt">Inside the API server, admission chain, controllers, and the subtle reasons declarative deployments sometimes fail.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="articles/chaos_engineering_practice.html" class="ac" style="--ac1:var(--accent5);--ac2:var(--accent3);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#eef0ff,#e8eeff);">
+        <span class="ac-visual-num">03</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Chaos</span>
+          <span class="ac-visual-tag">Resilience</span>
+          <span class="ac-visual-tag">Incidents</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-inf">Infrastructure</span>
+        <span class="ac-read">52 min read</span>
+      </div>
+      <h3 class="ac-title">Chaos Engineering in Practice: What Breaking Things Teaches You</h3>
+      <p class="ac-excerpt">What actually breaks under failure injection, how to design steady-state tests, and where most chaos programs fall apart.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="nl" id="newsletter">
+    <div>
+      <div class="nl-eyebrow">Stay Sharp</div>
+      <h3>New infrastructure deep dives,<br>twice a month.</h3>
+      <p>Get notified when the next research-level article drops. No noise, no sponsorships, no re-engagement campaigns.</p>
+    </div>
+    <div class="nl-form">
+      <input type="email" class="nl-input" placeholder="your@email.com">
+      <button class="nl-btn">Subscribe →</button>
+      <span class="nl-note">Join 4,200+ engineers. No spam, ever.</span>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-col footer-logo-area">
+      <div class="footer-logo">
+        <span class="footer-logo-dot"></span>
+        Depth
+      </div>
+      <p class="footer-tagline">Research-grade writing on system design, AI/ML, infrastructure, databases, security and data systems.</p>
+      <div class="footer-social">
+        <a href="#">X</a>
+        <a href="#">GH</a>
+        <a href="#">LI</a>
+        <a href="#">RSS</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Topics</div>
+      <a href="system_design.html">System Design</a>
+      <a href="ai_ml.html">AI / ML</a>
+      <a href="infrastructure.html">Infrastructure</a>
+      <a href="databases.html">Databases</a>
+      <a href="security.html">Security</a>
+      <a href="data_systems.html">Data Systems</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Articles</div>
+      <a href="../index.html#articles">Latest</a>
+      <a href="archive.html#most-read">Most Read</a>
+      <a href="archive.html#editors">Editor's Picks</a>
+      <a href="archive.html#series">Series</a>
+      <a href="archive.html">Archive</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Publication</div>
+      <a href="about.html">About</a>
+      <a href="editorial_standards.html">Editorial Standards</a>
+      <a href="write_for_depth.html">Write for Depth</a>
+      <a href="#newsletter">Newsletter</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Depth · Infrastructure Archive</span>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="rss.html">RSS Feed</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/depth/main.js" defer></script>
+</body>
+</html>

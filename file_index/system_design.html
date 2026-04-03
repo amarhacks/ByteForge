@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Design — Depth</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/depth/tokens.css">
+<link rel="stylesheet" href="../css/depth/base.css">
+<link rel="stylesheet" href="../css/depth/layout/grids.css">
+<link rel="stylesheet" href="../css/depth/components/nav.css">
+<link rel="stylesheet" href="../css/depth/components/hero.css">
+<link rel="stylesheet" href="../css/depth/components/ticker.css">
+<link rel="stylesheet" href="../css/depth/components/section-head.css">
+<link rel="stylesheet" href="../css/depth/components/filters.css">
+<link rel="stylesheet" href="../css/depth/components/cards.css">
+<link rel="stylesheet" href="../css/depth/components/topics.css">
+<link rel="stylesheet" href="../css/depth/components/newsletter.css">
+<link rel="stylesheet" href="../css/depth/components/about.css">
+<link rel="stylesheet" href="../css/depth/components/footer.css">
+<link rel="stylesheet" href="../css/depth/components/page.css">
+<link rel="stylesheet" href="../css/depth/components/article.css">
+<link rel="stylesheet" href="../css/depth/responsive.css">
+</head>
+<body class="topic-page theme-system" data-nav="system-design">
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    Depth
+  </a>
+  <div class="nav-center">
+    <a href="../index.html" class="nav-pill" data-nav="all">All</a>
+    <a href="system_design.html" class="nav-pill" data-nav="system-design">System Design</a>
+    <a href="ai_ml.html" class="nav-pill" data-nav="ai-ml">AI / ML</a>
+    <a href="infrastructure.html" class="nav-pill" data-nav="infrastructure">Infrastructure</a>
+    <a href="databases.html" class="nav-pill" data-nav="databases">Databases</a>
+    <a href="security.html" class="nav-pill" data-nav="security">Security</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-search">⌘K&nbsp; Search</div>
+    <a href="#newsletter" class="nav-subscribe">Subscribe</a>
+  </div>
+</nav>
+
+<!-- TOPIC HERO -->
+<section class="topic-hero">
+  <div class="topic-hero-inner">
+    <div class="topic-hero-left">
+      <div class="breadcrumb">
+        <a href="../index.html">Depth</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>System Design</span>
+      </div>
+      <div class="topic-hero-eyebrow">Topic Archive</div>
+      <h1 class="topic-hero-title">Systems That <em>Scale.</em></h1>
+      <p class="topic-hero-desc">
+        Distributed systems, scalability patterns, load balancing, CAP theorem, and designing for failure at scale. Every article written by practitioners — no theory without production scars.
+      </p>
+    </div>
+    <div class="topic-hero-right">
+      <div class="topic-stat-stack">
+        <div class="topic-stat">
+          <span class="ts-n count-up">7</span>
+          <span class="ts-l">Articles Published</span>
+        </div>
+        <div class="topic-stat">
+          <span class="ts-n count-up">280K</span>
+          <span class="ts-l">Words of Research</span>
+        </div>
+        <div class="topic-stat">
+          <span class="ts-n count-up">34</span>
+          <span class="ts-l">Original Diagrams</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBTOPIC FILTER BAR -->
+<div class="subtopic-bar">
+  <div class="subtopic-bar-inner">
+    <span class="sub-label">Filter by</span>
+    <button class="sub-pill active">All</button>
+    <button class="sub-pill">Distributed Systems</button>
+    <button class="sub-pill">Scalability</button>
+    <button class="sub-pill">Load Balancing</button>
+    <button class="sub-pill">CAP Theorem</button>
+    <button class="sub-pill">Failure Design</button>
+    <button class="sub-pill">Consensus</button>
+    <button class="sub-pill">Caching</button>
+  </div>
+</div>
+
+<main>
+<div class="wrap">
+
+  <!-- CONCEPTS INDEX -->
+  <div class="sh" id="concepts">
+    <div class="sh-left">
+      <div class="sh-eye">Navigate by Concept</div>
+      <h2>Core <em>Subtopics</em></h2>
+    </div>
+  </div>
+
+  <div class="concept-grid">
+    <a href="articles/designing_10m_users.html" class="concept-card">
+      <span class="concept-icon">🌐</span>
+      <div class="concept-name">Distributed Systems</div>
+      <div class="concept-count">3 articles</div>
+      <p class="concept-desc">Consensus protocols, clock synchronisation, partition tolerance, and the realities of building across unreliable networks.</p>
+    </a>
+    <a href="articles/designing_10m_users.html" class="concept-card">
+      <span class="concept-icon">📈</span>
+      <div class="concept-name">Scalability Patterns</div>
+      <div class="concept-count">4 articles</div>
+      <p class="concept-desc">Horizontal vs vertical scaling, sharding strategies, stateless design, and the architectural decisions that actually hold under load.</p>
+    </a>
+    <a href="articles/designing_10m_users.html" class="concept-card">
+      <span class="concept-icon">⚖️</span>
+      <div class="concept-name">Load Balancing</div>
+      <div class="concept-count">2 articles</div>
+      <p class="concept-desc">L4 vs L7 routing, consistent hashing, health checks, and what actually happens when a node silently fails mid-request.</p>
+    </a>
+    <a href="articles/cap_theorem_not.html" class="concept-card">
+      <span class="concept-icon">🔺</span>
+      <div class="concept-name">CAP Theorem</div>
+      <div class="concept-count">2 articles</div>
+      <p class="concept-desc">Why CAP is misunderstood, PACELC as a better model, and how real systems navigate the consistency-availability tradeoff under partition.</p>
+    </a>
+    <a href="articles/circuit_breakers_bulkheads.html" class="concept-card">
+      <span class="concept-icon">🛡</span>
+      <div class="concept-name">Designing for Failure</div>
+      <div class="concept-count">3 articles</div>
+      <p class="concept-desc">Circuit breakers, bulkheads, chaos engineering, graceful degradation, and building systems that fail well rather than failing fast.</p>
+    </a>
+    <a href="articles/raft_vs_paxos.html" class="concept-card">
+      <span class="concept-icon">🗳</span>
+      <div class="concept-name">Consensus Protocols</div>
+      <div class="concept-count">2 articles</div>
+      <p class="concept-desc">Raft vs Paxos, leader election, split-brain prevention, and the performance cost of strong consistency guarantees.</p>
+    </a>
+    <a href="articles/consistent_hashing.html" class="concept-card">
+      <span class="concept-icon">⚡</span>
+      <div class="concept-name">Caching Strategies</div>
+      <div class="concept-count">2 articles</div>
+      <p class="concept-desc">Write-through vs write-behind, cache invalidation patterns, stampede prevention, and the cold start problem at scale.</p>
+    </a>
+    <a href="articles/event_sourcing_harder.html" class="concept-card">
+      <span class="concept-icon">📋</span>
+      <div class="concept-name">Event Sourcing & CQRS</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">Why event sourcing is harder than it looks, eventual consistency implications, and when CQRS is the right split.</p>
+    </a>
+  </div>
+
+  <!-- READING PATH -->
+  <div class="sh" style="padding-top:0;">
+    <div class="sh-left">
+      <div class="sh-eye">Structured Learning</div>
+      <h2>Recommended <em>Reading Path</em></h2>
+    </div>
+  </div>
+
+  <div class="path-section" style="margin-bottom:72px;">
+    <div class="path-header">
+      <div>
+        <div class="path-title">From First Principles to Production</div>
+        <div class="path-subtitle">7 articles · ~5 hours of reading · Beginner to Advanced</div>
+      </div>
+      <span class="path-badge">Curated Series</span>
+    </div>
+    <div class="path-items">
+      <a href="articles/cap_theorem_not.html" class="path-item">
+        <div class="path-step">01</div>
+        <div class="path-body">
+          <div class="path-item-title">CAP Theorem Is Not What You Think It Is</div>
+          <div class="path-item-meta">
+            <span>Foundation</span><span class="ep-dot"></span>
+            <span>22 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/consistent_hashing.html" class="path-item">
+        <div class="path-step">02</div>
+        <div class="path-body">
+          <div class="path-item-title">Consistent Hashing: The Algorithm Powering Every Distributed Cache</div>
+          <div class="path-item-meta">
+            <span>Core Concept</span><span class="ep-dot"></span>
+            <span>30 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/designing_10m_users.html" class="path-item">
+        <div class="path-step">03</div>
+        <div class="path-body">
+          <div class="path-item-title">Designing for 10 Million Concurrent Users: The Decisions That Actually Matter</div>
+          <div class="path-item-meta">
+            <span>Applied Scale</span><span class="ep-dot"></span>
+            <span>48 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/raft_vs_paxos.html" class="path-item">
+        <div class="path-step">04</div>
+        <div class="path-body">
+          <div class="path-item-title">Raft vs Paxos: Why We Chose the Understandable One</div>
+          <div class="path-item-meta">
+            <span>Consensus</span><span class="ep-dot"></span>
+            <span>36 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/event_sourcing_harder.html" class="path-item">
+        <div class="path-step">05</div>
+        <div class="path-body">
+          <div class="path-item-title">The Event Sourcing Pattern: Why It's Harder Than You Think</div>
+          <div class="path-item-meta">
+            <span>Architecture</span><span class="ep-dot"></span>
+            <span>44 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/circuit_breakers_bulkheads.html" class="path-item">
+        <div class="path-step">06</div>
+        <div class="path-body">
+          <div class="path-item-title">Circuit Breakers, Bulkheads, and the Art of Graceful Degradation</div>
+          <div class="path-item-meta">
+            <span>Resilience</span><span class="ep-dot"></span>
+            <span>38 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/chaos_engineering_practice.html" class="path-item">
+        <div class="path-step">07</div>
+        <div class="path-body">
+          <div class="path-item-title">Chaos Engineering in Practice: What Breaking Things Teaches You</div>
+          <div class="path-item-meta">
+            <span>Advanced</span><span class="ep-dot"></span>
+            <span>52 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ALL ARTICLES -->
+  <div class="sh" id="articles" style="padding-top:0;">
+    <div class="sh-left">
+      <div class="sh-eye">Complete Archive</div>
+      <h2>All <em>Articles</em></h2>
+    </div>
+    <a href="../index.html#topics" class="sh-right">View all topics</a>
+  </div>
+
+  <!-- SORT BAR -->
+  <div class="sort-bar">
+    <div class="sort-left">Showing <strong>7 articles</strong> in System Design</div>
+    <div class="sort-right">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active">Latest</button>
+      <button class="sort-btn">Most Read</button>
+      <button class="sort-btn">Reading Time</button>
+    </div>
+  </div>
+
+  <!-- FEATURED ARTICLE -->
+  <div class="feat-card" style="margin-bottom:40px;">
+    <div class="feat-card-inner">
+      <div class="feat-card-body">
+        <div class="feat-badge">Featured Article</div>
+        <h2 class="feat-title">Designing for 10 Million Concurrent Users: The Decisions That Actually Matter</h2>
+        <p class="feat-excerpt">Load balancers, sharding strategies, eventual consistency tradeoffs, and the 6 architectural decisions most teams get wrong when building for extreme scale. This is not a tutorial — it is a post-mortem on every mistake made before getting it right.</p>
+        <div class="feat-footer">
+          <div class="feat-meta-item">
+            <span class="ac-tag t-sys" style="margin:0;">System Design</span>
+          </div>
+          <div class="feat-meta-item">
+            <span class="ep-dot"></span>
+            48 min read
+          </div>
+          <div class="feat-meta-item">
+            <span class="ep-dot"></span>
+            Distributed Systems · Scale · CAP
+          </div>
+          <a href="articles/designing_10m_users.html" class="feat-read-btn">Read Article →</a>
+        </div>
+      </div>
+      <div class="feat-card-aside">
+        <div class="feat-tags">
+          <span class="ac-visual-tag">Distributed</span>
+          <span class="ac-visual-tag">Scale</span>
+          <span class="ac-visual-tag">CAP</span>
+          <span class="ac-visual-tag">Sharding</span>
+          <span class="ac-visual-tag">Load Balancing</span>
+        </div>
+        <div class="feat-num">01</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3-COLUMN GRID -->
+  <div class="grid-3">
+    <a href="articles/cap_theorem_not.html" class="ac" style="--ac1:var(--accent2);--ac2:var(--accent5);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#eef4ff,#e8eeff);">
+        <span class="ac-visual-num">02</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">CAP</span>
+          <span class="ac-visual-tag">PACELC</span>
+          <span class="ac-visual-tag">Theory</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-sys">System Design</span>
+        <span class="ac-read">22 min read</span>
+      </div>
+      <h3 class="ac-title">CAP Theorem Is Not What You Think It Is</h3>
+      <p class="ac-excerpt">Why PACELC is a more honest model, what "partition tolerance" actually means in practice, and how real databases navigate the tradeoff.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="articles/consistent_hashing.html" class="ac" style="--ac1:var(--accent2);--ac2:var(--accent3);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#eefaf4,#eef4ff);">
+        <span class="ac-visual-num">03</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Hashing</span>
+          <span class="ac-visual-tag">Caching</span>
+          <span class="ac-visual-tag">Routing</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-sys">System Design</span>
+        <span class="ac-read">30 min read</span>
+      </div>
+      <h3 class="ac-title">Consistent Hashing: The Algorithm Powering Every Distributed Cache</h3>
+      <p class="ac-excerpt">From virtual nodes to bounded loads — the internals of consistent hashing and why naive modulo hashing breaks under any topology change.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="articles/raft_vs_paxos.html" class="ac" style="--ac1:var(--accent5);--ac2:var(--accent2);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#f0eeff,#eef4ff);">
+        <span class="ac-visual-num">04</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Raft</span>
+          <span class="ac-visual-tag">Paxos</span>
+          <span class="ac-visual-tag">Consensus</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-sys">System Design</span>
+        <span class="ac-read">36 min read</span>
+      </div>
+      <h3 class="ac-title">Raft vs Paxos: Why We Chose the Understandable One</h3>
+      <p class="ac-excerpt">A practical comparison of consensus protocols — leader election, log replication, safety guarantees, and the operational cost difference.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="grid-2">
+    <a href="articles/event_sourcing_harder.html" class="ac" style="--ac1:var(--accent4);--ac2:var(--accent2);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#ffeef4,#eef4ff);">
+        <span class="ac-visual-num">05</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Event Sourcing</span>
+          <span class="ac-visual-tag">CQRS</span>
+          <span class="ac-visual-tag">Eventual Consistency</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-sys">System Design</span>
+        <span class="ac-read">44 min read</span>
+      </div>
+      <h3 class="ac-title">The Event Sourcing Pattern: Why It's Harder Than You Think</h3>
+      <p class="ac-excerpt">Snapshot strategies, projection rebuilding, event schema evolution, and the operational complexity that never shows up in the introductory tutorials.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="articles/circuit_breakers_bulkheads.html" class="ac" style="--ac1:var(--accent3);--ac2:var(--accent2);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#eefaf4,#eef4ee);">
+        <span class="ac-visual-num">06</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Circuit Breaker</span>
+          <span class="ac-visual-tag">Bulkhead</span>
+          <span class="ac-visual-tag">Resilience</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-sys">System Design</span>
+        <span class="ac-read">38 min read</span>
+      </div>
+      <h3 class="ac-title">Circuit Breakers, Bulkheads, and the Art of Graceful Degradation</h3>
+      <p class="ac-excerpt">How Netflix-style resilience patterns actually work at the implementation level, what thresholds to set, and when they will fail you anyway.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- HORIZONTAL ARTICLES -->
+  <a href="articles/chaos_engineering_practice.html" class="ac-hz" style="margin-bottom:40px;">
+    <div class="ac-hz-visual" style="background:linear-gradient(135deg,#eef0ff,#e8eeff);">
+      <span class="ac-hz-num" style="color:var(--accent2);">07</span>
+    </div>
+    <div class="ac-hz-body">
+      <div class="ac-meta" style="margin-bottom:10px;">
+        <span class="ac-tag t-sys">System Design</span>
+        <span class="ac-read">52 min read</span>
+      </div>
+      <h3 class="ac-title">Chaos Engineering in Practice: What Breaking Things Teaches You</h3>
+      <p class="ac-hz-desc">Most teams understand chaos engineering as a concept. Fewer have run it against a production system and faced the consequences. This article documents what actually breaks, why, and how steady-state hypothesis design separates signal from noise.</p>
+      <div class="ac-hz-meta">
+        <span>Chaos Engineering</span><span class="ep-dot"></span>
+        <span>Resilience</span><span class="ep-dot"></span>
+        <span>Failure Modes</span><span class="ep-dot"></span>
+        <span>2025</span>
+      </div>
+    </div>
+  </a>
+
+  <!-- NEWSLETTER -->
+  <div class="nl" id="newsletter">
+    <div>
+      <div class="nl-eyebrow">Stay Sharp</div>
+      <h3>New system design deep dives,<br>twice a month.</h3>
+      <p>Get notified when the next research-level article drops. No noise, no sponsorships, no re-engagement campaigns.</p>
+    </div>
+    <div class="nl-form">
+      <input type="email" class="nl-input" placeholder="your@email.com">
+      <button class="nl-btn">Subscribe →</button>
+      <span class="nl-note">Join 4,200+ engineers. No spam, ever.</span>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-col footer-logo-area">
+      <div class="footer-logo">
+        <span class="footer-logo-dot"></span>
+        Depth
+      </div>
+      <p class="footer-tagline">Research-grade writing on system design, AI/ML, infrastructure, databases, security and data systems.</p>
+      <div class="footer-social">
+        <a href="#">X</a>
+        <a href="#">GH</a>
+        <a href="#">LI</a>
+        <a href="#">RSS</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Topics</div>
+      <a href="system_design.html">System Design</a>
+      <a href="ai_ml.html">AI / ML</a>
+      <a href="infrastructure.html">Infrastructure</a>
+      <a href="databases.html">Databases</a>
+      <a href="security.html">Security</a>
+      <a href="data_systems.html">Data Systems</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Articles</div>
+      <a href="../index.html#articles">Latest</a>
+      <a href="archive.html#most-read">Most Read</a>
+      <a href="archive.html#editors">Editor's Picks</a>
+      <a href="archive.html#series">Series</a>
+      <a href="archive.html">Archive</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Publication</div>
+      <a href="about.html">About</a>
+      <a href="editorial_standards.html">Editorial Standards</a>
+      <a href="write_for_depth.html">Write for Depth</a>
+      <a href="#newsletter">Newsletter</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Depth · System Design Archive</span>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="rss.html">RSS Feed</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/depth/main.js" defer></script>
+</body>
+</html>

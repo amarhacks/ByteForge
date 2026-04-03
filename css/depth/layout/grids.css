@@ -1,0 +1,9 @@
+.wrap {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+}
+
+.section-pad {
+    padding: 72px 0;
+}

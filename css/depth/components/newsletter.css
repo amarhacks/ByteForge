@@ -1,0 +1,118 @@
+.nl {
+    background: var(--text);
+    border-radius: 16px;
+    padding: 64px 72px;
+    margin-bottom: 80px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 48px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.nl::before {
+    content: '';
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: rgba(196, 79, 0, .12);
+    pointer-events: none;
+}
+
+.topic-page .nl::before {
+    background: rgba(26, 92, 154, .15);
+}
+
+.nl-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: rgba(248, 246, 242, .4);
+    margin-bottom: 14px;
+}
+
+.nl h3 {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 3vw, 38px);
+    font-weight: 700;
+    color: #f8f6f2;
+    line-height: 1.15;
+    margin-bottom: 12px;
+}
+
+.nl p {
+    font-size: 15px;
+    color: rgba(248, 246, 242, .5);
+    line-height: 1.7;
+}
+
+.nl-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 300px;
+}
+
+.nl-input {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    background: rgba(248, 246, 242, .08);
+    border: 1px solid rgba(248, 246, 242, .15);
+    color: #f8f6f2;
+    outline: none;
+    transition: border-color var(--transition-fast);
+}
+
+.nl-input::placeholder {
+    color: rgba(248, 246, 242, .3);
+}
+
+.nl-input:focus {
+    border-color: var(--accent);
+}
+
+.topic-page .nl-input:focus {
+    border-color: var(--topic-accent);
+}
+
+.nl-btn {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 13px 22px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background var(--transition-fast);
+}
+
+.topic-page .nl-btn {
+    background: var(--topic-accent);
+}
+
+.nl-btn:hover {
+    background: #a84200;
+}
+
+.topic-page .nl-btn:hover {
+    background: var(--topic-accent);
+}
+
+.nl-note {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: rgba(248, 246, 242, .3);
+    text-align: center;
+    letter-spacing: .06em;
+}

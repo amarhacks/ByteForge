@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Networking — Depth</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/depth/tokens.css">
+<link rel="stylesheet" href="../css/depth/base.css">
+<link rel="stylesheet" href="../css/depth/layout/grids.css">
+<link rel="stylesheet" href="../css/depth/components/nav.css">
+<link rel="stylesheet" href="../css/depth/components/hero.css">
+<link rel="stylesheet" href="../css/depth/components/ticker.css">
+<link rel="stylesheet" href="../css/depth/components/section-head.css">
+<link rel="stylesheet" href="../css/depth/components/filters.css">
+<link rel="stylesheet" href="../css/depth/components/cards.css">
+<link rel="stylesheet" href="../css/depth/components/topics.css">
+<link rel="stylesheet" href="../css/depth/components/newsletter.css">
+<link rel="stylesheet" href="../css/depth/components/about.css">
+<link rel="stylesheet" href="../css/depth/components/footer.css">
+<link rel="stylesheet" href="../css/depth/components/page.css">
+<link rel="stylesheet" href="../css/depth/components/article.css">
+<link rel="stylesheet" href="../css/depth/responsive.css">
+</head>
+<body class="topic-page theme-network" data-nav="all">
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    Depth
+  </a>
+  <div class="nav-center">
+    <a href="../index.html" class="nav-pill" data-nav="all">All</a>
+    <a href="system_design.html" class="nav-pill" data-nav="system-design">System Design</a>
+    <a href="ai_ml.html" class="nav-pill" data-nav="ai-ml">AI / ML</a>
+    <a href="infrastructure.html" class="nav-pill" data-nav="infrastructure">Infrastructure</a>
+    <a href="databases.html" class="nav-pill" data-nav="databases">Databases</a>
+    <a href="security.html" class="nav-pill" data-nav="security">Security</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-search">⌘K&nbsp; Search</div>
+    <a href="#newsletter" class="nav-subscribe">Subscribe</a>
+  </div>
+</nav>
+
+<!-- TOPIC HERO -->
+<section class="topic-hero">
+  <div class="topic-hero-inner">
+    <div class="topic-hero-left">
+      <div class="breadcrumb">
+        <a href="../index.html">Depth</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Networking</span>
+      </div>
+      <div class="topic-hero-eyebrow">Topic Archive</div>
+      <h1 class="topic-hero-title">Networking That <em>Stays Fast.</em></h1>
+      <p class="topic-hero-desc">
+        DNS resolution, service mesh overhead, and the network decisions that quietly add milliseconds to every request.
+      </p>
+    </div>
+    <div class="topic-hero-right">
+      <div class="topic-stat-stack">
+        <div class="topic-stat">
+          <span class="ts-n count-up">2</span>
+          <span class="ts-l">Articles Published</span>
+        </div>
+        <div class="topic-stat">
+          <span class="ts-n count-up">70K</span>
+          <span class="ts-l">Words of Research</span>
+        </div>
+        <div class="topic-stat">
+          <span class="ts-n count-up">12</span>
+          <span class="ts-l">Original Diagrams</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBTOPIC FILTER BAR -->
+<div class="subtopic-bar">
+  <div class="subtopic-bar-inner">
+    <span class="sub-label">Filter by</span>
+    <button class="sub-pill active">All</button>
+    <button class="sub-pill">DNS</button>
+    <button class="sub-pill">Service Mesh</button>
+    <button class="sub-pill">TCP</button>
+    <button class="sub-pill">Latency</button>
+    <button class="sub-pill">Retries</button>
+    <button class="sub-pill">Load Balancing</button>
+    <button class="sub-pill">Observability</button>
+  </div>
+</div>
+
+<main>
+<div class="wrap">
+
+  <!-- CONCEPTS INDEX -->
+  <div class="sh" id="concepts">
+    <div class="sh-left">
+      <div class="sh-eye">Navigate by Concept</div>
+      <h2>Core <em>Subtopics</em></h2>
+    </div>
+  </div>
+
+  <div class="concept-grid">
+    <a href="articles/dns_at_scale.html" class="concept-card">
+      <span class="concept-icon">📡</span>
+      <div class="concept-name">DNS at Scale</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">Why 30ms becomes 300ms, and how DNS becomes a hidden bottleneck.</p>
+    </a>
+    <a href="articles/service_mesh_retries.html" class="concept-card">
+      <span class="concept-icon">🕸️</span>
+      <div class="concept-name">Service Mesh Retries</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">Reliability patterns that add latency, and how to tune retry storms.</p>
+    </a>
+    <a href="articles/dns_at_scale.html" class="concept-card">
+      <span class="concept-icon">🧭</span>
+      <div class="concept-name">Latency Budgets</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">Mapping network latency budgets to product SLAs without guesswork.</p>
+    </a>
+    <a href="articles/service_mesh_retries.html" class="concept-card">
+      <span class="concept-icon">🔁</span>
+      <div class="concept-name">Retry Cascades</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">When retries turn into outages and how to stop the cascade.</p>
+    </a>
+  </div>
+
+  <!-- READING PATH -->
+  <div class="sh" style="padding-top:0;">
+    <div class="sh-left">
+      <div class="sh-eye">Structured Learning</div>
+      <h2>Recommended <em>Reading Path</em></h2>
+    </div>
+  </div>
+
+  <div class="path-section" style="margin-bottom:72px;">
+    <div class="path-header">
+      <div>
+        <div class="path-title">Latency in the Real World</div>
+        <div class="path-subtitle">2 articles · ~1.5 hours of reading · Practical</div>
+      </div>
+      <span class="path-badge">Curated Series</span>
+    </div>
+    <div class="path-items">
+      <a href="articles/dns_at_scale.html" class="path-item">
+        <div class="path-step">01</div>
+        <div class="path-body">
+          <div class="path-item-title">DNS at Scale: Why 30ms Turns into 300</div>
+          <div class="path-item-meta">
+            <span>Foundations</span><span class="ep-dot"></span>
+            <span>32 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/service_mesh_retries.html" class="path-item">
+        <div class="path-step">02</div>
+        <div class="path-body">
+          <div class="path-item-title">Service Mesh Retries: When Reliability Adds Latency</div>
+          <div class="path-item-meta">
+            <span>Operations</span><span class="ep-dot"></span>
+            <span>28 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ALL ARTICLES -->
+  <div class="sh" id="articles" style="padding-top:0;">
+    <div class="sh-left">
+      <div class="sh-eye">Complete Archive</div>
+      <h2>All <em>Articles</em></h2>
+    </div>
+    <a href="../index.html#topics" class="sh-right">View all topics</a>
+  </div>
+
+  <!-- SORT BAR -->
+  <div class="sort-bar">
+    <div class="sort-left">Showing <strong>2 articles</strong> in Networking</div>
+    <div class="sort-right">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active">Latest</button>
+      <button class="sort-btn">Most Read</button>
+      <button class="sort-btn">Reading Time</button>
+    </div>
+  </div>
+
+  <!-- FEATURED ARTICLE -->
+  <div class="feat-card" style="margin-bottom:40px;">
+    <div class="feat-card-inner">
+      <div class="feat-card-body">
+        <div class="feat-badge">Featured Article</div>
+        <h2 class="feat-title">DNS at Scale: Why 30ms Turns into 300</h2>
+        <p class="feat-excerpt">Latency isn't just about servers. This deep dive shows how DNS configuration, caching, and resolution paths can add hundreds of milliseconds to every request.</p>
+        <div class="feat-footer">
+          <div class="feat-meta-item">
+            <span class="ac-tag t-net" style="margin:0;">Networking</span>
+          </div>
+          <div class="feat-meta-item">
+            <span class="ep-dot"></span>
+            32 min read
+          </div>
+          <div class="feat-meta-item">
+            <span class="ep-dot"></span>
+            DNS · Latency · Caching
+          </div>
+          <a href="articles/dns_at_scale.html" class="feat-read-btn">Read Article →</a>
+        </div>
+      </div>
+      <div class="feat-card-aside">
+        <div class="feat-tags">
+          <span class="ac-visual-tag">DNS</span>
+          <span class="ac-visual-tag">TTL</span>
+          <span class="ac-visual-tag">Caching</span>
+          <span class="ac-visual-tag">Latency</span>
+          <span class="ac-visual-tag">Resolution</span>
+        </div>
+        <div class="feat-num">01</div>
+      </div>
+    </div>
+  </div>
+
+  <a href="articles/service_mesh_retries.html" class="ac-hz" style="margin-bottom:40px;">
+    <div class="ac-hz-visual" style="background:linear-gradient(135deg,#eef2ff,#eeeeff);">
+      <span class="ac-hz-num" style="color:var(--topic-accent);">02</span>
+    </div>
+    <div class="ac-hz-body">
+      <div class="ac-meta" style="margin-bottom:10px;">
+        <span class="ac-tag t-net">Networking</span>
+        <span class="ac-read">28 min read</span>
+      </div>
+      <h3 class="ac-title">Service Mesh Retries: When Reliability Adds Latency</h3>
+      <p class="ac-hz-desc">How retry storms form, why tail latency explodes, and the guardrails that keep reliability tools from becoming the outage.</p>
+      <div class="ac-hz-meta">
+        <span>Retries</span><span class="ep-dot"></span>
+        <span>Latency</span><span class="ep-dot"></span>
+        <span>Service Mesh</span><span class="ep-dot"></span>
+        <span>2025</span>
+      </div>
+    </div>
+  </a>
+
+  <!-- NEWSLETTER -->
+  <div class="nl" id="newsletter">
+    <div>
+      <div class="nl-eyebrow">Stay Sharp</div>
+      <h3>New networking deep dives,<br>twice a month.</h3>
+      <p>Get notified when the next research-level article drops. No noise, no sponsorships, no re-engagement campaigns.</p>
+    </div>
+    <div class="nl-form">
+      <input type="email" class="nl-input" placeholder="your@email.com">
+      <button class="nl-btn">Subscribe →</button>
+      <span class="nl-note">Join 4,200+ engineers. No spam, ever.</span>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-col footer-logo-area">
+      <div class="footer-logo">
+        <span class="footer-logo-dot"></span>
+        Depth
+      </div>
+      <p class="footer-tagline">Research-grade writing on system design, AI/ML, infrastructure, databases, security and data systems.</p>
+      <div class="footer-social">
+        <a href="#">X</a>
+        <a href="#">GH</a>
+        <a href="#">LI</a>
+        <a href="#">RSS</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Topics</div>
+      <a href="system_design.html">System Design</a>
+      <a href="ai_ml.html">AI / ML</a>
+      <a href="infrastructure.html">Infrastructure</a>
+      <a href="databases.html">Databases</a>
+      <a href="security.html">Security</a>
+      <a href="data_systems.html">Data Systems</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Articles</div>
+      <a href="../index.html#articles">Latest</a>
+      <a href="archive.html#most-read">Most Read</a>
+      <a href="archive.html#editors">Editor's Picks</a>
+      <a href="archive.html#series">Series</a>
+      <a href="archive.html">Archive</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Publication</div>
+      <a href="about.html">About</a>
+      <a href="editorial_standards.html">Editorial Standards</a>
+      <a href="write_for_depth.html">Write for Depth</a>
+      <a href="#newsletter">Newsletter</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Depth · Networking Archive</span>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="rss.html">RSS Feed</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/depth/main.js" defer></script>
+</body>
+</html>

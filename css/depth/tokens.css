@@ -1,0 +1,64 @@
+:root {
+    --bg: #f8f6f2;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --surface3: #e8e4db;
+    --border: #ddd9d0;
+    --border2: #ccc8be;
+    --text: #111008;
+    --text2: #2a2820;
+    --muted: #6a6458;
+    --muted2: #9a9488;
+    --accent: #c44f00;
+    --accent2: #1a5c9a;
+    --accent3: #1a7a48;
+    --accent4: #8a1a4a;
+    --accent5: #4a3ab0;
+    --accent6: #b06800;
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --max-width: 1340px;
+    --space-xl: 48px;
+    --font-body: 'Lora', Georgia, serif;
+    --font-display: 'Playfair Display', serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --transition-fast: .2s;
+    --topic-accent: var(--accent2);
+}
+
+body.topic-page {
+    --topic-accent: var(--accent2);
+}
+
+body.theme-system {
+    --topic-accent: var(--accent2);
+}
+
+body.theme-ai {
+    --topic-accent: var(--accent);
+}
+
+body.theme-infra {
+    --topic-accent: var(--accent3);
+}
+
+body.theme-db {
+    --topic-accent: var(--accent6);
+}
+
+body.theme-security {
+    --topic-accent: var(--accent4);
+}
+
+body.theme-data {
+    --topic-accent: var(--accent5);
+}
+
+body.theme-network {
+    --topic-accent: #1a6a6a;
+}
+
+body.theme-performance {
+    --topic-accent: #6a1a1a;
+}

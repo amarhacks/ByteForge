@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI / ML Engineering — Depth</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/depth/tokens.css">
+<link rel="stylesheet" href="../css/depth/base.css">
+<link rel="stylesheet" href="../css/depth/layout/grids.css">
+<link rel="stylesheet" href="../css/depth/components/nav.css">
+<link rel="stylesheet" href="../css/depth/components/hero.css">
+<link rel="stylesheet" href="../css/depth/components/ticker.css">
+<link rel="stylesheet" href="../css/depth/components/section-head.css">
+<link rel="stylesheet" href="../css/depth/components/filters.css">
+<link rel="stylesheet" href="../css/depth/components/cards.css">
+<link rel="stylesheet" href="../css/depth/components/topics.css">
+<link rel="stylesheet" href="../css/depth/components/newsletter.css">
+<link rel="stylesheet" href="../css/depth/components/about.css">
+<link rel="stylesheet" href="../css/depth/components/footer.css">
+<link rel="stylesheet" href="../css/depth/components/page.css">
+<link rel="stylesheet" href="../css/depth/components/article.css">
+<link rel="stylesheet" href="../css/depth/responsive.css">
+</head>
+<body class="topic-page theme-ai" data-nav="ai-ml">
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    Depth
+  </a>
+  <div class="nav-center">
+    <a href="../index.html" class="nav-pill" data-nav="all">All</a>
+    <a href="system_design.html" class="nav-pill" data-nav="system-design">System Design</a>
+    <a href="ai_ml.html" class="nav-pill" data-nav="ai-ml">AI / ML</a>
+    <a href="infrastructure.html" class="nav-pill" data-nav="infrastructure">Infrastructure</a>
+    <a href="databases.html" class="nav-pill" data-nav="databases">Databases</a>
+    <a href="security.html" class="nav-pill" data-nav="security">Security</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-search">⌘K&nbsp; Search</div>
+    <a href="#newsletter" class="nav-subscribe">Subscribe</a>
+  </div>
+</nav>
+
+<!-- TOPIC HERO -->
+<section class="topic-hero">
+  <div class="topic-hero-inner">
+    <div class="topic-hero-left">
+      <div class="breadcrumb">
+        <a href="../index.html">Depth</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>AI / ML Engineering</span>
+      </div>
+      <div class="topic-hero-eyebrow">Topic Archive</div>
+      <h1 class="topic-hero-title">AI That <em>Survives Production.</em></h1>
+      <p class="topic-hero-desc">
+        RAG pipelines, vector search, LLM reliability, and the real-world failure modes that show up only after launch. Every article is written from production experience — not demos.
+      </p>
+    </div>
+    <div class="topic-hero-right">
+      <div class="topic-stat-stack">
+        <div class="topic-stat">
+          <span class="ts-n count-up">6</span>
+          <span class="ts-l">Articles Published</span>
+        </div>
+        <div class="topic-stat">
+          <span class="ts-n count-up">210K</span>
+          <span class="ts-l">Words of Research</span>
+        </div>
+        <div class="topic-stat">
+          <span class="ts-n count-up">26</span>
+          <span class="ts-l">Original Diagrams</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBTOPIC FILTER BAR -->
+<div class="subtopic-bar">
+  <div class="subtopic-bar-inner">
+    <span class="sub-label">Filter by</span>
+    <button class="sub-pill active">All</button>
+    <button class="sub-pill">RAG</button>
+    <button class="sub-pill">Vector Search</button>
+    <button class="sub-pill">Evaluation</button>
+    <button class="sub-pill">LLM Reliability</button>
+    <button class="sub-pill">Embeddings</button>
+    <button class="sub-pill">Prompting</button>
+    <button class="sub-pill">Production</button>
+  </div>
+</div>
+
+<main>
+<div class="wrap">
+
+  <!-- CONCEPTS INDEX -->
+  <div class="sh" id="concepts">
+    <div class="sh-left">
+      <div class="sh-eye">Navigate by Concept</div>
+      <h2>Core <em>Subtopics</em></h2>
+    </div>
+  </div>
+
+  <div class="concept-grid">
+    <a href="articles/rag_pipeline_fails.html" class="concept-card">
+      <span class="concept-icon">🧭</span>
+      <div class="concept-name">Retrieval Pipelines</div>
+      <div class="concept-count">2 articles</div>
+      <p class="concept-desc">Chunking, retrieval, reranking, and the pipeline failures that only show up at scale.</p>
+    </a>
+    <a href="articles/chunking_documents_wrong.html" class="concept-card">
+      <span class="concept-icon">✂️</span>
+      <div class="concept-name">Chunking Strategy</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">How naive splitting kills context, and the heuristics that actually preserve meaning.</p>
+    </a>
+    <a href="articles/llm_confidence_wrong.html" class="concept-card">
+      <span class="concept-icon">📏</span>
+      <div class="concept-name">LLM Calibration</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">Why probability outputs from LLMs are misleading, and how to measure reliability.</p>
+    </a>
+    <a href="articles/embeddings_biased.html" class="concept-card">
+      <span class="concept-icon">🧬</span>
+      <div class="concept-name">Embedding Bias</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">Bias sources, drift, and the quiet failure modes inside production embeddings.</p>
+    </a>
+    <a href="articles/hidden_cost_vector_search.html" class="concept-card">
+      <span class="concept-icon">🧱</span>
+      <div class="concept-name">Vector Search at Scale</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">ANN tradeoffs, recall cliffs, and the costs you only see after 10M vectors.</p>
+    </a>
+    <a href="articles/ai_answered_2023.html" class="concept-card">
+      <span class="concept-icon">🕰️</span>
+      <div class="concept-name">Recency Gaps</div>
+      <div class="concept-count">1 article</div>
+      <p class="concept-desc">Why stale training data shapes answers — and how to surface that risk.</p>
+    </a>
+  </div>
+
+  <!-- READING PATH -->
+  <div class="sh" style="padding-top:0;">
+    <div class="sh-left">
+      <div class="sh-eye">Structured Learning</div>
+      <h2>Recommended <em>Reading Path</em></h2>
+    </div>
+  </div>
+
+  <div class="path-section" style="margin-bottom:72px;">
+    <div class="path-header">
+      <div>
+        <div class="path-title">From Prototype to Production</div>
+        <div class="path-subtitle">4 articles · ~2.5 hours of reading · Practical to Advanced</div>
+      </div>
+      <span class="path-badge">Curated Series</span>
+    </div>
+    <div class="path-items">
+      <a href="articles/chunking_documents_wrong.html" class="path-item">
+        <div class="path-step">01</div>
+        <div class="path-body">
+          <div class="path-item-title">You're Chunking Your Documents Wrong</div>
+          <div class="path-item-meta">
+            <span>Foundation</span><span class="ep-dot"></span>
+            <span>15 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/llm_confidence_wrong.html" class="path-item">
+        <div class="path-step">02</div>
+        <div class="path-body">
+          <div class="path-item-title">The LLM Said It Was 95% Confident. It Was Completely Wrong.</div>
+          <div class="path-item-meta">
+            <span>Reliability</span><span class="ep-dot"></span>
+            <span>15 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/rag_pipeline_fails.html" class="path-item">
+        <div class="path-step">03</div>
+        <div class="path-body">
+          <div class="path-item-title">Why Your RAG Pipeline Works in Testing and Fails in Production</div>
+          <div class="path-item-meta">
+            <span>Systems</span><span class="ep-dot"></span>
+            <span>15 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+      <a href="articles/embeddings_biased.html" class="path-item">
+        <div class="path-step">04</div>
+        <div class="path-body">
+          <div class="path-item-title">Your Embeddings Are Biased and You Don't Know It</div>
+          <div class="path-item-meta">
+            <span>Production</span><span class="ep-dot"></span>
+            <span>52 min read</span><span class="ep-dot"></span>
+            <span>2025</span>
+          </div>
+        </div>
+        <div class="path-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ALL ARTICLES -->
+  <div class="sh" id="articles" style="padding-top:0;">
+    <div class="sh-left">
+      <div class="sh-eye">Complete Archive</div>
+      <h2>All <em>Articles</em></h2>
+    </div>
+    <a href="../index.html#topics" class="sh-right">View all topics</a>
+  </div>
+
+  <!-- SORT BAR -->
+  <div class="sort-bar">
+    <div class="sort-left">Showing <strong>6 articles</strong> in AI / ML Engineering</div>
+    <div class="sort-right">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active">Latest</button>
+      <button class="sort-btn">Most Read</button>
+      <button class="sort-btn">Reading Time</button>
+    </div>
+  </div>
+
+  <!-- FEATURED ARTICLE -->
+  <div class="feat-card" style="margin-bottom:40px;">
+    <div class="feat-card-inner">
+      <div class="feat-card-body">
+        <div class="feat-badge">Featured Article</div>
+        <h2 class="feat-title">Why Your RAG Pipeline Works in Testing and Fails in Production</h2>
+        <p class="feat-excerpt">The seven gaps between demo and deployment — chunking strategy, embedding drift, latency budgets, eval blind spots, and the ops work that keeps retrieval reliable at scale.</p>
+        <div class="feat-footer">
+          <div class="feat-meta-item">
+            <span class="ac-tag t-ai" style="margin:0;">AI / ML</span>
+          </div>
+          <div class="feat-meta-item">
+            <span class="ep-dot"></span>
+            15 min read
+          </div>
+          <div class="feat-meta-item">
+            <span class="ep-dot"></span>
+            RAG · Retrieval · Production
+          </div>
+          <a href="articles/rag_pipeline_fails.html" class="feat-read-btn">Read Article →</a>
+        </div>
+      </div>
+      <div class="feat-card-aside">
+        <div class="feat-tags">
+          <span class="ac-visual-tag">RAG</span>
+          <span class="ac-visual-tag">Chunking</span>
+          <span class="ac-visual-tag">Latency</span>
+          <span class="ac-visual-tag">Evaluation</span>
+          <span class="ac-visual-tag">Drift</span>
+        </div>
+        <div class="feat-num">01</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3-COLUMN GRID -->
+  <div class="grid-3">
+    <a href="articles/chunking_documents_wrong.html" class="ac" style="--ac1:var(--accent);--ac2:#ff6b6b;">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#fdf4ee,#f8ece0);">
+        <span class="ac-visual-num">02</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Chunking</span>
+          <span class="ac-visual-tag">RAG</span>
+          <span class="ac-visual-tag">NLP</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-ai">AI / ML</span>
+        <span class="ac-read">15 min read</span>
+      </div>
+      <h3 class="ac-title">You're Chunking Your Documents Wrong</h3>
+      <p class="ac-excerpt">How naive text splitting destroys semantic meaning before it even reaches the vector database — and the five strategies that preserve it.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="articles/llm_confidence_wrong.html" class="ac" style="--ac1:var(--accent5);--ac2:var(--accent2);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#f0eeff,#e8e4ff);">
+        <span class="ac-visual-num">03</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Calibration</span>
+          <span class="ac-visual-tag">Hallucination</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-ai">AI / ML</span>
+        <span class="ac-read">15 min read</span>
+      </div>
+      <h3 class="ac-title">The LLM Said It Was 95% Confident. It Was Completely Wrong.</h3>
+      <p class="ac-excerpt">A deep-dive into AI hallucination, confidence calibration, and why probability scores from LLMs are not what you think.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="articles/embeddings_biased.html" class="ac" style="--ac1:var(--accent4);--ac2:var(--accent);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#ffeef4,#ffeeee);">
+        <span class="ac-visual-num">04</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Embeddings</span>
+          <span class="ac-visual-tag">Bias</span>
+          <span class="ac-visual-tag">Drift</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-ai">AI / ML</span>
+        <span class="ac-read">52 min read</span>
+      </div>
+      <h3 class="ac-title">Your Embeddings Are Biased and You Don't Know It</h3>
+      <p class="ac-excerpt">A practical look at embedding bias, drift, and the measurement gaps that turn ranking systems into silent regressions.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="grid-2">
+    <a href="articles/ai_answered_2023.html" class="ac" style="--ac1:var(--accent4);--ac2:var(--accent2);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#ffeef4,#eef4ff);">
+        <span class="ac-visual-num">05</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Recency</span>
+          <span class="ac-visual-tag">Safety</span>
+          <span class="ac-visual-tag">Trust</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-ai">AI / ML</span>
+        <span class="ac-read">50 min read</span>
+      </div>
+      <h3 class="ac-title">You Asked the AI a Question. It Answered From 2023.</h3>
+      <p class="ac-excerpt">Why staleness is the default in model outputs, how to surface confidence gaps, and when retrieval is the only honest fix.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="articles/hidden_cost_vector_search.html" class="ac" style="--ac1:var(--accent5);--ac2:var(--accent2);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#f0eeff,#eef4ff);">
+        <span class="ac-visual-num">06</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">ANN</span>
+          <span class="ac-visual-tag">HNSW</span>
+          <span class="ac-visual-tag">Scale</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-db">Databases</span>
+        <span class="ac-read">54 min read</span>
+      </div>
+      <h3 class="ac-title">The Hidden Cost of Vector Search at Scale</h3>
+      <p class="ac-excerpt">Why cosine similarity gets dangerously unreliable above 10M vectors, and the indexing choices that actually hold up.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="nl" id="newsletter">
+    <div>
+      <div class="nl-eyebrow">Stay Sharp</div>
+      <h3>New AI/ML deep dives,<br>twice a month.</h3>
+      <p>Get notified when the next research-level article drops. No noise, no sponsorships, no re-engagement campaigns.</p>
+    </div>
+    <div class="nl-form">
+      <input type="email" class="nl-input" placeholder="your@email.com">
+      <button class="nl-btn">Subscribe →</button>
+      <span class="nl-note">Join 4,200+ engineers. No spam, ever.</span>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-col footer-logo-area">
+      <div class="footer-logo">
+        <span class="footer-logo-dot"></span>
+        Depth
+      </div>
+      <p class="footer-tagline">Research-grade writing on system design, AI/ML, infrastructure, databases, security and data systems.</p>
+      <div class="footer-social">
+        <a href="#">X</a>
+        <a href="#">GH</a>
+        <a href="#">LI</a>
+        <a href="#">RSS</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Topics</div>
+      <a href="system_design.html">System Design</a>
+      <a href="ai_ml.html">AI / ML</a>
+      <a href="infrastructure.html">Infrastructure</a>
+      <a href="databases.html">Databases</a>
+      <a href="security.html">Security</a>
+      <a href="data_systems.html">Data Systems</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Articles</div>
+      <a href="../index.html#articles">Latest</a>
+      <a href="archive.html#most-read">Most Read</a>
+      <a href="archive.html#editors">Editor's Picks</a>
+      <a href="archive.html#series">Series</a>
+      <a href="archive.html">Archive</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Publication</div>
+      <a href="about.html">About</a>
+      <a href="editorial_standards.html">Editorial Standards</a>
+      <a href="write_for_depth.html">Write for Depth</a>
+      <a href="#newsletter">Newsletter</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Depth · AI / ML Archive</span>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="rss.html">RSS Feed</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/depth/main.js" defer></script>
+</body>
+</html>

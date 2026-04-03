@@ -1,0 +1,164 @@
+@media (max-width: 1100px) {
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-right {
+        border-top: 1px solid var(--border);
+    }
+
+    .hero-left {
+        padding: 60px 28px;
+    }
+
+    .topic-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .about-row {
+        grid-template-columns: 1fr;
+    }
+
+    .about-right {
+        border-top: 1px solid var(--border);
+    }
+
+    .topic-hero-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .topic-hero-left {
+        border-right: none;
+        padding-right: 0;
+    }
+
+    .topic-hero-right {
+        padding-left: 0;
+        border-top: 1px solid var(--border);
+    }
+
+    .concept-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .feat-card-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .feat-card-aside {
+        display: none;
+    }
+
+    .article-hero-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .article-content {
+        grid-template-columns: 1fr;
+    }
+
+    .article-aside {
+        position: static;
+        order: 2;
+    }
+}
+
+@media (max-width: 768px) {
+    nav {
+        padding: 0 20px;
+    }
+
+    .nav-center {
+        display: none;
+    }
+
+    .wrap {
+        padding: 0 20px;
+    }
+
+    .grid-3,
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .ep-strip {
+        grid-template-columns: 1fr;
+    }
+
+    .ep-item {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .nl {
+        grid-template-columns: 1fr;
+        padding: 36px 28px;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-left {
+        padding: 40px 20px 48px;
+    }
+
+    .topic-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .ac-hz {
+        grid-template-columns: 1fr;
+    }
+
+    .ac-hz-visual {
+        height: 100px;
+    }
+
+    .subtopic-bar-inner {
+        padding: 0 20px;
+    }
+
+    .topic-hero-inner {
+        padding: 0 20px;
+    }
+
+    .concept-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .path-item {
+        grid-template-columns: 48px 1fr auto;
+    }
+
+    .sort-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .article-hero-inner,
+    .page-hero-inner {
+        padding: 40px 20px;
+    }
+
+    .article-content,
+    .page-content {
+        padding: 32px 20px 64px;
+    }
+}
+
+@media (max-width: 560px) {
+    .topic-grid,
+    .concept-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-right {
+        gap: 8px;
+    }
+}

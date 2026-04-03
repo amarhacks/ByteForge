@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VectorMind — AI Engineering Deep Dives</title>
+    <meta name="description"
+        content="Research-grade articles on RAG, vector search, LLM systems and the gaps between demos and reality.">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Design System CSS (order matters) -->
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components/nav.css">
+    <link rel="stylesheet" href="css/components/hero.css">
+    <link rel="stylesheet" href="css/components/ticker.css">
+    <link rel="stylesheet" href="css/components/section-head.css">
+    <link rel="stylesheet" href="css/components/cards.css">
+    <link rel="stylesheet" href="css/components/series.css">
+    <link rel="stylesheet" href="css/components/about.css">
+    <link rel="stylesheet" href="css/components/newsletter.css">
+    <link rel="stylesheet" href="css/components/footer.css">
+    <link rel="stylesheet" href="css/layout/grids.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">
+            <span class="dot"></span>
+            VectorMind
+        </a>
+        <div class="nav-links">
+            <a href="#articles">Articles</a>
+            <a href="#series">Series</a>
+            <a href="#about">About</a>
+            <a href="#newsletter">Newsletter</a>
+        </div>
+        <div class="nav-tag">AI Engineering</div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+
+        <div class="hero-eyebrow">Research-level AI Engineering</div>
+        <h1>
+            Where Production AI<br>
+            <span class="line2">Gets Brutally Honest.</span>
+            <span class="line3">Deep dives into RAG, vector search, LLM systems &amp; the gaps between demos and
+                reality.</span>
+        </h1>
+        <p class="hero-desc">
+            No tutorials. No fluff. Research-grade articles on the hard problems in building AI systems that actually
+            work at scale — written by engineers who have hit the walls.
+        </p>
+        <div class="hero-actions">
+            <a href="#articles" class="btn-primary">Read the Latest</a>
+            <a href="#newsletter" class="btn-outline">Get Notified</a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="sn">9</span>
+                <span class="sl">Deep Dives</span>
+            </div>
+            <div class="hero-stat">
+                <span class="sn">82K</span>
+                <span class="sl">Words Written</span>
+            </div>
+            <div class="hero-stat">
+                <span class="sn">47</span>
+                <span class="sl">Diagrams</span>
+            </div>
+        </div>
+
+        <div class="scroll-hint">
+            <div class="scroll-arrow"></div>
+            Scroll to explore
+        </div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="ticker">
+        <div class="ticker-inner">
+            <strong>NEW</strong>You're Chunking Your Documents Wrong<span class="sep"> · </span>
+            <strong>NEW</strong>LLM Said 95% Confident. Completely Wrong.<span class="sep"> · </span>
+            <strong></strong>RAG Pipeline Fails in Production<span class="sep"> · </span>
+            <strong></strong>Hidden Cost of Vector Search at Scale<span class="sep"> · </span>
+            <strong></strong>Embeddings Are Biased and You Don't Know It<span class="sep"> · </span>
+            <strong></strong>Knowledge Cutoff Problem in RAG Systems<span class="sep"> · </span>
+            <strong></strong>Vector Search Mismatch Problem<span class="sep"> · </span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <strong>NEW</strong>You're Chunking Your Documents Wrong<span class="sep"> · </span>
+            <strong>NEW</strong>LLM Said 95% Confident. Completely Wrong.<span class="sep"> · </span>
+            <strong></strong>RAG Pipeline Fails in Production<span class="sep"> · </span>
+            <strong></strong>Hidden Cost of Vector Search at Scale<span class="sep"> · </span>
+            <strong></strong>Embeddings Are Biased and You Don't Know It<span class="sep"> · </span>
+            <strong></strong>Knowledge Cutoff Problem in RAG Systems<span class="sep"> · </span>
+            <strong></strong>Vector Search Mismatch Problem<span class="sep"> · </span>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <main>
+        <div class="section-wrap">
+
+            <!-- FEATURED -->
+            <div class="section-head" id="articles">
+                <div class="section-head-left">
+                    <div class="section-eyebrow">Latest &amp; Featured</div>
+                    <h2>Recent <em>Deep Dives</em></h2>
+                </div>
+                <a href="#" class="view-all">View all articles</a>
+            </div>
+
+            <div class="featured-grid">
+
+                <!-- FEATURED LARGE -->
+                <a href="#" class="article-card card-feat theme-orange">
+                    <div class="card-glow"
+                        style="background:radial-gradient(ellipse at 50% 0%,rgba(200,133,10,.06) 0%,transparent 60%)">
+                    </div>
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">01</span>
+                                <span class="icon-label">Chunking · NLP · RAG</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-orange">RAG Systems</span>
+                            <span class="card-read">15 min read · 4,000 words</span>
+                        </div>
+                        <h3 class="card-title">You're Chunking Your Documents Wrong</h3>
+                        <p class="card-excerpt">How naive text splitting destroys semantic meaning before it even
+                            reaches the vector database — and the five strategies that preserve it. From fixed-size
+                            failures to proposition-level retrieval.</p>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- SMALL TOP RIGHT -->
+                <a href="#" class="article-card card-sm theme-purple">
+                    <div class="card-glow"
+                        style="background:radial-gradient(ellipse at 50% 0%,rgba(138,64,230,.06) 0%,transparent 60%)">
+                    </div>
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">02</span>
+                                <span class="icon-label">Calibration · Hallucination</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-purple">LLM Safety</span>
+                            <span class="card-read">15 min</span>
+                        </div>
+                        <h3 class="card-title">The LLM Said It Was 95% Confident. It Was Completely Wrong.</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- SMALL BOTTOM RIGHT -->
+                <a href="#" class="article-card card-sm theme-red">
+                    <div class="card-glow"
+                        style="background:radial-gradient(ellipse at 50% 0%,rgba(224,69,69,.06) 0%,transparent 60%)">
+                    </div>
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">03</span>
+                                <span class="icon-label">Production · Gaps · RAG</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-red">Production AI</span>
+                            <span class="card-read">15 min</span>
+                        </div>
+                        <h3 class="card-title">Why Your RAG Pipeline Works in Testing and Fails in Production</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- ALL ARTICLES GRID -->
+            <div class="section-head" style="padding-top:0;">
+                <div class="section-head-left">
+                    <div class="section-eyebrow">Full Archive</div>
+                    <h2>All <em>Articles</em></h2>
+                </div>
+            </div>
+
+            <div class="articles-grid">
+
+                <a href="#" class="article-card card-list theme-blue">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">04</span>
+                                <span class="icon-label">Vector Search · Scale</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-blue">Vector Search</span>
+                            <span class="card-read">54 min</span>
+                        </div>
+                        <h3 class="card-title">The Hidden Cost of Vector Search at Scale</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="article-card card-list theme-orange">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">05</span>
+                                <span class="icon-label">Bias · Embeddings · Production</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-orange">AI Bias</span>
+                            <span class="card-read">52 min</span>
+                        </div>
+                        <h3 class="card-title">Your Embeddings Are Biased and You Don't Know It</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="article-card card-list theme-cyan">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">06</span>
+                                <span class="icon-label">Freshness · RAG · Real-Time</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-cyan">Real-Time AI</span>
+                            <span class="card-read">50 min</span>
+                        </div>
+                        <h3 class="card-title">You Asked the AI a Question. It Answered From 2023.</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="article-card card-list theme-green">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">07</span>
+                                <span class="icon-label">Vector · Mismatch · Search</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-green">Semantic Search</span>
+                            <span class="card-read">45 min</span>
+                        </div>
+                        <h3 class="card-title">You Searched for an Apple. The Database Returned a Carrot.</h3>
+                        <div class="card-footer">
+                            <span class="card-date">2025</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="article-card card-list theme-purple">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">08</span>
+                                <span class="icon-label">Fine-tuning · RAG · Strategy</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-purple">Architecture</span>
+                            <span class="card-read">40 min</span>
+                        </div>
+                        <h3 class="card-title">Fine-Tuning vs. RAG: You're Probably Choosing the Wrong One</h3>
+                        <div class="card-footer">
+                            <span class="card-date">Coming Soon</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="article-card card-list theme-red">
+                    <div class="card-visual">
+                        <div class="card-visual-inner">
+                            <div class="card-icon">
+                                <span class="big-num">09</span>
+                                <span class="icon-label">Prompt · Retrieval · Failure</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-tag tag-red">LLM Engineering</span>
+                            <span class="card-read">38 min</span>
+                        </div>
+                        <h3 class="card-title">The Prompt Looked Perfect. The Output Was Garbage.</h3>
+                        <div class="card-footer">
+                            <span class="card-date">Coming Soon</span>
+                            <span class="card-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- SERIES -->
+            <div class="section-head" id="series" style="padding-top:20px;">
+                <div class="section-head-left">
+                    <div class="section-eyebrow">Curated Collections</div>
+                    <h2>Article <em>Series</em></h2>
+                </div>
+            </div>
+
+            <div class="series-grid">
+                <a href="#" class="series-card" style="--c1:#c8850a;--c2:#e04545;">
+                    <div class="series-num">01</div>
+                    <div class="series-title">The RAG Engineering Series</div>
+                    <div class="series-count">4 articles · Chunking, retrieval, context, evaluation</div>
+                </a>
+                <a href="#" class="series-card" style="--c1:#2b7de9;--c2:#0fb86f;">
+                    <div class="series-num">02</div>
+                    <div class="series-title">Vector Search at Scale</div>
+                    <div class="series-count">3 articles · ANN, indexing, production architecture</div>
+                </a>
+                <a href="#" class="series-card" style="--c1:#8a40e6;--c2:#2b7de9;">
+                    <div class="series-num">03</div>
+                    <div class="series-title">LLM Reliability &amp; Safety</div>
+                    <div class="series-count">2 articles · Hallucination, calibration, confidence</div>
+                </a>
+                <a href="#" class="series-card" style="--c1:#0fb86f;--c2:#149090;">
+                    <div class="series-num">04</div>
+                    <div class="series-title">AI Bias in Production</div>
+                    <div class="series-count">1 article · Embedding bias, detection, mitigation</div>
+                </a>
+            </div>
+
+            <!-- ABOUT STRIP -->
+            <div class="section-head" id="about" style="padding-top:20px;">
+                <div class="section-head-left">
+                    <div class="section-eyebrow">The Philosophy</div>
+                    <h2>Why This <em>Blog Exists</em></h2>
+                </div>
+            </div>
+
+            <div class="about-strip" style="margin-bottom:80px;">
+                <div class="about-cell">
+                    <div class="about-cell-icon">🔬</div>
+                    <h4>Research-Grade Depth</h4>
+                    <p>Every article cites primary research, includes original diagrams built from scratch, and goes
+                        beyond surface-level tutorials. If it's already in the LangChain docs, it's not here.</p>
+                </div>
+                <div class="about-cell">
+                    <div class="about-cell-icon">⚙️</div>
+                    <h4>Production-First Perspective</h4>
+                    <p>All articles are written from the perspective of systems that must run reliably under real load,
+                        with real users, on real data — not synthetic benchmarks designed to make things look better
+                        than they are.</p>
+                </div>
+                <div class="about-cell">
+                    <div class="about-cell-icon">📐</div>
+                    <h4>Code That Actually Runs</h4>
+                    <p>Every code sample is production-quality Python with real error handling, real configuration, and
+                        comments that explain the why — not just the what. No pseudocode.</p>
+                </div>
+            </div>
+
+            <!-- NEWSLETTER -->
+            <div class="newsletter" id="newsletter">
+                <div class="newsletter-text">
+                    <div class="newsletter-eyebrow">Stay Sharp</div>
+                    <h3>New deep dives, twice a month.<br>No noise. No sponsorships.</h3>
+                    <p>Get notified when the next research-level article drops. Unsubscribe any time — no dark patterns,
+                        no re-engagement campaigns.</p>
+                </div>
+                <div class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="your@email.com">
+                    <a href="#" class="btn-primary">Subscribe</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-logo">
+                <span class="dot"></span>
+                VectorMind
+            </div>
+            <div class="footer-links">
+                <a href="#">Articles</a>
+                <a href="#">Series</a>
+                <a href="#">Medium</a>
+                <a href="#">GitHub</a>
+                <a href="#">Twitter / X</a>
+            </div>
+            <div class="footer-copy">© 2025 VectorMind · All rights reserved</div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

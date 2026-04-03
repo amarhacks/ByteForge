@@ -4,430 +4,549 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VectorMind — AI Engineering Deep Dives</title>
-    <meta name="description"
-        content="Research-grade articles on RAG, vector search, LLM systems and the gaps between demos and reality.">
-
-    <!-- Google Fonts -->
+    <title>Depth — Advanced Technology Writing</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap"
         rel="stylesheet">
-
-    <!-- Design System CSS (order matters) -->
-    <link rel="stylesheet" href="css/tokens.css">
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/components/nav.css">
-    <link rel="stylesheet" href="css/components/hero.css">
-    <link rel="stylesheet" href="css/components/ticker.css">
-    <link rel="stylesheet" href="css/components/section-head.css">
-    <link rel="stylesheet" href="css/components/cards.css">
-    <link rel="stylesheet" href="css/components/series.css">
-    <link rel="stylesheet" href="css/components/about.css">
-    <link rel="stylesheet" href="css/components/newsletter.css">
-    <link rel="stylesheet" href="css/components/footer.css">
-    <link rel="stylesheet" href="css/layout/grids.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    
+    <link rel="stylesheet" href="css/depth/tokens.css">
+    <link rel="stylesheet" href="css/depth/base.css">
+    <link rel="stylesheet" href="css/depth/layout/grids.css">
+    <link rel="stylesheet" href="css/depth/components/nav.css">
+    <link rel="stylesheet" href="css/depth/components/hero.css">
+    <link rel="stylesheet" href="css/depth/components/ticker.css">
+    <link rel="stylesheet" href="css/depth/components/section-head.css">
+    <link rel="stylesheet" href="css/depth/components/filters.css">
+    <link rel="stylesheet" href="css/depth/components/cards.css">
+    <link rel="stylesheet" href="css/depth/components/topics.css">
+    <link rel="stylesheet" href="css/depth/components/newsletter.css">
+    <link rel="stylesheet" href="css/depth/components/about.css">
+    <link rel="stylesheet" href="css/depth/components/footer.css">
+    <link rel="stylesheet" href="css/depth/components/page.css">
+    <link rel="stylesheet" href="css/depth/components/article.css">
+    <link rel="stylesheet" href="css/depth/responsive.css">
 </head>
 
-<body>
-
-    <div class="cursor-glow" id="cursorGlow"></div>
+<body class="home-page" data-nav="all">
 
     <!-- NAV -->
     <nav>
-        <a href="#" class="nav-logo">
-            <span class="dot"></span>
-            VectorMind
+        <a href="index.html" class="nav-logo">
+            <span class="nav-logo-dot"></span>
+            Depth
         </a>
-        <div class="nav-links">
-            <a href="#articles">Articles</a>
-            <a href="#series">Series</a>
-            <a href="#about">About</a>
-            <a href="#newsletter">Newsletter</a>
+        <div class="nav-center">
+            <a href="index.html" class="nav-pill" data-nav="all">All</a>
+            <a href="file_index/system_design.html" class="nav-pill" data-nav="system-design">System Design</a>
+            <a href="file_index/ai_ml.html" class="nav-pill" data-nav="ai-ml">AI / ML</a>
+            <a href="file_index/infrastructure.html" class="nav-pill" data-nav="infrastructure">Infrastructure</a>
+            <a href="file_index/databases.html" class="nav-pill" data-nav="databases">Databases</a>
+            <a href="file_index/security.html" class="nav-pill" data-nav="security">Security</a>
         </div>
-        <div class="nav-tag">AI Engineering</div>
+        <div class="nav-right">
+            <div class="nav-search">⌘K&nbsp; Search</div>
+            <a href="#newsletter" class="nav-subscribe">Subscribe</a>
+        </div>
     </nav>
 
     <!-- HERO -->
     <section class="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-grid"></div>
-        <div class="orb orb1"></div>
-        <div class="orb orb2"></div>
-        <div class="orb orb3"></div>
-
-        <div class="hero-eyebrow">Research-level AI Engineering</div>
-        <h1>
-            Where Production AI<br>
-            <span class="line2">Gets Brutally Honest.</span>
-            <span class="line3">Deep dives into RAG, vector search, LLM systems &amp; the gaps between demos and
-                reality.</span>
-        </h1>
-        <p class="hero-desc">
-            No tutorials. No fluff. Research-grade articles on the hard problems in building AI systems that actually
-            work at scale — written by engineers who have hit the walls.
-        </p>
-        <div class="hero-actions">
-            <a href="#articles" class="btn-primary">Read the Latest</a>
-            <a href="#newsletter" class="btn-outline">Get Notified</a>
-        </div>
-
-        <div class="hero-stats">
-            <div class="hero-stat">
-                <span class="sn">9</span>
-                <span class="sl">Deep Dives</span>
+        <!-- LEFT -->
+        <div class="hero-left">
+            <div class="hero-eyebrow">Advanced Technology Writing</div>
+            <h1>Engineering<br>at <span class="hl">Depth.</span></h1>
+            <p class="hero-desc">
+                Research-grade articles on system design, distributed systems, AI/ML engineering, databases,
+                infrastructure, and security. No tutorials. No fluff. Just the hard problems — written clearly.
+            </p>
+            <div class="hero-ctas">
+                <a href="#articles" class="btn-primary">Browse Articles</a>
+                <a href="#topics" class="btn-outline">Explore Topics</a>
             </div>
-            <div class="hero-stat">
-                <span class="sn">82K</span>
-                <span class="sl">Words Written</span>
-            </div>
-            <div class="hero-stat">
-                <span class="sn">47</span>
-                <span class="sl">Diagrams</span>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="sn count-up">23</span>
+                    <span class="sl">Articles Published</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="sn count-up">8</span>
+                    <span class="sl">Topic Areas</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="sn count-up">160K</span>
+                    <span class="sl">Words of Research</span>
+                </div>
             </div>
         </div>
 
-        <div class="scroll-hint">
-            <div class="scroll-arrow"></div>
-            Scroll to explore
+        <!-- RIGHT: featured stack -->
+        <div class="hero-right">
+            <div class="hero-feat-label">Editor's picks</div>
+            <div class="hero-feat-stack">
+
+                <a href="file_index/articles/designing_10m_users.html" class="hero-feat-item" style="--c:var(--accent2);">
+                    <div class="feat-num">01</div>
+                    <div class="feat-content">
+                        <span class="feat-tag" style="color:var(--accent2);">System Design</span>
+                        <div class="feat-title">Designing for 10 Million Concurrent Users: The Decisions That Actually
+                            Matter</div>
+                        <div class="feat-meta">48 min read · Distributed Systems · Scale</div>
+                    </div>
+                    <span class="feat-arrow">→</span>
+                </a>
+
+                <a href="file_index/articles/rag_pipeline_fails.html" class="hero-feat-item" style="--c:var(--accent);">
+                    <div class="feat-num">02</div>
+                    <div class="feat-content">
+                        <span class="feat-tag" style="color:var(--accent);">AI / ML</span>
+                        <div class="feat-title">Why Your RAG Pipeline Works in Testing and Fails in Production</div>
+                        <div class="feat-meta">15 min read · RAG · Production Engineering</div>
+                    </div>
+                    <span class="feat-arrow">→</span>
+                </a>
+
+                <a href="file_index/articles/hidden_cost_vector_search.html" class="hero-feat-item" style="--c:var(--accent5);">
+                    <div class="feat-num">03</div>
+                    <div class="feat-content">
+                        <span class="feat-tag" style="color:var(--accent5);">Databases</span>
+                        <div class="feat-title">The Hidden Cost of Vector Search at Scale</div>
+                        <div class="feat-meta">54 min read · Vector DBs · ANN Indexing</div>
+                    </div>
+                    <span class="feat-arrow">→</span>
+                </a>
+
+                <a href="file_index/articles/kafka_pulsar_redpanda.html" class="hero-feat-item" style="--c:var(--accent3);">
+                    <div class="feat-num">04</div>
+                    <div class="feat-content">
+                        <span class="feat-tag" style="color:var(--accent3);">Infrastructure</span>
+                        <div class="feat-title">Kafka vs. Pulsar vs. Redpanda: What the Benchmarks Don't Tell You</div>
+                        <div class="feat-meta">35 min read · Messaging · Streaming</div>
+                    </div>
+                    <span class="feat-arrow">→</span>
+                </a>
+
+            </div>
         </div>
     </section>
 
     <!-- TICKER -->
     <div class="ticker">
         <div class="ticker-inner">
-            <strong>NEW</strong>You're Chunking Your Documents Wrong<span class="sep"> · </span>
-            <strong>NEW</strong>LLM Said 95% Confident. Completely Wrong.<span class="sep"> · </span>
-            <strong></strong>RAG Pipeline Fails in Production<span class="sep"> · </span>
-            <strong></strong>Hidden Cost of Vector Search at Scale<span class="sep"> · </span>
-            <strong></strong>Embeddings Are Biased and You Don't Know It<span class="sep"> · </span>
-            <strong></strong>Knowledge Cutoff Problem in RAG Systems<span class="sep"> · </span>
-            <strong></strong>Vector Search Mismatch Problem<span class="sep"> · </span>
+            <span class="t-new">NEW</span><span class="t-item">You're Chunking Your Documents Wrong</span>
+            <span class="t-sep">·</span>
+            <span class="t-new">NEW</span><span class="t-item">LLM Confidence Calibration Deep Dive</span>
+            <span class="t-sep">·</span>
+            <span class="t-label">SYSTEM DESIGN</span><span class="t-item">Designing for 10M Concurrent Users</span>
+            <span class="t-sep">·</span>
+            <span class="t-label">DATABASES</span><span class="t-item">Hidden Cost of Vector Search at Scale</span>
+            <span class="t-sep">·</span>
+            <span class="t-label">AI / ML</span><span class="t-item">Embedding Bias in Production Systems</span>
+            <span class="t-sep">·</span>
+            <span class="t-label">INFRA</span><span class="t-item">Kafka vs Pulsar vs Redpanda</span>
+            <span class="t-sep">·</span>
+            <span class="t-label">SECURITY</span><span class="t-item">Zero-Trust in Distributed Systems</span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <strong>NEW</strong>You're Chunking Your Documents Wrong<span class="sep"> · </span>
-            <strong>NEW</strong>LLM Said 95% Confident. Completely Wrong.<span class="sep"> · </span>
-            <strong></strong>RAG Pipeline Fails in Production<span class="sep"> · </span>
-            <strong></strong>Hidden Cost of Vector Search at Scale<span class="sep"> · </span>
-            <strong></strong>Embeddings Are Biased and You Don't Know It<span class="sep"> · </span>
-            <strong></strong>Knowledge Cutoff Problem in RAG Systems<span class="sep"> · </span>
-            <strong></strong>Vector Search Mismatch Problem<span class="sep"> · </span>
+            <span class="t-new">NEW</span><span class="t-item">You're Chunking Your Documents Wrong</span>
+            <span class="t-sep">·</span>
+            <span class="t-new">NEW</span><span class="t-item">LLM Confidence Calibration Deep Dive</span>
+            <span class="t-sep">·</span>
+            <span class="t-label">SYSTEM DESIGN</span><span class="t-item">Designing for 10M Concurrent Users</span>
+            <span class="t-sep">·</span>
+            <span class="t-label">DATABASES</span><span class="t-item">Hidden Cost of Vector Search at Scale</span>
+            <span class="t-sep">·</span>
+            <span class="t-label">AI / ML</span><span class="t-item">Embedding Bias in Production Systems</span>
+            <span class="t-sep">·</span>
+            <span class="t-label">INFRA</span><span class="t-item">Kafka vs Pulsar vs Redpanda</span>
+            <span class="t-sep">·</span>
+            <span class="t-label">SECURITY</span><span class="t-item">Zero-Trust in Distributed Systems</span>
         </div>
     </div>
 
     <!-- MAIN -->
     <main>
-        <div class="section-wrap">
+        <div class="wrap">
 
-            <!-- FEATURED -->
-            <div class="section-head" id="articles">
-                <div class="section-head-left">
-                    <div class="section-eyebrow">Latest &amp; Featured</div>
-                    <h2>Recent <em>Deep Dives</em></h2>
-                </div>
-                <a href="#" class="view-all">View all articles</a>
-            </div>
-
-            <div class="featured-grid">
-
-                <!-- FEATURED LARGE -->
-                <a href="#" class="article-card card-feat theme-orange">
-                    <div class="card-glow"
-                        style="background:radial-gradient(ellipse at 50% 0%,rgba(200,133,10,.06) 0%,transparent 60%)">
-                    </div>
-                    <div class="card-visual">
-                        <div class="card-visual-inner">
-                            <div class="card-icon">
-                                <span class="big-num">01</span>
-                                <span class="icon-label">Chunking · NLP · RAG</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-meta">
-                            <span class="card-tag tag-orange">RAG Systems</span>
-                            <span class="card-read">15 min read · 4,000 words</span>
-                        </div>
-                        <h3 class="card-title">You're Chunking Your Documents Wrong</h3>
-                        <p class="card-excerpt">How naive text splitting destroys semantic meaning before it even
-                            reaches the vector database — and the five strategies that preserve it. From fixed-size
-                            failures to proposition-level retrieval.</p>
-                        <div class="card-footer">
-                            <span class="card-date">2025</span>
-                            <span class="card-arrow">→</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- SMALL TOP RIGHT -->
-                <a href="#" class="article-card card-sm theme-purple">
-                    <div class="card-glow"
-                        style="background:radial-gradient(ellipse at 50% 0%,rgba(138,64,230,.06) 0%,transparent 60%)">
-                    </div>
-                    <div class="card-visual">
-                        <div class="card-visual-inner">
-                            <div class="card-icon">
-                                <span class="big-num">02</span>
-                                <span class="icon-label">Calibration · Hallucination</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-meta">
-                            <span class="card-tag tag-purple">LLM Safety</span>
-                            <span class="card-read">15 min</span>
-                        </div>
-                        <h3 class="card-title">The LLM Said It Was 95% Confident. It Was Completely Wrong.</h3>
-                        <div class="card-footer">
-                            <span class="card-date">2025</span>
-                            <span class="card-arrow">→</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- SMALL BOTTOM RIGHT -->
-                <a href="#" class="article-card card-sm theme-red">
-                    <div class="card-glow"
-                        style="background:radial-gradient(ellipse at 50% 0%,rgba(224,69,69,.06) 0%,transparent 60%)">
-                    </div>
-                    <div class="card-visual">
-                        <div class="card-visual-inner">
-                            <div class="card-icon">
-                                <span class="big-num">03</span>
-                                <span class="icon-label">Production · Gaps · RAG</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-meta">
-                            <span class="card-tag tag-red">Production AI</span>
-                            <span class="card-read">15 min</span>
-                        </div>
-                        <h3 class="card-title">Why Your RAG Pipeline Works in Testing and Fails in Production</h3>
-                        <div class="card-footer">
-                            <span class="card-date">2025</span>
-                            <span class="card-arrow">→</span>
-                        </div>
-                    </div>
-                </a>
-
-            </div>
-
-            <!-- ALL ARTICLES GRID -->
-            <div class="section-head" style="padding-top:0;">
-                <div class="section-head-left">
-                    <div class="section-eyebrow">Full Archive</div>
-                    <h2>All <em>Articles</em></h2>
+            <!-- TOPICS -->
+            <div class="sh" id="topics">
+                <div class="sh-left">
+                    <div class="sh-eye">Explore by Domain</div>
+                    <h2>Every <em>Topic Area</em></h2>
                 </div>
             </div>
 
-            <div class="articles-grid">
+            <div class="topic-grid">
+                <a href="file_index/system_design.html" class="topic-card" style="--tc:var(--accent2);">
+                    <span class="topic-icon">🏗</span>
+                    <div class="topic-name">System Design</div>
+                    <div class="topic-count">7 articles</div>
+                    <p class="topic-desc">Distributed systems, scalability patterns, load balancing, CAP theorem, and
+                        designing for failure at scale.</p>
+                </a>
+                <a href="file_index/ai_ml.html" class="topic-card" style="--tc:var(--accent);">
+                    <span class="topic-icon">🧠</span>
+                    <div class="topic-name">AI / ML Engineering</div>
+                    <div class="topic-count">6 articles</div>
+                    <p class="topic-desc">RAG pipelines, vector search, LLM calibration, embedding bias, chunking
+                        strategies, and production AI systems.</p>
+                </a>
+                <a href="file_index/infrastructure.html" class="topic-card" style="--tc:var(--accent3);">
+                    <span class="topic-icon">⚙️</span>
+                    <div class="topic-name">Infrastructure</div>
+                    <div class="topic-count">3 articles</div>
+                    <p class="topic-desc">Kubernetes internals, messaging systems, observability, container
+                        orchestration, and cloud-native architectures.</p>
+                </a>
+                <a href="file_index/databases.html" class="topic-card" style="--tc:var(--accent6);">
+                    <span class="topic-icon">🗄</span>
+                    <div class="topic-name">Databases</div>
+                    <div class="topic-count">3 articles</div>
+                    <p class="topic-desc">Indexing strategies, consistency models, NewSQL vs NoSQL, replication, and
+                        database internals under the hood.</p>
+                </a>
+                <a href="file_index/security.html" class="topic-card" style="--tc:var(--accent4);">
+                    <span class="topic-icon">🔐</span>
+                    <div class="topic-name">Security</div>
+                    <div class="topic-count">1 article</div>
+                    <p class="topic-desc">Zero-trust architecture, OAuth internals, cryptography for engineers, and
+                        securing distributed systems.</p>
+                </a>
+                <a href="file_index/data_systems.html" class="topic-card" style="--tc:var(--accent5);">
+                    <span class="topic-icon">📊</span>
+                    <div class="topic-name">Data Systems</div>
+                    <div class="topic-count">4 articles</div>
+                    <p class="topic-desc">Streaming vs batch, data lake architectures, real-time pipelines, and the
+                        hidden costs of modern data stacks.</p>
+                </a>
+                <a href="file_index/networking.html" class="topic-card" style="--tc:#1a6a6a;">
+                    <span class="topic-icon">🌐</span>
+                    <div class="topic-name">Networking</div>
+                    <div class="topic-count">2 articles</div>
+                    <p class="topic-desc">TCP/IP deep dives, service mesh internals, DNS at scale, and what actually
+                        happens in a network call.</p>
+                </a>
+                <a href="file_index/performance.html" class="topic-card" style="--tc:#6a1a1a;">
+                    <span class="topic-icon">⚡</span>
+                    <div class="topic-name">Performance</div>
+                    <div class="topic-count">3 articles</div>
+                    <p class="topic-desc">Profiling, caching strategies, CPU and memory optimization, latency vs
+                        throughput, and benchmarking correctly.</p>
+                </a>
+            </div>
 
-                <a href="#" class="article-card card-list theme-blue">
-                    <div class="card-visual">
-                        <div class="card-visual-inner">
-                            <div class="card-icon">
-                                <span class="big-num">04</span>
-                                <span class="icon-label">Vector Search · Scale</span>
-                            </div>
+            <!-- LATEST ARTICLES -->
+            <div class="sh" id="articles" style="padding-top:20px;">
+                <div class="sh-left">
+                    <div class="sh-eye">Most Recent</div>
+                    <h2>Latest <em>Articles</em></h2>
+                </div>
+                <a href="file_index/archive.html" class="sh-right">View archive</a>
+            </div>
+
+            <!-- CAT FILTER -->
+            <div class="cat-filter">
+                <button class="cat-btn active">All</button>
+                <button class="cat-btn">System Design</button>
+                <button class="cat-btn">AI / ML</button>
+                <button class="cat-btn">Databases</button>
+                <button class="cat-btn">Infrastructure</button>
+                <button class="cat-btn">Security</button>
+            </div>
+
+            <!-- 3-COLUMN GRID -->
+            <div class="grid-3">
+
+                <a href="file_index/articles/chunking_documents_wrong.html" class="ac" style="--ac1:var(--accent);--ac2:#ff6b6b;">
+                    <div class="ac-visual" style="background:linear-gradient(135deg,#fdf4ee,#f8ece0);">
+                        <span class="ac-visual-num">01</span>
+                        <div class="ac-visual-tags">
+                            <span class="ac-visual-tag">Chunking</span>
+                            <span class="ac-visual-tag">RAG</span>
+                            <span class="ac-visual-tag">NLP</span>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="card-meta">
-                            <span class="card-tag tag-blue">Vector Search</span>
-                            <span class="card-read">54 min</span>
-                        </div>
-                        <h3 class="card-title">The Hidden Cost of Vector Search at Scale</h3>
-                        <div class="card-footer">
-                            <span class="card-date">2025</span>
-                            <span class="card-arrow">→</span>
-                        </div>
+                    <div class="ac-meta">
+                        <span class="ac-tag t-ai">AI / ML</span>
+                        <span class="ac-read">15 min read</span>
+                    </div>
+                    <h3 class="ac-title">You're Chunking Your Documents Wrong</h3>
+                    <p class="ac-excerpt">How naive text splitting destroys semantic meaning before it even reaches the
+                        vector database — and the five strategies that preserve it.</p>
+                    <div class="ac-footer">
+                        <span class="ac-date">2025</span>
+                        <span class="ac-arrow">→</span>
                     </div>
                 </a>
 
-                <a href="#" class="article-card card-list theme-orange">
-                    <div class="card-visual">
-                        <div class="card-visual-inner">
-                            <div class="card-icon">
-                                <span class="big-num">05</span>
-                                <span class="icon-label">Bias · Embeddings · Production</span>
-                            </div>
+                <a href="file_index/articles/llm_confidence_wrong.html" class="ac" style="--ac1:var(--accent5);--ac2:var(--accent2);">
+                    <div class="ac-visual" style="background:linear-gradient(135deg,#f0eeff,#e8e4ff);">
+                        <span class="ac-visual-num">02</span>
+                        <div class="ac-visual-tags">
+                            <span class="ac-visual-tag">Calibration</span>
+                            <span class="ac-visual-tag">Hallucination</span>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="card-meta">
-                            <span class="card-tag tag-orange">AI Bias</span>
-                            <span class="card-read">52 min</span>
-                        </div>
-                        <h3 class="card-title">Your Embeddings Are Biased and You Don't Know It</h3>
-                        <div class="card-footer">
-                            <span class="card-date">2025</span>
-                            <span class="card-arrow">→</span>
-                        </div>
+                    <div class="ac-meta">
+                        <span class="ac-tag t-ai">AI / ML</span>
+                        <span class="ac-read">15 min read</span>
                     </div>
-                </a>
-
-                <a href="#" class="article-card card-list theme-cyan">
-                    <div class="card-visual">
-                        <div class="card-visual-inner">
-                            <div class="card-icon">
-                                <span class="big-num">06</span>
-                                <span class="icon-label">Freshness · RAG · Real-Time</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-meta">
-                            <span class="card-tag tag-cyan">Real-Time AI</span>
-                            <span class="card-read">50 min</span>
-                        </div>
-                        <h3 class="card-title">You Asked the AI a Question. It Answered From 2023.</h3>
-                        <div class="card-footer">
-                            <span class="card-date">2025</span>
-                            <span class="card-arrow">→</span>
-                        </div>
+                    <h3 class="ac-title">The LLM Said It Was 95% Confident. It Was Completely Wrong.</h3>
+                    <p class="ac-excerpt">A deep-dive into AI hallucination, confidence calibration, and why probability
+                        scores from LLMs are not what you think.</p>
+                    <div class="ac-footer">
+                        <span class="ac-date">2025</span>
+                        <span class="ac-arrow">→</span>
                     </div>
                 </a>
 
-                <a href="#" class="article-card card-list theme-green">
-                    <div class="card-visual">
-                        <div class="card-visual-inner">
-                            <div class="card-icon">
-                                <span class="big-num">07</span>
-                                <span class="icon-label">Vector · Mismatch · Search</span>
-                            </div>
+                <a href="file_index/articles/rag_pipeline_fails.html" class="ac" style="--ac1:var(--accent4);--ac2:var(--accent);">
+                    <div class="ac-visual" style="background:linear-gradient(135deg,#ffeef4,#ffeeee);">
+                        <span class="ac-visual-num">03</span>
+                        <div class="ac-visual-tags">
+                            <span class="ac-visual-tag">Production</span>
+                            <span class="ac-visual-tag">RAG</span>
+                            <span class="ac-visual-tag">Gaps</span>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="card-meta">
-                            <span class="card-tag tag-green">Semantic Search</span>
-                            <span class="card-read">45 min</span>
-                        </div>
-                        <h3 class="card-title">You Searched for an Apple. The Database Returned a Carrot.</h3>
-                        <div class="card-footer">
-                            <span class="card-date">2025</span>
-                            <span class="card-arrow">→</span>
-                        </div>
+                    <div class="ac-meta">
+                        <span class="ac-tag t-ai">AI / ML</span>
+                        <span class="ac-read">15 min read</span>
                     </div>
-                </a>
-
-                <a href="#" class="article-card card-list theme-purple">
-                    <div class="card-visual">
-                        <div class="card-visual-inner">
-                            <div class="card-icon">
-                                <span class="big-num">08</span>
-                                <span class="icon-label">Fine-tuning · RAG · Strategy</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-meta">
-                            <span class="card-tag tag-purple">Architecture</span>
-                            <span class="card-read">40 min</span>
-                        </div>
-                        <h3 class="card-title">Fine-Tuning vs. RAG: You're Probably Choosing the Wrong One</h3>
-                        <div class="card-footer">
-                            <span class="card-date">Coming Soon</span>
-                            <span class="card-arrow">→</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#" class="article-card card-list theme-red">
-                    <div class="card-visual">
-                        <div class="card-visual-inner">
-                            <div class="card-icon">
-                                <span class="big-num">09</span>
-                                <span class="icon-label">Prompt · Retrieval · Failure</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-meta">
-                            <span class="card-tag tag-red">LLM Engineering</span>
-                            <span class="card-read">38 min</span>
-                        </div>
-                        <h3 class="card-title">The Prompt Looked Perfect. The Output Was Garbage.</h3>
-                        <div class="card-footer">
-                            <span class="card-date">Coming Soon</span>
-                            <span class="card-arrow">→</span>
-                        </div>
+                    <h3 class="ac-title">Why Your RAG Pipeline Works in Testing and Fails in Production</h3>
+                    <p class="ac-excerpt">The 7 gaps between demo and deployment — chunking strategies, embedding drift,
+                        latency budgets, and more.</p>
+                    <div class="ac-footer">
+                        <span class="ac-date">2025</span>
+                        <span class="ac-arrow">→</span>
                     </div>
                 </a>
 
             </div>
 
-            <!-- SERIES -->
-            <div class="section-head" id="series" style="padding-top:20px;">
-                <div class="section-head-left">
-                    <div class="section-eyebrow">Curated Collections</div>
-                    <h2>Article <em>Series</em></h2>
+            <div class="grid-2">
+
+                <a href="file_index/articles/designing_10m_users.html" class="ac" style="--ac1:var(--accent2);--ac2:var(--accent3);">
+                    <div class="ac-visual" style="background:linear-gradient(135deg,#eef4ff,#e8f4ee);">
+                        <span class="ac-visual-num">04</span>
+                        <div class="ac-visual-tags">
+                            <span class="ac-visual-tag">Distributed</span>
+                            <span class="ac-visual-tag">Scale</span>
+                            <span class="ac-visual-tag">CAP</span>
+                        </div>
+                    </div>
+                    <div class="ac-meta">
+                        <span class="ac-tag t-sys">System Design</span>
+                        <span class="ac-read">48 min read</span>
+                    </div>
+                    <h3 class="ac-title">Designing for 10 Million Concurrent Users: The Decisions That Actually Matter
+                    </h3>
+                    <p class="ac-excerpt">Load balancers, sharding strategies, eventual consistency tradeoffs, and the 6
+                        architectural decisions most teams get wrong when building for extreme scale.</p>
+                    <div class="ac-footer">
+                        <span class="ac-date">2025</span>
+                        <span class="ac-arrow">→</span>
+                    </div>
+                </a>
+
+                <a href="file_index/articles/hidden_cost_vector_search.html" class="ac" style="--ac1:var(--accent5);--ac2:var(--accent2);">
+                    <div class="ac-visual" style="background:linear-gradient(135deg,#f0eeff,#eef4ff);">
+                        <span class="ac-visual-num">05</span>
+                        <div class="ac-visual-tags">
+                            <span class="ac-visual-tag">ANN</span>
+                            <span class="ac-visual-tag">HNSW</span>
+                            <span class="ac-visual-tag">Scale</span>
+                        </div>
+                    </div>
+                    <div class="ac-meta">
+                        <span class="ac-tag t-db">Databases</span>
+                        <span class="ac-read">54 min read</span>
+                    </div>
+                    <h3 class="ac-title">The Hidden Cost of Vector Search at Scale</h3>
+                    <p class="ac-excerpt">Why cosine similarity gets dangerously unreliable above 10M vectors, how the
+                        curse of dimensionality breaks intuition, and the indexing strategies that actually hold up in
+                        production.</p>
+                    <div class="ac-footer">
+                        <span class="ac-date">2025</span>
+                        <span class="ac-arrow">→</span>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- HORIZONTAL ARTICLES -->
+            <a href="file_index/articles/kafka_pulsar_redpanda.html" class="ac-hz">
+                <div class="ac-hz-visual" style="background:linear-gradient(135deg,#eefff4,#e8fff0);">
+                    <span class="ac-hz-num" style="color:var(--accent3);">06</span>
+                </div>
+                <div class="ac-hz-body">
+                    <div class="ac-meta" style="margin-bottom:10px;">
+                        <span class="ac-tag t-inf">Infrastructure</span>
+                        <span class="ac-read">35 min read</span>
+                    </div>
+                    <h3 class="ac-title">Kafka vs. Pulsar vs. Redpanda: What the Benchmarks Don't Tell You</h3>
+                    <p class="ac-hz-desc">Most comparisons stop at throughput numbers. This one goes inside the
+                        replication model, the disk I/O pattern, the consumer group semantics, and the operational
+                        complexity you will actually face at 200K messages per second.</p>
+                    <div class="ac-hz-meta">
+                        <span>Messaging Systems</span><span class="ep-dot"></span>
+                        <span>Streaming Architecture</span><span class="ep-dot"></span>
+                        <span>2025</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="file_index/articles/zero_trust_discipline.html" class="ac-hz">
+                <div class="ac-hz-visual" style="background:linear-gradient(135deg,#fff0ee,#ffeeee);">
+                    <span class="ac-hz-num" style="color:var(--accent4);">07</span>
+                </div>
+                <div class="ac-hz-body">
+                    <div class="ac-meta" style="margin-bottom:10px;">
+                        <span class="ac-tag t-sec">Security</span>
+                        <span class="ac-read">40 min read</span>
+                    </div>
+                    <h3 class="ac-title">Zero-Trust Architecture Is Not a Product. It Is an Engineering Discipline.</h3>
+                    <p class="ac-hz-desc">Vendors have turned zero-trust into a marketing term. This article strips it
+                        back to the underlying engineering decisions: identity as the new perimeter, mTLS everywhere,
+                        least-privilege enforcement at the service mesh layer, and why most "zero-trust" deployments are
+                        neither.</p>
+                    <div class="ac-hz-meta">
+                        <span>Security Engineering</span><span class="ep-dot"></span>
+                        <span>Distributed Systems</span><span class="ep-dot"></span>
+                        <span>2025</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="file_index/articles/read_write_ratio.html" class="ac-hz" style="margin-bottom:40px;">
+                <div class="ac-hz-visual" style="background:linear-gradient(135deg,#eef2ff,#eeeeff);">
+                    <span class="ac-hz-num" style="color:var(--accent5);">08</span>
+                </div>
+                <div class="ac-hz-body">
+                    <div class="ac-meta" style="margin-bottom:10px;">
+                        <span class="ac-tag t-sys">System Design</span>
+                        <span class="ac-read">52 min read</span>
+                    </div>
+                    <h3 class="ac-title">The Read-Write Ratio Changes Everything: Database Selection at Genuine Scale
+                    </h3>
+                    <p class="ac-hz-desc">The decision between PostgreSQL, Cassandra, DynamoDB, and CockroachDB is not
+                        about features — it is about the shape of your access pattern, your consistency requirements,
+                        and the operational cost you can actually afford. A framework for making this decision
+                        correctly, once.</p>
+                    <div class="ac-hz-meta">
+                        <span>Database Architecture</span><span class="ep-dot"></span>
+                        <span>Consistency Models</span><span class="ep-dot"></span>
+                        <span>2025</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- EDITOR'S PICKS -->
+            <div class="sh" style="padding-top:20px;">
+                <div class="sh-left">
+                    <div class="sh-eye">Staff Selections</div>
+                    <h2>More <em>Recommended</em> Reading</h2>
                 </div>
             </div>
 
-            <div class="series-grid">
-                <a href="#" class="series-card" style="--c1:#c8850a;--c2:#e04545;">
-                    <div class="series-num">01</div>
-                    <div class="series-title">The RAG Engineering Series</div>
-                    <div class="series-count">4 articles · Chunking, retrieval, context, evaluation</div>
+            <div class="ep-strip">
+                <a href="file_index/articles/embeddings_biased.html" class="ep-item">
+                    <div class="ep-label">AI / ML</div>
+                    <div class="ep-title">Your Embeddings Are Biased and You Don't Know It</div>
+                    <div class="ep-footer">
+                        <span>52 min read</span><span class="ep-dot"></span><span>2025</span>
+                    </div>
                 </a>
-                <a href="#" class="series-card" style="--c1:#2b7de9;--c2:#0fb86f;">
-                    <div class="series-num">02</div>
-                    <div class="series-title">Vector Search at Scale</div>
-                    <div class="series-count">3 articles · ANN, indexing, production architecture</div>
+                <a href="file_index/articles/ai_answered_2023.html" class="ep-item">
+                    <div class="ep-label">AI / ML</div>
+                    <div class="ep-title">You Asked the AI a Question. It Answered From 2023.</div>
+                    <div class="ep-footer">
+                        <span>50 min read</span><span class="ep-dot"></span><span>2025</span>
+                    </div>
                 </a>
-                <a href="#" class="series-card" style="--c1:#8a40e6;--c2:#2b7de9;">
-                    <div class="series-num">03</div>
-                    <div class="series-title">LLM Reliability &amp; Safety</div>
-                    <div class="series-count">2 articles · Hallucination, calibration, confidence</div>
-                </a>
-                <a href="#" class="series-card" style="--c1:#0fb86f;--c2:#149090;">
-                    <div class="series-num">04</div>
-                    <div class="series-title">AI Bias in Production</div>
-                    <div class="series-count">1 article · Embedding bias, detection, mitigation</div>
+                <a href="file_index/articles/event_sourcing_harder.html" class="ep-item">
+                    <div class="ep-label">System Design</div>
+                    <div class="ep-title">The Event Sourcing Pattern: Why It's Harder Than You Think</div>
+                    <div class="ep-footer">
+                        <span>44 min read</span><span class="ep-dot"></span><span>2025</span>
+                    </div>
                 </a>
             </div>
 
-            <!-- ABOUT STRIP -->
-            <div class="section-head" id="about" style="padding-top:20px;">
-                <div class="section-head-left">
-                    <div class="section-eyebrow">The Philosophy</div>
-                    <h2>Why This <em>Blog Exists</em></h2>
+            <div class="ep-strip" style="margin-bottom:80px;">
+                <a href="file_index/articles/btree_vs_lsm.html" class="ep-item">
+                    <div class="ep-label">Databases</div>
+                    <div class="ep-title">B-Tree vs. LSM-Tree: The Index Structure Behind Every Query</div>
+                    <div class="ep-footer">
+                        <span>38 min read</span><span class="ep-dot"></span><span>2025</span>
+                    </div>
+                </a>
+                <a href="file_index/articles/kubectl_apply.html" class="ep-item">
+                    <div class="ep-label">Infrastructure</div>
+                    <div class="ep-title">What Kubernetes Actually Does When You Run kubectl apply</div>
+                    <div class="ep-footer">
+                        <span>42 min read</span><span class="ep-dot"></span><span>2025</span>
+                    </div>
+                </a>
+                <a href="file_index/articles/cpu_caches_false_sharing.html" class="ep-item">
+                    <div class="ep-label">Performance</div>
+                    <div class="ep-title">CPU Caches, False Sharing, and Why Your Code Is Slower Than It Should Be</div>
+                    <div class="ep-footer">
+                        <span>36 min read</span><span class="ep-dot"></span><span>2025</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- ABOUT -->
+            <div class="sh" id="about" style="padding-top:20px;">
+                <div class="sh-left">
+                    <div class="sh-eye">The Publication</div>
+                    <h2>What <em>Depth</em> Is</h2>
                 </div>
             </div>
 
-            <div class="about-strip" style="margin-bottom:80px;">
-                <div class="about-cell">
-                    <div class="about-cell-icon">🔬</div>
-                    <h4>Research-Grade Depth</h4>
-                    <p>Every article cites primary research, includes original diagrams built from scratch, and goes
-                        beyond surface-level tutorials. If it's already in the LangChain docs, it's not here.</p>
+            <div class="about-row">
+                <div class="about-left">
+                    <h3>Written for engineers who want the <em>full picture.</em></h3>
+                    <p>Most technical content stops at the "what." Depth goes to the "why" and "at what cost" — the
+                        tradeoffs, the failure modes, the things you only learn after shipping to production and
+                        watching things break.</p>
+                    <p>Every article is written by practitioners, cites primary research, includes original diagrams,
+                        and is edited for precision. Topics span the full stack of modern engineering — from CPU caches
+                        to distributed consensus to LLM calibration — connected by a single philosophy: depth over
+                        breadth, always.</p>
+                    <a href="file_index/editorial_standards.html" class="about-link">Read our editorial standards →</a>
                 </div>
-                <div class="about-cell">
-                    <div class="about-cell-icon">⚙️</div>
-                    <h4>Production-First Perspective</h4>
-                    <p>All articles are written from the perspective of systems that must run reliably under real load,
-                        with real users, on real data — not synthetic benchmarks designed to make things look better
-                        than they are.</p>
-                </div>
-                <div class="about-cell">
-                    <div class="about-cell-icon">📐</div>
-                    <h4>Code That Actually Runs</h4>
-                    <p>Every code sample is production-quality Python with real error handling, real configuration, and
-                        comments that explain the why — not just the what. No pseudocode.</p>
+                <div class="about-right">
+                    <div class="about-stat">
+                        <span class="as-n count-up">23</span>
+                        <span class="as-l">Articles Published</span>
+                    </div>
+                    <div class="about-stat">
+                        <span class="as-n count-up">160K</span>
+                        <span class="as-l">Words of Research</span>
+                    </div>
+                    <div class="about-stat">
+                        <span class="as-n count-up">90</span>
+                        <span class="as-l">Original Diagrams</span>
+                    </div>
+                    <div class="about-stat">
+                        <span class="as-n count-up">8</span>
+                        <span class="as-l">Topic Domains</span>
+                    </div>
                 </div>
             </div>
 
             <!-- NEWSLETTER -->
-            <div class="newsletter" id="newsletter">
-                <div class="newsletter-text">
-                    <div class="newsletter-eyebrow">Stay Sharp</div>
+            <div class="nl" id="newsletter">
+                <div>
+                    <div class="nl-eyebrow">Stay Sharp</div>
                     <h3>New deep dives, twice a month.<br>No noise. No sponsorships.</h3>
-                    <p>Get notified when the next research-level article drops. Unsubscribe any time — no dark patterns,
-                        no re-engagement campaigns.</p>
+                    <p>Get notified when the next research-level article drops. Unsubscribe at any time — no dark
+                        patterns, no re-engagement campaigns, no ads.</p>
                 </div>
-                <div class="newsletter-form">
-                    <input type="email" class="newsletter-input" placeholder="your@email.com">
-                    <a href="#" class="btn-primary">Subscribe</a>
+                <div class="nl-form">
+                    <input type="email" class="nl-input" placeholder="your@email.com">
+                    <button class="nl-btn">Subscribe →</button>
+                    <span class="nl-note">Join 4,200+ engineers. No spam, ever.</span>
                 </div>
             </div>
 
@@ -436,23 +555,58 @@
 
     <!-- FOOTER -->
     <footer>
-        <div class="footer-inner">
-            <div class="footer-logo">
-                <span class="dot"></span>
-                VectorMind
+        <div class="footer-top">
+            <div class="footer-col footer-logo-area">
+                <div class="footer-logo">
+                    <span class="footer-logo-dot"></span>
+                    Depth
+                </div>
+                <p class="footer-tagline">Research-grade writing on system design, AI/ML, infrastructure, databases,
+                    security and data systems.</p>
+                <div class="footer-social">
+                    <a href="#">X</a>
+                    <a href="#">GH</a>
+                    <a href="#">LI</a>
+                    <a href="#">RSS</a>
+                </div>
             </div>
-            <div class="footer-links">
-                <a href="#">Articles</a>
-                <a href="#">Series</a>
-                <a href="#">Medium</a>
-                <a href="#">GitHub</a>
-                <a href="#">Twitter / X</a>
+            <div class="footer-col">
+                <div class="footer-col-head">Topics</div>
+                <a href="file_index/system_design.html">System Design</a>
+                <a href="file_index/ai_ml.html">AI / ML</a>
+                <a href="file_index/infrastructure.html">Infrastructure</a>
+                <a href="file_index/databases.html">Databases</a>
+                <a href="file_index/security.html">Security</a>
+                <a href="file_index/data_systems.html">Data Systems</a>
             </div>
-            <div class="footer-copy">© 2025 VectorMind · All rights reserved</div>
+            <div class="footer-col">
+                <div class="footer-col-head">Articles</div>
+                <a href="index.html#articles">Latest</a>
+                <a href="file_index/archive.html#most-read">Most Read</a>
+                <a href="file_index/archive.html#editors">Editor's Picks</a>
+                <a href="file_index/archive.html#series">Series</a>
+                <a href="file_index/archive.html">Archive</a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-head">Publication</div>
+                <a href="file_index/about.html">About</a>
+                <a href="file_index/editorial_standards.html">Editorial Standards</a>
+                <a href="file_index/write_for_depth.html">Write for Depth</a>
+                <a href="#newsletter">Newsletter</a>
+                <a href="file_index/contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span class="footer-copy">© 2025 Depth · All articles are original research</span>
+            <div class="footer-bottom-links">
+                <a href="file_index/privacy.html">Privacy</a>
+                <a href="file_index/terms.html">Terms</a>
+                <a href="file_index/rss.html">RSS Feed</a>
+            </div>
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="js/depth/main.js" defer></script>
 </body>
 
 </html>
