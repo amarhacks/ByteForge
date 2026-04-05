@@ -6,21 +6,22 @@
   <title>You're Chunking Your Documents Wrong — Depth</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../css/depth/tokens.css">
-<link rel="stylesheet" href="../../css/depth/base.css">
-<link rel="stylesheet" href="../../css/depth/layout/grids.css">
-<link rel="stylesheet" href="../../css/depth/components/nav.css">
-<link rel="stylesheet" href="../../css/depth/components/hero.css">
-<link rel="stylesheet" href="../../css/depth/components/ticker.css">
-<link rel="stylesheet" href="../../css/depth/components/section-head.css">
-<link rel="stylesheet" href="../../css/depth/components/filters.css">
-<link rel="stylesheet" href="../../css/depth/components/cards.css">
-<link rel="stylesheet" href="../../css/depth/components/topics.css">
-<link rel="stylesheet" href="../../css/depth/components/newsletter.css">
-<link rel="stylesheet" href="../../css/depth/components/about.css">
-<link rel="stylesheet" href="../../css/depth/components/footer.css">
-<link rel="stylesheet" href="../../css/depth/components/page.css">
-<link rel="stylesheet" href="../../css/depth/components/article.css">
-<link rel="stylesheet" href="../../css/depth/responsive.css">
+  <link rel="stylesheet" href="../../css/depth/base.css">
+  <link rel="stylesheet" href="../../css/depth/layout/grids.css">
+  <link rel="stylesheet" href="../../css/depth/components/nav.css">
+  <link rel="stylesheet" href="../../css/depth/components/hero.css">
+  <link rel="stylesheet" href="../../css/depth/components/ticker.css">
+  <link rel="stylesheet" href="../../css/depth/components/section-head.css">
+  <link rel="stylesheet" href="../../css/depth/components/filters.css">
+  <link rel="stylesheet" href="../../css/depth/components/cards.css">
+  <link rel="stylesheet" href="../../css/depth/components/topics.css">
+  <link rel="stylesheet" href="../../css/depth/components/newsletter.css">
+  <link rel="stylesheet" href="../../css/depth/components/about.css">
+  <link rel="stylesheet" href="../../css/depth/components/footer.css">
+  <link rel="stylesheet" href="../../css/depth/components/page.css">
+  <link rel="stylesheet" href="../../css/depth/components/article.css">
+  <link rel="stylesheet" href="../../css/depth/components/ai-longform.css">
+  <link rel="stylesheet" href="../../css/depth/responsive.css">
 </head>
 <body class="article-page theme-ai" data-nav="ai-ml">
 <nav>
@@ -42,7 +43,7 @@
   </div>
 </nav>
 
-<section class="article-hero">
+<section class="article-hero" id="top">
   <div class="article-hero-inner">
     <div>
       <div class="breadcrumb">
@@ -53,8 +54,8 @@
         <span>You're Chunking Your Documents Wrong</span>
       </div>
       <div class="article-kicker">AI / ML</div>
-      <h1 class="article-title">You're Chunking Your Documents Wrong</h1>
-      <p class="article-subtitle">How naive splitting destroys semantic meaning before it reaches the vector database — and how to fix it.</p>
+      <h1 class="article-title">You're Chunking Your <span class="hl">Documents Wrong</span></h1>
+      <p class="article-subtitle">How naive text splitting destroys semantic meaning before it even reaches the vector database — and the five strategies that preserve it.</p>
       <div class="article-meta">
         <div class="article-meta-item"><strong>15 min read</strong></div>
         <div class="article-meta-item"><span class="ep-dot"></span>2025</div>
@@ -65,11 +66,11 @@
       <h4>Key Themes</h4>
       <div class="feat-tags">
         <span class="ac-visual-tag">Chunking</span>
-<span class="ac-visual-tag">RAG</span>
-<span class="ac-visual-tag">NLP</span>
-<span class="ac-visual-tag">Retrieval</span>
+        <span class="ac-visual-tag">RAG</span>
+        <span class="ac-visual-tag">NLP</span>
+        <span class="ac-visual-tag">Retrieval</span>
       </div>
-      <p>How naive splitting destroys semantic meaning before it reaches the vector database — and how to fix it.</p>
+      <p>How naive text splitting destroys semantic meaning before it even reaches the vector database — and the five strategies that preserve it.</p>
     </aside>
   </div>
 </section>
@@ -78,30 +79,794 @@
   <aside class="article-aside">
     <h4>On This Page</h4>
     <div class="article-toc">
-      <a href="#context">Context</a>
-      <a href="#under-the-hood">Under the Hood</a>
-      <a href="#failure-modes">Failure Modes</a>
-      <a href="#takeaways">Takeaways</a>
+      <a href="#intro"> 01 — The First Casualty What Dies Before the Vector Database Even Sees It</a>
+      <a href="#fixed-size-failure"> 02 — The Failure Modes Five Ways Fixed-Size Chunking Destroys Meaning</a>
+      <a href="#strategies"> 03 — Five Strategies That Actually Work From Structure-Aware to Proposition-Level</a>
+      <a href="#decision-framework"> 04 — The Decision Framework Choosing the Right Strategy for Your Document Type</a>
+      <a href="#evaluation"> 05 — Measuring Chunk Quality How to Know When Your Chunks Are Good</a>
+      <a href="#closing"> 06 — The Investment Why Chunking Deserves Engineering Time</a>
     </div>
   </aside>
   <article class="article-body">
-    <p>How naive splitting destroys semantic meaning before it reaches the vector database — and how to fix it.</p>
+    <div class="ai-longform">
+<div class="article">
 
-    <h2 id="context">Context</h2>
-    <p>This piece grounds ai / ml decisions in production reality — the edge cases, scaling thresholds, and tradeoffs that rarely make it into tutorials.</p>
+<!-- 01 -->
+<section id="intro">
+  <h2><span class="sec-num"> 01 — The First Casualty</span>What Dies Before the Vector Database Even Sees It</h2>
 
-    <h2 id="under-the-hood">Under the Hood</h2>
-    <p>We break down the mechanics behind you're chunking your documents wrong and map how those mechanics shape reliability, latency, and operational cost.</p>
+  <p class="drop">Most engineers building RAG systems spend the majority of their time on the glamorous parts — choosing an embedding model, tuning retrieval parameters, crafting system prompts, optimizing re-ranking. These decisions get discussed, benchmarked, and iterated on. Chunking gets a default configuration in a LangChain helper function, a token size of 512, an overlap of 50, and is never revisited again.</p>
 
-    <blockquote>Depth is about the tradeoffs you only see after shipping.</blockquote>
+  <p>This is a critical mistake. <strong>Chunking is the first and most consequential transformation your documents undergo.</strong> It determines the atomic unit of meaning that your embedding model will encode, your vector database will index, and your retrieval system will return. Every downstream decision — embedding quality, retrieval precision, context coherence — is bounded above by the quality of your chunks. You cannot retrieve a semantically coherent chunk that was never created.</p>
 
-    <h2 id="failure-modes">Failure Modes</h2>
-    <p>The failure modes here are subtle: degraded performance, silent correctness drift, and compounded operational toil. The article focuses on detection and mitigation before the incident page lights up.</p>
+  <p>The standard approach — splitting documents into fixed-size token windows with a fixed overlap — is not a neutral default. It is a systematic destroyer of semantic structure. It breaks sentences mid-thought, tears paragraphs from their headers, severs code examples from their explanations, and fractures multi-step reasoning chains into isolated fragments that mean nothing in isolation. The embedding model then faithfully encodes these meaningless fragments, and your vector database indexes them with the same confidence it would index perfectly coherent passages. No alarm is raised. The damage is invisible until a user asks a question the system should be able to answer — and cannot.</p>
 
-    <h2 id="takeaways">Takeaways</h2>
-    <ul>
-      <li>Pay attention to chunking — it is usually the first signal of scale-induced instability.</li><li>Pay attention to rag — it is usually the first signal of scale-induced instability.</li><li>Pay attention to nlp — it is usually the first signal of scale-induced instability.</li>
-    </ul>
+  <div class="stat-row">
+    <div class="stat"><span class="n">512</span><span class="l">Default chunk size used by most RAG tutorials — chosen for no reason specific to any document</span></div>
+    <div class="stat"><span class="n">~34%</span><span class="l">Of semantic units split across chunk boundaries by fixed-size chunking on typical prose</span></div>
+    <div class="stat"><span class="n">↑60%</span><span class="l">Retrieval recall improvement reported moving from fixed-size to semantic chunking</span></div>
+    <div class="stat"><span class="n">0</span><span class="l">Documents in any real corpus that have uniform semantic density at 512 token intervals</span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="ico">⚠️</div>
+    <div class="body"><strong>The Garbage-In Guarantee:</strong> A retrieval system built on poorly chunked documents cannot be improved by a better embedding model or a better vector database. The semantic information was destroyed before encoding. No downstream technique can recover meaning that was never encoded. Chunking quality is a hard ceiling on retrieval quality — and most production systems are operating well below their ceiling because nobody has revisited the defaults.</div>
+  </div>
+</section>
+
+<div class="div">· · ·</div>
+
+<!-- 02 -->
+<section id="fixed-size-failure">
+  <h2><span class="sec-num"> 02 — The Failure Modes</span>Five Ways Fixed-Size Chunking Destroys Meaning</h2>
+
+  <p>Fixed-size chunking's damage is not random. It follows predictable patterns tied to the structural properties of real documents — which are never semantically uniform at any fixed token interval. Understanding each failure mode reveals why the damage is so systematic and why overlap, the standard attempted mitigation, fails to fix it.</p>
+
+  <h3>Failure Mode 1: The Mid-Sentence Guillotine</h3>
+
+  <p>The most basic failure is splitting in the middle of a sentence. This happens more often than intuition suggests. With a chunk size of 512 tokens, a sentence that begins at token 508 and ends at token 523 is split across two chunks. Chunk N ends with "The maximum dosage of the drug should not exceed" and chunk N+1 begins with "200mg per day, and should be reduced for patients with renal impairment." Neither chunk independently retrieves the complete, actionable medical instruction. A query for "drug dosage limits" retrieves one chunk — the one that contains "maximum dosage" — and returns an incomplete, potentially dangerous answer: "should not exceed."</p>
+
+  <p>Adding sentence-aware splitting helps here but does not eliminate the problem. Sentence boundaries are not semantic boundaries. A paragraph of five sentences may establish a causal chain where the conclusion in sentence 5 only makes sense in the context of premises established in sentences 1 through 4. Splitting after sentence 3 — even at a clean sentence boundary — severs the logic.</p>
+
+  <h3>Failure Mode 2: The Header Orphan</h3>
+
+  <p>In structured documents — technical documentation, legal texts, medical references, API guides — sections begin with headers that define the semantic context for everything that follows. Fixed-size chunking routinely separates headers from their content. A chunk ends with a section header, and the next chunk begins with the section's body text, with no header present. The embedding model encodes the body text without the contextual anchor provided by the header.</p>
+
+  <p>The retrieval consequence is silent and severe. A query for "authentication failure handling" may fail to retrieve the relevant section because the chunk containing the handling steps was encoded without its "Authentication Error Handling" header — which would have provided the semantic signal needed to match the query. The correct information exists in the index. It is simply unreachable because its semantic label was cut off.</p>
+
+  <h3>Failure Mode 3: The Table and Code Block Fracture</h3>
+
+  <p>Tables, code blocks, mathematical formulas, and structured lists are the most information-dense elements in most technical documents. They are also the elements most likely to be split across chunk boundaries by fixed-size chunking, because they often span hundreds of tokens without any of the sentence-break signals that some splitters use as split points.</p>
+
+  <p>A split code block is worse than useless. It is actively harmful. Half a function definition — with no closing brace, no return statement, no context about what the function does — is encoded as if it were a coherent passage. The embedding model produces a vector for it. The vector is meaningless as a representation of the function's purpose. Queries about that function will not retrieve this chunk reliably, and if they do retrieve it, the LLM receiving it as context cannot extract the correct answer because the answer was split away.</p>
+
+  <h3>Failure Mode 4: The Cross-Reference Severance</h3>
+
+  <p>Technical and legal documents routinely contain cross-references: "as defined in section 3.2," "see the configuration table above," "building on the example from the previous section." Fixed-size chunking transforms these into dangling pointers. A chunk that says "using the function defined above" with no preceding context containing that function definition is semantically broken. The "above" refers to something that no longer exists in the same chunk, and the LLM receiving this chunk as context will either hallucinate what "the function defined above" means or produce an incomplete answer.</p>
+
+  <h3>Failure Mode 5: The Context Window Mismatch</h3>
+
+  <p>Documents vary enormously in their information density. A legal contract may contain a single critical clause in a 50-token sentence surrounded by hundreds of tokens of boilerplate. A research paper abstract may pack five distinct claims into 150 tokens. A narrative explanation of a concept may require 800 tokens to convey a single coherent idea. Fixed-size chunking applies a uniform token budget to this non-uniform semantic reality, simultaneously over-splitting dense passages and under-splitting sparse ones.</p>
+
+  <div class="pq">
+    <p>"The 512-token default was not derived from the semantic structure of documents. It was derived from what fits comfortably in an embedding model's input window. These are not the same constraint, and confusing them produces systematically bad chunks."</p>
+  </div>
+
+</section>
+
+</div>
+
+<!-- DIAGRAM 1: Fixed-size failure modes -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 460" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c05a00"/></marker>
+  </defs>
+  <rect width="1040" height="460" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#141210" font-size="15" font-weight="700" text-anchor="middle">FIXED-SIZE CHUNKING — FIVE FAILURE MODES WITH CONCRETE EXAMPLES</text>
+
+  <!-- Mode 1: Mid-sentence -->
+  <rect x="30" y="55" width="185" height="360" rx="12" fill="#fff8f2" stroke="#c05a00" stroke-width="1.5"/>
+  <rect x="30" y="55" width="185" height="36" rx="12" fill="#c05a00"/>
+  <text x="122" y="79" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">① MID-SENTENCE CUT</text>
+  <!-- Document text showing the split -->
+  <rect x="44" y="100" width="157" height="62" rx="6" fill="#f0fff4" stroke="#1a6e42" stroke-width="1"/>
+  <text x="122" y="116" fill="#1a6e42" font-size="10" text-anchor="middle" font-weight="700">CHUNK N</text>
+  <text x="122" y="132" fill="#444" font-size="10" text-anchor="middle">"The max dosage</text>
+  <text x="122" y="148" fill="#444" font-size="10" text-anchor="middle">should not exceed</text>
+  <!-- Split line -->
+  <line x1="38" y1="168" x2="195" y2="168" stroke="#c05a00" stroke-width="2.5" stroke-dasharray="6 3"/>
+  <text x="122" y="180" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">✂ TOKEN 512</text>
+  <rect x="44" y="186" width="157" height="62" rx="6" fill="#fff5f0" stroke="#c05a00" stroke-width="1"/>
+  <text x="122" y="202" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">CHUNK N+1</text>
+  <text x="122" y="218" fill="#444" font-size="10" text-anchor="middle">200mg per day..."</text>
+  <text x="122" y="234" fill="#444" font-size="10" text-anchor="middle">[context severed]</text>
+  <text x="122" y="274" fill="#c05a00" font-size="11" text-anchor="middle" font-weight="700">Query retrieves:</text>
+  <text x="122" y="292" fill="#c05a00" font-size="11" text-anchor="middle">"should not exceed"</text>
+  <text x="122" y="310" fill="#c05a00" font-size="11" text-anchor="middle">→ incomplete answer</text>
+  <text x="122" y="390" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">Risk: HIGH</text>
+  <text x="122" y="406" fill="#555" font-size="10" text-anchor="middle">Medical/legal docs</text>
+
+  <!-- Mode 2: Header orphan -->
+  <rect x="233" y="55" width="185" height="360" rx="12" fill="#fff8f2" stroke="#c05a00" stroke-width="1.5"/>
+  <rect x="233" y="55" width="185" height="36" rx="12" fill="#c05a00"/>
+  <text x="325" y="79" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">② HEADER ORPHAN</text>
+  <rect x="247" y="100" width="157" height="62" rx="6" fill="#f0fff4" stroke="#1a6e42" stroke-width="1"/>
+  <text x="325" y="116" fill="#1a6e42" font-size="10" text-anchor="middle" font-weight="700">CHUNK N</text>
+  <text x="325" y="132" fill="#444" font-size="10" text-anchor="middle">[body of prev section]</text>
+  <text x="325" y="148" fill="#1a5a8a" font-size="10" text-anchor="middle" font-weight="700">## Auth Error Handling</text>
+  <line x1="241" y1="168" x2="398" y2="168" stroke="#c05a00" stroke-width="2.5" stroke-dasharray="6 3"/>
+  <text x="325" y="180" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">✂ TOKEN 512</text>
+  <rect x="247" y="186" width="157" height="62" rx="6" fill="#fff5f0" stroke="#c05a00" stroke-width="1"/>
+  <text x="325" y="202" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">CHUNK N+1</text>
+  <text x="325" y="218" fill="#444" font-size="10" text-anchor="middle">"When a 401 occurs,</text>
+  <text x="325" y="234" fill="#444" font-size="10" text-anchor="middle">retry with refresh..."</text>
+  <text x="325" y="274" fill="#c05a00" font-size="11" text-anchor="middle" font-weight="700">No header context.</text>
+  <text x="325" y="292" fill="#c05a00" font-size="11" text-anchor="middle">Query: "auth error"</text>
+  <text x="325" y="310" fill="#c05a00" font-size="11" text-anchor="middle">→ misses this chunk</text>
+  <text x="325" y="390" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">Risk: HIGH</text>
+  <text x="325" y="406" fill="#555" font-size="10" text-anchor="middle">Technical docs</text>
+
+  <!-- Mode 3: Code fracture -->
+  <rect x="436" y="55" width="185" height="360" rx="12" fill="#fff8f2" stroke="#c05a00" stroke-width="1.5"/>
+  <rect x="436" y="55" width="185" height="36" rx="12" fill="#c05a00"/>
+  <text x="528" y="79" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">③ CODE FRACTURE</text>
+  <rect x="450" y="100" width="157" height="62" rx="6" fill="#f0fff4" stroke="#1a6e42" stroke-width="1"/>
+  <text x="528" y="116" fill="#1a6e42" font-size="10" text-anchor="middle" font-weight="700">CHUNK N</text>
+  <text x="528" y="132" fill="#444" font-family="JetBrains Mono" font-size="9" text-anchor="middle">def authenticate(</text>
+  <text x="528" y="146" fill="#444" font-family="JetBrains Mono" font-size="9" text-anchor="middle">  user, token):</text>
+  <text x="528" y="160" fill="#444" font-family="JetBrains Mono" font-size="9" text-anchor="middle">  if not token:</text>
+  <line x1="444" y1="168" x2="601" y2="168" stroke="#c05a00" stroke-width="2.5" stroke-dasharray="6 3"/>
+  <text x="528" y="180" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">✂ TOKEN 512</text>
+  <rect x="450" y="186" width="157" height="62" rx="6" fill="#fff5f0" stroke="#c05a00" stroke-width="1"/>
+  <text x="528" y="202" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">CHUNK N+1</text>
+  <text x="528" y="218" fill="#444" font-family="JetBrains Mono" font-size="9" text-anchor="middle">    raise AuthError</text>
+  <text x="528" y="232" fill="#444" font-family="JetBrains Mono" font-size="9" text-anchor="middle">  return verify(t)</text>
+  <text x="528" y="274" fill="#c05a00" font-size="11" text-anchor="middle" font-weight="700">Half a function.</text>
+  <text x="528" y="292" fill="#c05a00" font-size="11" text-anchor="middle">Neither chunk tells</text>
+  <text x="528" y="310" fill="#c05a00" font-size="11" text-anchor="middle">the full story.</text>
+  <text x="528" y="390" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">Risk: VERY HIGH</text>
+  <text x="528" y="406" fill="#555" font-size="10" text-anchor="middle">API / code docs</text>
+
+  <!-- Mode 4: Cross-reference -->
+  <rect x="639" y="55" width="185" height="360" rx="12" fill="#fff8f2" stroke="#c05a00" stroke-width="1.5"/>
+  <rect x="639" y="55" width="185" height="36" rx="12" fill="#c05a00"/>
+  <text x="731" y="72" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">④ CROSS-REFERENCE</text>
+  <text x="731" y="87" fill="#ffe0c0" font-size="10" text-anchor="middle">SEVERANCE</text>
+  <rect x="653" y="100" width="157" height="62" rx="6" fill="#f0fff4" stroke="#1a6e42" stroke-width="1"/>
+  <text x="731" y="116" fill="#1a6e42" font-size="10" text-anchor="middle" font-weight="700">CHUNK N</text>
+  <text x="731" y="132" fill="#444" font-size="10" text-anchor="middle">config = {</text>
+  <text x="731" y="148" fill="#444" font-size="10" text-anchor="middle">  "timeout": 30 }</text>
+  <line x1="647" y1="168" x2="804" y2="168" stroke="#c05a00" stroke-width="2.5" stroke-dasharray="6 3"/>
+  <text x="731" y="180" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">✂ TOKEN 512</text>
+  <rect x="653" y="186" width="157" height="62" rx="6" fill="#fff5f0" stroke="#c05a00" stroke-width="1"/>
+  <text x="731" y="202" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">CHUNK N+1</text>
+  <text x="731" y="218" fill="#444" font-size="10" text-anchor="middle">"Using the config</text>
+  <text x="731" y="234" fill="#444" font-size="10" text-anchor="middle">defined above..."</text>
+  <text x="731" y="274" fill="#c05a00" font-size="11" text-anchor="middle" font-weight="700">"above" = nothing.</text>
+  <text x="731" y="292" fill="#c05a00" font-size="11" text-anchor="middle">LLM hallucinates</text>
+  <text x="731" y="310" fill="#c05a00" font-size="11" text-anchor="middle">what config is.</text>
+  <text x="731" y="390" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">Risk: HIGH</text>
+  <text x="731" y="406" fill="#555" font-size="10" text-anchor="middle">Tutorials / guides</text>
+
+  <!-- Mode 5: Density mismatch -->
+  <rect x="842" y="55" width="168" height="360" rx="12" fill="#fff8f2" stroke="#c05a00" stroke-width="1.5"/>
+  <rect x="842" y="55" width="168" height="36" rx="12" fill="#c05a00"/>
+  <text x="926" y="72" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">⑤ DENSITY</text>
+  <text x="926" y="87" fill="#ffe0c0" font-size="10" text-anchor="middle">MISMATCH</text>
+  <!-- Dense chunk: packs 8 claims -->
+  <rect x="856" y="100" width="140" height="62" rx="6" fill="#f0f4ff" stroke="#1a5a8a" stroke-width="1"/>
+  <text x="926" y="116" fill="#1a5a8a" font-size="10" text-anchor="middle" font-weight="700">ABSTRACT: 8 claims</text>
+  <text x="926" y="132" fill="#444" font-size="10" text-anchor="middle">in 200 tokens</text>
+  <text x="926" y="148" fill="#1a5a8a" font-size="9" text-anchor="middle">Each buried in embedding</text>
+  <!-- Sparse chunk: 1 claim in 512 tokens -->
+  <rect x="856" y="182" width="140" height="62" rx="6" fill="#fff8f0" stroke="#c05a00" stroke-width="1"/>
+  <text x="926" y="198" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">INTRO: 1 concept</text>
+  <text x="926" y="214" fill="#444" font-size="10" text-anchor="middle">in 512 tokens</text>
+  <text x="926" y="230" fill="#c05a00" font-size="9" text-anchor="middle">Most tokens = noise</text>
+  <text x="926" y="274" fill="#c05a00" font-size="11" text-anchor="middle" font-weight="700">Same token budget.</text>
+  <text x="926" y="292" fill="#c05a00" font-size="11" text-anchor="middle">Wildly different</text>
+  <text x="926" y="310" fill="#c05a00" font-size="11" text-anchor="middle">semantic density.</text>
+  <text x="926" y="390" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">Risk: MEDIUM</text>
+  <text x="926" y="406" fill="#555" font-size="10" text-anchor="middle">Research papers</text>
+
+  <!-- Bottom note -->
+  <rect x="30" y="430" width="980" height="18" rx="5" fill="#fff5f0" stroke="#c05a00" stroke-width="1"/>
+  <text x="520" y="443" fill="#c05a00" font-size="11" text-anchor="middle" font-weight="700">All five failure modes are invisible: no error is raised, the embedding is computed, the chunk is indexed with full confidence. The damage is silent.</text>
+</svg>
+<figcaption>Fig. 1 — Five failure modes of fixed-size chunking with concrete examples. Each mode destroys meaning in a different way, but all share the same property: the damage is invisible, no error is raised, and the broken chunk is indexed with the same confidence as a perfectly coherent one.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+  <h3>Why Overlap Doesn't Fix It</h3>
+
+  <p>The standard response to chunking failures is to add overlap — include the last N tokens of the previous chunk at the beginning of the next. This is better than nothing but solves much less than it appears to. Overlap with 50 tokens of context ensures that a sentence split at the boundary appears in both chunks — but it does not restore the header context lost 300 tokens earlier, the code block context split 150 tokens back, or the cross-reference established in a previous section entirely. Overlap is a band-aid for the specific problem of mid-sentence splits and a fiction for every other failure mode.</p>
+
+  <p>Overlap also introduces a new problem: <strong>duplicate content in the index</strong>. With 50-token overlap across a 512-token chunk size, approximately 10 percent of your index is duplicated content. At scale, this wastes memory, inflates index size, and creates retrieval noise — multiple chunks with highly similar embeddings that the retrieval system treats as independent results.</p>
+
+<div class="div">· · ·</div>
+
+<!-- 03 -->
+<section id="strategies">
+  <h2><span class="sec-num"> 03 — Five Strategies That Actually Work</span>From Structure-Aware to Proposition-Level</h2>
+
+  <p>Having established what naive chunking breaks and why, we can examine the strategies that preserve semantic meaning. These are not mutually exclusive — the most effective production systems layer multiple strategies, choosing the appropriate one for each document type. The strategies are presented in order of increasing sophistication and computational cost.</p>
+
+  <h3>Strategy 1: Structure-Aware Chunking</h3>
+
+  <p>The most impactful single change you can make is to respect the document's own structural boundaries — headers, paragraphs, sections, list items, code blocks — rather than imposing a uniform token budget on top of them. This requires document-type-specific parsers rather than a generic text splitter.</p>
+
+  <p>For Markdown documents, split on header boundaries and enforce minimum and maximum token thresholds. A section under the threshold is merged with the following section; a section over the threshold is split at paragraph boundaries, never mid-paragraph. For HTML, use the DOM structure. For PDFs, use a PDF parser that extracts layout information — text columns, headers, table cells — rather than a raw text extractor that flattens everything to a single stream. For code files, use the language's AST (Abstract Syntax Tree) to split at function or class boundaries.</p>
+
+<pre>
+<span class="cm"># Structure-aware Markdown chunker</span>
+<span class="kw">import</span> re
+<span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass
+
+@dataclass
+<span class="kw">class</span> <span class="cl">Chunk</span>:
+    text:           str
+    header_path:    list[str]   <span class="cm"># breadcrumb of ancestor headers</span>
+    doc_id:         str
+    chunk_type:     str         <span class="cm"># "section", "code_block", "table"</span>
+    token_count:    int
+
+<span class="kw">def</span> <span class="fn">structure_aware_chunk</span>(
+    markdown: str, doc_id: str,
+    min_tokens: int = <span class="nm">80</span>, max_tokens: int = <span class="nm">600</span>
+) -> list[<span class="cl">Chunk</span>]:
+    chunks   = []
+    header_stack = []   <span class="cm"># track ancestor headers for breadcrumb</span>
+
+    <span class="cm"># First: extract fenced code blocks and tables — never split these</span>
+    protected = {}
+    <span class="kw">def</span> <span class="fn">protect</span>(match):
+        key = <span class="st">f"__PROTECTED_{len(protected)}__"</span>
+        protected[key] = match.<span class="fn">group</span>(<span class="nm">0</span>)
+        <span class="kw">return</span> key
+    md_safe = re.<span class="fn">sub</span>(<span class="st">r'```[\s\S]*?```'</span>, protect, markdown)
+    md_safe = re.<span class="fn">sub</span>(<span class="st">r'\|.*\|'</span>, protect, md_safe)
+
+    <span class="cm"># Split on headers, preserving the header line</span>
+    parts = re.<span class="fn">split</span>(<span class="st">r'(?m)^(#{1,6}\s+.+)$'</span>, md_safe)
+    current_header, current_body = <span class="st">""</span>, <span class="st">""</span>
+
+    <span class="kw">for</span> part <span class="kw">in</span> parts:
+        <span class="kw">if</span> re.<span class="fn">match</span>(<span class="st">r'^#{1,6}\s+'</span>, part):
+            <span class="cm"># Save previous section</span>
+            <span class="kw">if</span> current_body.<span class="fn">strip</span>():
+                <span class="fn">_flush</span>(current_header, current_body, header_stack,
+                       doc_id, min_tokens, max_tokens, chunks, protected)
+            level = len(re.<span class="fn">match</span>(<span class="st">r'^(#+)'</span>, part).<span class="fn">group</span>(<span class="nm">1</span>))
+            header_stack = header_stack[:level - <span class="nm">1</span>] + [part.<span class="fn">strip</span>()]
+            current_header = part
+            current_body   = <span class="st">""</span>
+        <span class="kw">else</span>:
+            current_body += part
+    <span class="kw">if</span> current_body.<span class="fn">strip</span>():
+        <span class="fn">_flush</span>(current_header, current_body, header_stack,
+               doc_id, min_tokens, max_tokens, chunks, protected)
+    <span class="kw">return</span> chunks
+
+<span class="kw">def</span> <span class="fn">_flush</span>(header, body, stack, doc_id, min_t, max_t, out, protected):
+    <span class="cm"># Restore protected blocks</span>
+    <span class="kw">for</span> key, val <span class="kw">in</span> protected.<span class="fn">items</span>():
+        body = body.<span class="fn">replace</span>(key, val)
+    full = (<span class="st">f"{header}\n\n"</span> + body.<span class="fn">strip</span>()) <span class="kw">if</span> header <span class="kw">else</span> body.<span class="fn">strip</span>()
+    tokens = len(full.<span class="fn">split</span>())
+    <span class="kw">if</span> tokens < min_t:
+        <span class="kw">return</span>   <span class="cm"># too small to be useful</span>
+    <span class="kw">if</span> tokens <= max_t:
+        out.<span class="fn">append</span>(<span class="cl">Chunk</span>(full, <span class="fn">list</span>(stack), doc_id, <span class="st">"section"</span>, tokens))
+    <span class="kw">else</span>:
+        <span class="cm"># Too large: split at paragraph boundaries</span>
+        <span class="kw">for</span> para <span class="kw">in</span> body.<span class="fn">split</span>(<span class="st">'\n\n'</span>):
+            para = para.<span class="fn">strip</span>()
+            <span class="kw">if</span> len(para.<span class="fn">split</span>()) >= min_t:
+                text = (<span class="st">f"{header}\n\n"</span> + para) <span class="kw">if</span> header <span class="kw">else</span> para
+                out.<span class="fn">append</span>(<span class="cl">Chunk</span>(text, <span class="fn">list</span>(stack), doc_id,
+                                  <span class="st">"paragraph"</span>, len(text.<span class="fn">split</span>())))
+</pre>
+
+  <h3>Strategy 2: Header-Path Prepending</h3>
+
+  <p>Even with structure-aware splitting at paragraph boundaries within sections, the header context can be lost when a section is split into multiple sub-chunks. The solution is <strong>header-path prepending</strong>: before embedding each chunk, prepend the full breadcrumb of ancestor headers — every header from the document root down to the immediate parent of this chunk.</p>
+
+  <p>If a paragraph from a subsection titled "Rate Limit Errors" within a section titled "Error Handling" within a document titled "API Reference" is split into its own chunk, the embedded text becomes "API Reference > Error Handling > Rate Limit Errors\n\n[paragraph text]." The embedding now encodes the full semantic context. A query for "API rate limit handling" retrieves this chunk reliably, even though the paragraph text itself never uses the phrase "API reference" or "error handling."</p>
+
+<pre>
+<span class="cm"># Header-path prepending before embedding</span>
+<span class="kw">def</span> <span class="fn">prepend_context</span>(chunk: <span class="cl">Chunk</span>) -> str:
+    <span class="kw">if</span> chunk.header_path:
+        breadcrumb = <span class="st">" > "</span>.<span class="fn">join</span>([
+            h.<span class="fn">lstrip</span>(<span class="st">'# '</span>) <span class="kw">for</span> h <span class="kw">in</span> chunk.header_path
+        ])
+        <span class="kw">return</span> <span class="st">f"{breadcrumb}\n\n{chunk.text}"</span>
+    <span class="kw">return</span> chunk.text
+
+<span class="cm"># Embed with full context prepended</span>
+chunks_for_embedding = [<span class="fn">prepend_context</span>(c) <span class="kw">for</span> c <span class="kw">in</span> structured_chunks]
+vectors = embedder.<span class="fn">encode_batch</span>(chunks_for_embedding)
+
+<span class="cm"># Store original text (without prepended header) in the index payload</span>
+<span class="cm"># — we embed the full context but retrieve only the original paragraph,</span>
+<span class="cm"># which the LLM reads without the artificial breadcrumb prefix</span>
+</pre>
+
+  <h3>Strategy 3: Semantic Chunking</h3>
+
+  <p>Semantic chunking entirely abandons token counts as the split criterion and instead uses the <em>semantic distance between consecutive sentences</em> to find natural topic boundaries. The algorithm embeds each sentence independently, computes the cosine similarity between adjacent sentence embeddings, and identifies "breakpoints" — positions where the similarity drops sharply, indicating a topic transition.</p>
+
+  <p>This approach is document-type agnostic and adapts naturally to the actual semantic structure of any document. A narrative explanation that covers a single concept across 800 tokens stays together. A dense passage that transitions between three different concepts in 300 tokens is split at the two transitions. The chunk boundaries are determined by the document's meaning, not by an external token budget.</p>
+
+<pre>
+<span class="cm"># Semantic chunking: split at embedding distance peaks</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">semantic_chunk</span>(
+    text: str,
+    embedder,
+    breakpoint_percentile: float = <span class="nm">95</span>,  <span class="cm"># top 5% distances = splits</span>
+    min_sentences_per_chunk: int = <span class="nm">3</span>
+) -> list[str]:
+    <span class="cm"># Sentence tokenize</span>
+    sentences = [s.<span class="fn">strip</span>() <span class="kw">for</span> s <span class="kw">in</span> text.<span class="fn">split</span>(<span class="st">'.'</span>) <span class="kw">if</span> len(s.<span class="fn">strip</span>()) > <span class="nm">20</span>]
+    <span class="kw">if</span> len(sentences) < <span class="nm">2</span>:
+        <span class="kw">return</span> [text]
+
+    <span class="cm"># Embed each sentence</span>
+    embeddings = embedder.<span class="fn">encode</span>(sentences)   <span class="cm"># shape: (N, d)</span>
+
+    <span class="cm"># Cosine similarity between adjacent sentences</span>
+    def <span class="fn">cosine</span>(a, b):
+        <span class="kw">return</span> np.<span class="fn">dot</span>(a, b) / (np.<span class="fn">linalg.norm</span>(a) * np.<span class="fn">linalg.norm</span>(b))
+
+    distances = [
+        <span class="nm">1</span> - <span class="fn">cosine</span>(embeddings[i], embeddings[i + <span class="nm">1</span>])
+        <span class="kw">for</span> i <span class="kw">in</span> range(len(embeddings) - <span class="nm">1</span>)
+    ]
+
+    <span class="cm"># Breakpoints: where distance exceeds the Nth percentile</span>
+    threshold = np.<span class="fn">percentile</span>(distances, breakpoint_percentile)
+    breakpoints = [i + <span class="nm">1</span> <span class="kw">for</span> i, d <span class="kw">in</span> enumerate(distances) <span class="kw">if</span> d >= threshold]
+
+    <span class="cm"># Merge chunks that are too small</span>
+    chunks, prev = [], <span class="nm">0</span>
+    <span class="kw">for</span> bp <span class="kw">in</span> breakpoints:
+        <span class="kw">if</span> bp - prev >= min_sentences_per_chunk:
+            chunks.<span class="fn">append</span>(<span class="st">'. '</span>.<span class="fn">join</span>(sentences[prev:bp]) + <span class="st">'.'</span>)
+            prev = bp
+    chunks.<span class="fn">append</span>(<span class="st">'. '</span>.<span class="fn">join</span>(sentences[prev:]) + <span class="st">'.'</span>)
+    <span class="kw">return</span> chunks
+</pre>
+
+  <h3>Strategy 4: Hierarchical Indexing</h3>
+
+  <p>No single granularity serves all queries equally well. A specific factual query — "what is the maximum payload size for the REST endpoint" — needs a granular chunk containing exactly that information. A broad conceptual query — "how does the authentication system work" — needs a coarser chunk that covers the full mechanism. Indexing at a single granularity systematically fails one class or the other.</p>
+
+  <p>Hierarchical indexing maintains two or more indexes at different granularities simultaneously. At the coarse level, entire sections or multi-paragraph passages are indexed. At the fine level, individual paragraphs or proposition-level units are indexed. Both levels share a parent-child relationship: every fine-grained chunk knows which coarse-grained chunk it belongs to. Retrieval runs against the fine-grained index for specific queries and the coarse index for broad queries — or, most powerfully, retrieves fine-grained chunks and then expands to include the surrounding coarse context before passing to the LLM.</p>
+
+<pre>
+<span class="cm"># Hierarchical index: fine retrieval with coarse context expansion</span>
+<span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass, field
+
+@dataclass
+<span class="kw">class</span> <span class="cl">HierarchicalChunk</span>:
+    chunk_id:   str
+    parent_id:  str | <span class="kw">None</span>   <span class="cm"># None for top-level sections</span>
+    text:       str
+    level:      int            <span class="cm"># 0=section, 1=paragraph, 2=proposition</span>
+    children:   list[str] = field(default_factory=list)
+
+<span class="kw">class</span> <span class="cl">HierarchicalIndex</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, fine_index, coarse_index, chunk_store):
+        self.fine   = fine_index
+        self.coarse = coarse_index
+        self.store  = chunk_store   <span class="cm"># id → HierarchicalChunk</span>
+
+    <span class="kw">def</span> <span class="fn">search_with_expansion</span>(
+        self, query_vec, k: int = <span class="nm">5</span>, expand_to_parent: bool = <span class="kw">True</span>
+    ) -> list[str]:
+        <span class="cm"># Retrieve fine-grained chunks</span>
+        fine_results = self.fine.<span class="fn">search</span>(query_vec, k=k * <span class="nm">3</span>)
+
+        context_parts = []
+        seen_parents  = set()
+        <span class="kw">for</span> result <span class="kw">in</span> fine_results[:k]:
+            chunk = self.store[result[<span class="st">"id"</span>]]
+            <span class="kw">if</span> expand_to_parent <span class="kw">and</span> chunk.parent_id:
+                parent = self.store.<span class="fn">get</span>(chunk.parent_id)
+                <span class="kw">if</span> parent <span class="kw">and</span> parent.chunk_id <span class="kw">not in</span> seen_parents:
+                    <span class="cm"># Return full parent section as context</span>
+                    context_parts.<span class="fn">append</span>(parent.text)
+                    seen_parents.<span class="fn">add</span>(parent.chunk_id)
+            <span class="kw">else</span>:
+                context_parts.<span class="fn">append</span>(chunk.text)
+        <span class="kw">return</span> context_parts
+</pre>
+
+  <h3>Strategy 5: Proposition Chunking</h3>
+
+  <p>Proposition chunking, introduced by Chen et al. (2023) in the Dense X Retrieval paper, takes a fundamentally different approach to the unit of retrieval. Rather than chunking by structural or semantic boundaries in the source document, it decomposes documents into <strong>atomic propositions</strong> — individual factual claims that are self-contained and independently verifiable — and indexes each proposition as its own chunk.</p>
+
+  <p>A paragraph like "The boiling point of ethanol is 78.4°C. It was first synthesized by Jabir ibn Hayyan in the 8th century. It is used as a solvent in pharmaceutical manufacturing" is decomposed into three propositions, each indexed independently. This produces maximally focused retrieval — a query for "ethanol boiling point" retrieves precisely the one claim that answers it, without the noise of co-located but irrelevant information about synthesis history or pharmaceutical applications. The LLM receives a focused, precise context rather than a passage containing the answer buried among surrounding information.</p>
+
+<pre>
+<span class="cm"># Proposition chunking using an LLM decomposer</span>
+PROPOSITION_PROMPT = <span class="st">"""Decompose the following passage into atomic propositions.
+Each proposition must be:
+- A single, self-contained factual claim
+- Independently understandable without other propositions
+- Complete: include the subject explicitly (no pronouns like "it", "they")
+
+Passage: {passage}
+
+Respond ONLY with a JSON array of strings: ["claim1", "claim2", ...]"""</span>
+
+<span class="kw">async def</span> <span class="fn">propositionize</span>(passage: str, llm) -> list[str]:
+    response = await llm.<span class="fn">agenerate</span>(
+        PROPOSITION_PROMPT.<span class="fn">format</span>(passage=passage),
+        temperature=<span class="nm">0</span>, max_tokens=<span class="nm">500</span>
+    )
+    <span class="kw">try</span>:
+        props = json.<span class="fn">loads</span>(response)
+        <span class="cm"># Filter trivially short propositions</span>
+        <span class="kw">return</span> [p <span class="kw">for</span> p <span class="kw">in</span> props <span class="kw">if</span> len(p.<span class="fn">split</span>()) >= <span class="nm">8</span>]
+    <span class="kw">except</span>:
+        <span class="kw">return</span> [passage]   <span class="cm"># fallback: return full passage as one unit</span>
+
+<span class="cm"># Tradeoff: proposition chunking improves retrieval precision significantly</span>
+<span class="cm"># but adds LLM decomposition cost at indexing time (~$0.002 per 1K tokens)</span>
+<span class="cm"># Best for: dense reference documents, FAQ corpora, medical references</span>
+<span class="cm"># Not ideal for: narrative text, code documentation, procedural guides</span>
+</pre>
+
+</section>
+
+</div>
+
+<!-- DIAGRAM 2: Five strategies compared -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 400" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="b1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a6e42"/></marker>
+  </defs>
+  <rect width="1040" height="400" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#141210" font-size="15" font-weight="700" text-anchor="middle">FIVE CHUNKING STRATEGIES — MECHANISM, RECALL GAIN AND IDEAL USE CASE</text>
+
+  <!-- Fixed-size (baseline) -->
+  <rect x="30" y="55" width="177" height="300" rx="11" fill="#fff8f2" stroke="#c05a00" stroke-width="2"/>
+  <rect x="30" y="55" width="177" height="36" rx="11" fill="#c05a00"/>
+  <text x="118" y="79" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">FIXED-SIZE</text>
+  <text x="118" y="113" fill="#555" font-size="11" text-anchor="middle">Split every N tokens.</text>
+  <text x="118" y="131" fill="#555" font-size="11" text-anchor="middle">Overlap = last M</text>
+  <text x="118" y="149" fill="#555" font-size="11" text-anchor="middle">tokens of prev chunk</text>
+  <text x="118" y="183" fill="#c05a00" font-size="13" text-anchor="middle" font-weight="700">Recall: BASELINE</text>
+  <text x="118" y="204" fill="#c05a00" font-size="11" text-anchor="middle">0% improvement</text>
+  <text x="118" y="238" fill="#555" font-size="11" text-anchor="middle">Indexing cost: Low</text>
+  <text x="118" y="258" fill="#555" font-size="11" text-anchor="middle">Complexity: Low</text>
+  <text x="118" y="290" fill="#555" font-size="11" text-anchor="middle">Good for: Nothing</text>
+  <text x="118" y="308" fill="#555" font-size="11" text-anchor="middle">in particular</text>
+  <text x="118" y="340" fill="#c05a00" font-size="10" text-anchor="middle" font-weight="700">⚠ Avoid in production</text>
+
+  <!-- Structure-aware -->
+  <rect x="222" y="55" width="177" height="300" rx="11" fill="#f4f8ff" stroke="#1a5a8a" stroke-width="2"/>
+  <rect x="222" y="55" width="177" height="36" rx="11" fill="#1a5a8a"/>
+  <text x="310" y="79" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">STRUCTURE-AWARE</text>
+  <text x="310" y="113" fill="#555" font-size="11" text-anchor="middle">Split at document</text>
+  <text x="310" y="131" fill="#555" font-size="11" text-anchor="middle">structural boundaries:</text>
+  <text x="310" y="149" fill="#555" font-size="11" text-anchor="middle">headers, paragraphs</text>
+  <text x="310" y="183" fill="#1a5a8a" font-size="13" text-anchor="middle" font-weight="700">Recall: +25–35%</text>
+  <text x="310" y="204" fill="#1a5a8a" font-size="11" text-anchor="middle">vs fixed-size</text>
+  <text x="310" y="238" fill="#555" font-size="11" text-anchor="middle">Indexing cost: Low</text>
+  <text x="310" y="258" fill="#555" font-size="11" text-anchor="middle">Complexity: Medium</text>
+  <text x="310" y="290" fill="#555" font-size="11" text-anchor="middle">Best for: Technical</text>
+  <text x="310" y="308" fill="#555" font-size="11" text-anchor="middle">docs, legal text</text>
+  <text x="310" y="340" fill="#1a5a8a" font-size="10" text-anchor="middle" font-weight="700">✓ Default for most teams</text>
+
+  <!-- Semantic -->
+  <rect x="414" y="55" width="177" height="300" rx="11" fill="#f0fff4" stroke="#1a6e42" stroke-width="2"/>
+  <rect x="414" y="55" width="177" height="36" rx="11" fill="#1a6e42"/>
+  <text x="502" y="79" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">SEMANTIC</text>
+  <text x="502" y="113" fill="#555" font-size="11" text-anchor="middle">Split at embedding</text>
+  <text x="502" y="131" fill="#555" font-size="11" text-anchor="middle">distance peaks.</text>
+  <text x="502" y="149" fill="#555" font-size="11" text-anchor="middle">Topic-boundary aware</text>
+  <text x="502" y="183" fill="#1a6e42" font-size="13" text-anchor="middle" font-weight="700">Recall: +40–60%</text>
+  <text x="502" y="204" fill="#1a6e42" font-size="11" text-anchor="middle">vs fixed-size</text>
+  <text x="502" y="238" fill="#555" font-size="11" text-anchor="middle">Indexing cost: Medium</text>
+  <text x="502" y="258" fill="#555" font-size="11" text-anchor="middle">Complexity: Medium</text>
+  <text x="502" y="290" fill="#555" font-size="11" text-anchor="middle">Best for: Narrative</text>
+  <text x="502" y="308" fill="#555" font-size="11" text-anchor="middle">and mixed content</text>
+  <text x="502" y="340" fill="#1a6e42" font-size="10" text-anchor="middle" font-weight="700">✓ Best general-purpose</text>
+
+  <!-- Hierarchical -->
+  <rect x="606" y="55" width="177" height="300" rx="11" fill="#f8f4ff" stroke="#7a1a5a" stroke-width="2"/>
+  <rect x="606" y="55" width="177" height="36" rx="11" fill="#7a1a5a"/>
+  <text x="694" y="79" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">HIERARCHICAL</text>
+  <text x="694" y="113" fill="#555" font-size="11" text-anchor="middle">Two granularities.</text>
+  <text x="694" y="131" fill="#555" font-size="11" text-anchor="middle">Fine retrieval +</text>
+  <text x="694" y="149" fill="#555" font-size="11" text-anchor="middle">coarse expansion</text>
+  <text x="694" y="183" fill="#7a1a5a" font-size="13" text-anchor="middle" font-weight="700">Recall: +50–70%</text>
+  <text x="694" y="204" fill="#7a1a5a" font-size="11" text-anchor="middle">on mixed query types</text>
+  <text x="694" y="238" fill="#555" font-size="11" text-anchor="middle">Indexing cost: 2×</text>
+  <text x="694" y="258" fill="#555" font-size="11" text-anchor="middle">Complexity: High</text>
+  <text x="694" y="290" fill="#555" font-size="11" text-anchor="middle">Best for: Enterprise</text>
+  <text x="694" y="308" fill="#555" font-size="11" text-anchor="middle">knowledge bases</text>
+  <text x="694" y="340" fill="#7a1a5a" font-size="10" text-anchor="middle" font-weight="700">✓ Best for diverse queries</text>
+
+  <!-- Proposition -->
+  <rect x="798" y="55" width="212" height="300" rx="11" fill="#fff8e8" stroke="#5a3a00" stroke-width="2"/>
+  <rect x="798" y="55" width="212" height="36" rx="11" fill="#5a3a00"/>
+  <text x="904" y="79" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">PROPOSITION</text>
+  <text x="904" y="113" fill="#555" font-size="11" text-anchor="middle">LLM decomposes</text>
+  <text x="904" y="131" fill="#555" font-size="11" text-anchor="middle">passages into atomic</text>
+  <text x="904" y="149" fill="#555" font-size="11" text-anchor="middle">self-contained claims</text>
+  <text x="904" y="183" fill="#5a3a00" font-size="13" text-anchor="middle" font-weight="700">Recall: +60–85%</text>
+  <text x="904" y="204" fill="#5a3a00" font-size="11" text-anchor="middle">on factual queries</text>
+  <text x="904" y="238" fill="#555" font-size="11" text-anchor="middle">Indexing cost: High</text>
+  <text x="904" y="258" fill="#555" font-size="11" text-anchor="middle">Complexity: High</text>
+  <text x="904" y="290" fill="#555" font-size="11" text-anchor="middle">Best for: Dense ref.</text>
+  <text x="904" y="308" fill="#555" font-size="11" text-anchor="middle">docs, medical, legal</text>
+  <text x="904" y="340" fill="#5a3a00" font-size="10" text-anchor="middle" font-weight="700">✓ Highest precision</text>
+
+  <!-- Recall comparison bar at bottom -->
+  <rect x="30" y="366" width="15" height="15" rx="3" fill="#c05a00"/>
+  <text x="52" y="378" fill="#555" font-size="11">Baseline</text>
+  <rect x="125" y="366" width="15" height="15" rx="3" fill="#1a5a8a"/>
+  <text x="147" y="378" fill="#555" font-size="11">+30%</text>
+  <rect x="210" y="366" width="15" height="15" rx="3" fill="#1a6e42"/>
+  <text x="232" y="378" fill="#555" font-size="11">+50%</text>
+  <rect x="295" y="366" width="15" height="15" rx="3" fill="#7a1a5a"/>
+  <text x="317" y="378" fill="#555" font-size="11">+60%</text>
+  <rect x="380" y="366" width="15" height="15" rx="3" fill="#5a3a00"/>
+  <text x="402" y="378" fill="#555" font-size="11">+72%</text>
+  <text x="750" y="378" fill="#c05a00" font-size="11" text-anchor="middle" font-weight="700">Recall improvement = approximate average across diverse document types. Vary by corpus.</text>
+</svg>
+<figcaption>Fig. 2 — Five chunking strategies compared by mechanism, recall improvement, indexing cost, and ideal use case. Semantic chunking is the best general-purpose choice. Proposition chunking delivers the highest precision for dense factual corpora. Hierarchical indexing handles the widest range of query types.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!-- 04 -->
+<section id="decision-framework">
+  <h2><span class="sec-num"> 04 — The Decision Framework</span>Choosing the Right Strategy for Your Document Type</h2>
+
+  <p>The optimal chunking strategy is not universal — it depends on the structural properties of your document corpus, the nature of your retrieval queries, and your indexing compute budget. The mapping from document type to chunking strategy follows a clear logic once you understand what each strategy is optimized for.</p>
+
+  <p><strong>Markdown and HTML documentation</strong> (developer docs, wikis, internal knowledge bases) should use structure-aware chunking as the baseline, with header-path prepending on every chunk. The document structure was created by a human who understood the semantic organization — honor it. If query diversity is high (mixing specific lookups and broad conceptual queries), add hierarchical indexing on top.</p>
+
+  <p><strong>Legal and regulatory documents</strong> are best served by a combination of structure-aware splitting (honoring article and section boundaries) with proposition chunking for the dense definitional sections that contain multiple independent obligations per paragraph. Legal queries are frequently hyper-specific — "what is the penalty for X under clause Y" — and proposition-level retrieval dramatically outperforms paragraph-level retrieval for this query type.</p>
+
+  <p><strong>Research papers and academic content</strong> require semantic chunking because their structure (Introduction, Methods, Results, Discussion) is a poor guide to semantic boundaries within sections. A Results section may cover five distinct findings in five consecutive paragraphs. Structure-aware splitting treats this as one chunk. Semantic splitting separates each finding into its own retrievable unit.</p>
+
+  <p><strong>Source code and technical references</strong> require AST-based splitting that never fractures a function, class, or code block. The unit of retrieval for code should be the unit of function — a complete, independently meaningful code element. Pair each code chunk with its docstring, signature, and any inline comments as a single unit. Strip nothing.</p>
+
+  <p><strong>Conversational content</strong> (customer support tickets, chat transcripts, interview notes) defies structural splitting because it has no structure. Semantic chunking is the only viable approach — embedding-based breakpoint detection finds the natural topic transitions that neither structural nor fixed-size splitting can identify.</p>
+
+  <div class="callout info">
+    <div class="ico">🔬</div>
+    <div class="body"><strong>The Mixed-Corpus Reality:</strong> Most production knowledge bases contain multiple document types simultaneously. The right architecture is a <strong>document-type-aware chunking router</strong> that detects document type at indexing time and applies the appropriate strategy. This is not significantly more complex than a universal chunker — it requires one classifier and three to five chunking pipelines — but it eliminates the systematic failures that any single strategy incurs on the document types it was not designed for.</div>
+  </div>
+
+<pre>
+<span class="cm"># Document-type-aware chunking router</span>
+<span class="kw">from</span> enum <span class="kw">import</span> Enum
+<span class="kw">import</span> magic   <span class="cm"># python-magic for MIME detection</span>
+
+<span class="kw">class</span> <span class="cl">DocType</span>(Enum):
+    MARKDOWN  = <span class="st">"markdown"</span>
+    HTML      = <span class="st">"html"</span>
+    CODE      = <span class="st">"code"</span>
+    PDF       = <span class="st">"pdf"</span>
+    PLAIN     = <span class="st">"plain"</span>
+
+<span class="kw">def</span> <span class="fn">detect_doc_type</span>(path: str, content: str) -> <span class="cl">DocType</span>:
+    <span class="kw">if</span> path.<span class="fn">endswith</span>((<span class="st">'.md'</span>, <span class="st">'.mdx'</span>)):   <span class="kw">return</span> <span class="cl">DocType</span>.MARKDOWN
+    <span class="kw">if</span> path.<span class="fn">endswith</span>((<span class="st">'.html'</span>, <span class="st">'.htm'</span>)): <span class="kw">return</span> <span class="cl">DocType</span>.HTML
+    <span class="kw">if</span> path.<span class="fn">endswith</span>((<span class="st">'.py'</span>,<span class="st">'.js'</span>,<span class="st">'.ts'</span>,<span class="st">'.java'</span>,<span class="st">'.go'</span>)): <span class="kw">return</span> <span class="cl">DocType</span>.CODE
+    <span class="kw">if</span> path.<span class="fn">endswith</span>(<span class="st">'.pdf'</span>):              <span class="kw">return</span> <span class="cl">DocType</span>.PDF
+    <span class="kw">return</span> <span class="cl">DocType</span>.PLAIN
+
+<span class="kw">def</span> <span class="fn">route_and_chunk</span>(path: str, content: str, embedder) -> list[<span class="cl">Chunk</span>]:
+    doc_type = <span class="fn">detect_doc_type</span>(path, content)
+    doc_id   = path
+
+    <span class="kw">if</span> doc_type == <span class="cl">DocType</span>.MARKDOWN:
+        chunks = <span class="fn">structure_aware_chunk</span>(content, doc_id)
+        <span class="kw">return</span> chunks  <span class="cm"># uses header-path prepending at embed time</span>
+
+    <span class="kw">elif</span> doc_type == <span class="cl">DocType</span>.CODE:
+        <span class="kw">return</span> <span class="fn">ast_chunk</span>(content, doc_id)  <span class="cm"># AST-based function/class split</span>
+
+    <span class="kw">elif</span> doc_type == <span class="cl">DocType</span>.PDF:
+        <span class="cm"># PDFs: layout-aware extraction, then semantic chunking</span>
+        plain = <span class="fn">pdf_extract_with_layout</span>(content)
+        <span class="kw">return</span> <span class="fn">semantic_chunk</span>(plain, embedder)
+
+    <span class="kw">else</span>:   <span class="cm"># PLAIN or HTML: semantic chunking</span>
+        <span class="kw">return</span> <span class="fn">semantic_chunk</span>(content, embedder)
+</pre>
+
+</section>
+
+<div class="div">· · ·</div>
+
+<!-- 05 -->
+<section id="evaluation">
+  <h2><span class="sec-num"> 05 — Measuring Chunk Quality</span>How to Know When Your Chunks Are Good</h2>
+
+  <p>Unlike latency or memory consumption, chunk quality is not directly observable from system metrics. You cannot tell from query logs whether your chunks are semantically coherent. You cannot tell from retrieval scores whether the returned chunk contains a complete, actionable answer or a fragment of one. Measuring chunk quality requires deliberate evaluation — and most teams skip it entirely.</p>
+
+  <p>The most reliable chunk quality metric is <strong>retrieval recall on a labeled evaluation set</strong>. For a set of queries with known correct answers, measure what fraction of the time the chunk containing the correct answer appears in the top-k retrieval results. Run this measurement after each change to the chunking strategy. A recall improvement from 0.74 to 0.91 after switching from fixed-size to semantic chunking is the kind of concrete, measurable evidence that justifies the engineering investment.</p>
+
+  <p>A second metric is <strong>chunk coherence score</strong>: for each chunk, embed the first half and the second half separately and measure their cosine similarity. A coherent chunk — one that discusses a single topic — should have high internal cosine similarity between its halves. A chunk split mid-topic by a fixed-size cutter will have lower internal similarity, because the first half encodes one topic and the second encodes another. This metric can be computed without any labeled data and provides a continuous signal for chunking quality across your entire corpus.</p>
+
+<pre>
+<span class="cm"># Chunk coherence audit — no labeled data required</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">chunk_coherence</span>(chunk_text: str, embedder) -> float:
+    words  = chunk_text.<span class="fn">split</span>()
+    <span class="kw">if</span> len(words) < <span class="nm">20</span>:
+        <span class="kw">return</span> <span class="nm">1.0</span>   <span class="cm"># too short to meaningfully split</span>
+    mid    = len(words) // <span class="nm">2</span>
+    first  = <span class="st">' '</span>.<span class="fn">join</span>(words[:mid])
+    second = <span class="st">' '</span>.<span class="fn">join</span>(words[mid:])
+    v1, v2 = embedder.<span class="fn">encode</span>([first, second])
+    sim = np.<span class="fn">dot</span>(v1, v2) / (np.<span class="fn">linalg.norm</span>(v1) * np.<span class="fn">linalg.norm</span>(v2))
+    <span class="kw">return</span> float(sim)
+
+<span class="kw">def</span> <span class="fn">corpus_coherence_audit</span>(chunks: list[str], embedder) -> dict:
+    scores = [<span class="fn">chunk_coherence</span>(c, embedder) <span class="kw">for</span> c <span class="kw">in</span> chunks]
+    <span class="kw">return</span> {
+        <span class="st">"mean_coherence"</span>:   round(np.<span class="fn">mean</span>(scores), <span class="nm">3</span>),
+        <span class="st">"pct_below_0_7"</span>:    round(np.<span class="fn">mean</span>([s < <span class="nm">0.7</span> <span class="kw">for</span> s <span class="kw">in</span> scores]), <span class="nm">3</span>),
+        <span class="st">"worst_chunks"</span>:     sorted(<span class="fn">zip</span>(scores, chunks))[:<span class="nm">5</span>]
+    }
+<span class="cm"># Fixed-size chunking: mean_coherence ≈ 0.71, pct_below_0.7 ≈ 34%</span>
+<span class="cm"># Semantic chunking:   mean_coherence ≈ 0.88, pct_below_0.7 ≈ 8%</span>
+</pre>
+
+</section>
+
+</div>
+
+<!-- DIAGRAM 3: Semantic chunking visualized -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 380" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="1040" height="380" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#141210" font-size="15" font-weight="700" text-anchor="middle">SEMANTIC CHUNKING IN ACTION — EMBEDDING DISTANCE BETWEEN ADJACENT SENTENCES</text>
+
+  <!-- LEFT: Fixed-size imposed boundaries -->
+  <text x="245" y="60" fill="#141210" font-size="13" font-weight="700" text-anchor="middle">FIXED-SIZE: ARBITRARY BOUNDARIES</text>
+
+  <!-- Sentence blocks -->
+  <rect x="40" y="75" width="410" height="32" rx="6" fill="#f0fff4" stroke="#1a6e42" stroke-width="1.5"/>
+  <text x="245" y="95" fill="#1a6e42" font-size="11" text-anchor="middle">"The API uses OAuth 2.0 for authentication."</text>
+  <rect x="40" y="112" width="410" height="32" rx="6" fill="#f0fff4" stroke="#1a6e42" stroke-width="1.5"/>
+  <text x="245" y="132" fill="#1a6e42" font-size="11" text-anchor="middle">"Tokens expire after 3600 seconds."</text>
+  <rect x="40" y="149" width="410" height="32" rx="6" fill="#f0fff4" stroke="#1a6e42" stroke-width="1.5"/>
+  <text x="245" y="169" fill="#1a6e42" font-size="11" text-anchor="middle">"Refresh tokens remain valid for 30 days."</text>
+
+  <!-- Fixed cut line (arbitrary, wrong place) -->
+  <line x1="35" y1="185" x2="455" y2="185" stroke="#c05a00" stroke-width="3" stroke-dasharray="8 4"/>
+  <rect x="120" y="172" width="250" height="24" rx="5" fill="#fff5f0" stroke="#c05a00" stroke-width="1"/>
+  <text x="245" y="188" fill="#c05a00" font-size="11" text-anchor="middle" font-weight="700">✂ TOKEN LIMIT HIT — cut here</text>
+
+  <rect x="40" y="198" width="410" height="32" rx="6" fill="#fff5f0" stroke="#c05a00" stroke-width="1.5"/>
+  <text x="245" y="218" fill="#c05a00" font-size="11" text-anchor="middle">"Error 401 means the token has expired."</text>
+  <rect x="40" y="235" width="410" height="32" rx="6" fill="#fff5f0" stroke="#c05a00" stroke-width="1.5"/>
+  <text x="245" y="255" fill="#c05a00" font-size="11" text-anchor="middle">"Error 403 means insufficient permissions."</text>
+
+  <!-- Real topic boundary ignored -->
+  <line x1="35" y1="147" x2="455" y2="147" stroke="#1a6e42" stroke-width="1.5" stroke-dasharray="4 3" opacity=".4"/>
+  <text x="455" y="143" fill="#1a6e42" font-size="9">actual topic boundary</text>
+
+  <text x="245" y="300" fill="#c05a00" font-size="12" text-anchor="middle" font-weight="700">Cut splits auth-tokens topic.</text>
+  <text x="245" y="318" fill="#c05a00" font-size="11" text-anchor="middle">Error-handling topic never gets its own chunk.</text>
+  <text x="245" y="356" fill="#c05a00" font-size="11" text-anchor="middle" font-weight="700">Query: "what causes 401 errors" → no clean retrieval</text>
+
+  <!-- DIVIDER -->
+  <line x1="520" y1="55" x2="520" y2="370" stroke="#cfc9be" stroke-width="1.5" stroke-dasharray="8 5"/>
+
+  <!-- RIGHT: Semantic boundaries -->
+  <text x="780" y="60" fill="#141210" font-size="13" font-weight="700" text-anchor="middle">SEMANTIC: NATURAL BOUNDARIES</text>
+
+  <!-- Sentences with distance chart -->
+  <rect x="540" y="75" width="310" height="32" rx="6" fill="#f0fff4" stroke="#1a6e42" stroke-width="1.5"/>
+  <text x="695" y="95" fill="#1a6e42" font-size="10" text-anchor="middle">"API uses OAuth 2.0 for authentication."</text>
+  <!-- distance bar: low = same topic -->
+  <rect x="860" y="83" width="140" height="16" rx="4" fill="#d4f0dd" stroke="#1a6e42" stroke-width="1"/>
+  <text x="870" y="95" fill="#1a6e42" font-size="9">dist=0.08 ← same topic</text>
+
+  <rect x="540" y="112" width="310" height="32" rx="6" fill="#f0fff4" stroke="#1a6e42" stroke-width="1.5"/>
+  <text x="695" y="132" fill="#1a6e42" font-size="10" text-anchor="middle">"Tokens expire after 3600 seconds."</text>
+  <rect x="860" y="120" width="140" height="16" rx="4" fill="#d4f0dd" stroke="#1a6e42" stroke-width="1"/>
+  <text x="870" y="132" fill="#1a6e42" font-size="9">dist=0.11 ← same topic</text>
+
+  <rect x="540" y="149" width="310" height="32" rx="6" fill="#f0fff4" stroke="#1a6e42" stroke-width="1.5"/>
+  <text x="695" y="169" fill="#1a6e42" font-size="10" text-anchor="middle">"Refresh tokens valid for 30 days."</text>
+  <rect x="860" y="157" width="140" height="16" rx="4" fill="#ffd4c0" stroke="#c05a00" stroke-width="2"/>
+  <text x="870" y="169" fill="#c05a00" font-size="9" font-weight="700">dist=0.62 ← BREAKPOINT!</text>
+
+  <!-- Semantic cut line (right place) -->
+  <line x1="535" y1="185" x2="1005" y2="185" stroke="#1a6e42" stroke-width="3"/>
+  <rect x="640" y="172" width="220" height="24" rx="5" fill="#f0fff4" stroke="#1a6e42" stroke-width="1.5"/>
+  <text x="750" y="188" fill="#1a6e42" font-size="11" text-anchor="middle" font-weight="700">✂ SEMANTIC BOUNDARY DETECTED</text>
+
+  <rect x="540" y="198" width="310" height="32" rx="6" fill="#f4f8ff" stroke="#1a5a8a" stroke-width="1.5"/>
+  <text x="695" y="218" fill="#1a5a8a" font-size="10" text-anchor="middle">"Error 401 means the token has expired."</text>
+  <rect x="860" y="206" width="140" height="16" rx="4" fill="#d4dff0" stroke="#1a5a8a" stroke-width="1"/>
+  <text x="870" y="218" fill="#1a5a8a" font-size="9">dist=0.09 ← same topic</text>
+
+  <rect x="540" y="235" width="310" height="32" rx="6" fill="#f4f8ff" stroke="#1a5a8a" stroke-width="1.5"/>
+  <text x="695" y="255" fill="#1a5a8a" font-size="10" text-anchor="middle">"Error 403 means insufficient permissions."</text>
+  <rect x="860" y="243" width="140" height="16" rx="4" fill="#d4dff0" stroke="#1a5a8a" stroke-width="1"/>
+  <text x="870" y="255" fill="#1a5a8a" font-size="9">dist=0.10 ← same topic</text>
+
+  <text x="750" y="300" fill="#1a6e42" font-size="12" text-anchor="middle" font-weight="700">Two clean chunks: Auth tokens + Error codes.</text>
+  <text x="750" y="318" fill="#1a6e42" font-size="11" text-anchor="middle">Each query retrieves exactly the right topic.</text>
+  <text x="750" y="356" fill="#1a6e42" font-size="11" text-anchor="middle" font-weight="700">Query: "what causes 401 errors" → perfect retrieval</text>
+</svg>
+<figcaption>Fig. 3 — Semantic chunking in action. Fixed-size splitting cuts mid-topic, mixing authentication-token content with error-handling content in the same chunk. Semantic splitting detects the embedding distance peak (0.62) between the two topics and creates a clean boundary, producing two precisely retrievable chunks.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!-- 06 -->
+<section id="closing">
+  <h2><span class="sec-num"> 06 — The Investment</span>Why Chunking Deserves Engineering Time</h2>
+
+  <p>Chunking sits at the beginning of the RAG pipeline and is therefore the decision whose effects propagate furthest. A poor embedding model choice reduces retrieval quality. A poor reranker reduces top-k precision. A poor chunking strategy degrades every query the system will ever receive, for every user, for the entire lifetime of the deployed system — until someone goes back and rebuilds the index with better chunks. The earlier the decision in the pipeline, the more consequential it is. Chunking is the earliest decision of all.</p>
+
+  <p>The time investment required to move from naive fixed-size chunking to a production-quality chunking strategy is not large. Structure-aware chunking with header-path prepending — the minimum viable improvement — can be implemented in a few hundred lines of code and a day of testing. Semantic chunking adds one additional dependency (sentence embeddings at index time) and roughly doubles indexing time. Proposition chunking is the most expensive to implement and operate but is justified for high-stakes, information-dense corpora where retrieval precision is critical.</p>
+
+  <p>The return on this investment compounds over time. Every query to a better-chunked index retrieves better context. Every better context produces a better LLM response. Every better LLM response is one fewer user who quietly decides the system is not reliable enough to use. The downstream effects of improving your chunking strategy are larger than the upstream effects of any other single RAG optimization — and they are entirely within your control before a single vector has been computed.</p>
+
+  <div class="callout tip">
+    <div class="ico">✅</div>
+    <div class="body"><strong>The Minimum Viable Chunking Upgrade:</strong> If you are currently using fixed-size chunking, do one thing today: switch to structure-aware splitting with a minimum and maximum token threshold, and prepend the full ancestor header path to every chunk before embedding. This change alone — implementable in an afternoon — will improve retrieval recall by 25 to 35 percent on typical technical document corpora. Measure it with the chunk coherence audit. You will not go back to 512-token fixed splits.</div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><span class="n">Str.</span><span class="l">Structure-aware — the minimum for any production system</span></div>
+    <div class="stat"><span class="n">Sem.</span><span class="l">Semantic — best general choice for mixed and narrative content</span></div>
+    <div class="stat"><span class="n">Hier.</span><span class="l">Hierarchical — when query types span specific and broad</span></div>
+    <div class="stat"><span class="n">Prop.</span><span class="l">Proposition — when factual precision is non-negotiable</span></div>
+  </div>
+
+  <p>Every document in your corpus was created by a human who organized it with care — who chose where sections begin and end, which ideas belong together, how information flows from one concept to the next. Naive chunking discards all of that structure in a single pass. The strategies described in this article are, at their core, ways of <em>listening to the document</em> rather than overwriting its structure with an arbitrary token counter. Your retrieval system will be as good as your respect for the documents it serves.</p>
+
+</section>
+
+<div class="div">· · ·</div>
+
+<section>
+  <h2><span class="sec-num">References</span>Key Research</h2>
+  <p style="font-size:15px;line-height:2.2;color:#645e54;">
+    Chen et al. (2023). <em>Dense X Retrieval: What Retrieval Granularity Should We Use?</em> arXiv:2312.06648.<br>
+    Gao et al. (2023). <em>Retrieval-Augmented Generation for Large Language Models: A Survey.</em> arXiv:2312.10997.<br>
+    Ram et al. (2023). <em>In-Context Retrieval-Augmented Language Models.</em> TACL 2023.<br>
+    Shi et al. (2023). <em>REPLUG: Retrieval-Augmented Black-Box Language Models.</em> arXiv:2301.12652.<br>
+    Izacard &amp; Grave (2021). <em>Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering.</em> EACL 2021.<br>
+    Sarthi et al. (2024). <em>RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval.</em> ICLR 2024.<br>
+    LangChain Documentation (2024). <em>Text Splitters — Semantic Chunker.</em> docs.langchain.com.
+  </p>
+</section>
+
+</div>
+    </div>
 
     <div class="article-cta">
       <h4>Continue Exploring</h4>

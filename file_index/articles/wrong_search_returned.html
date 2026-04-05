@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You Searched for an Apple. The Database Returned a Carrot. — Depth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/depth/tokens.css">
+  <link rel="stylesheet" href="../../css/depth/base.css">
+  <link rel="stylesheet" href="../../css/depth/layout/grids.css">
+  <link rel="stylesheet" href="../../css/depth/components/nav.css">
+  <link rel="stylesheet" href="../../css/depth/components/hero.css">
+  <link rel="stylesheet" href="../../css/depth/components/ticker.css">
+  <link rel="stylesheet" href="../../css/depth/components/section-head.css">
+  <link rel="stylesheet" href="../../css/depth/components/filters.css">
+  <link rel="stylesheet" href="../../css/depth/components/cards.css">
+  <link rel="stylesheet" href="../../css/depth/components/topics.css">
+  <link rel="stylesheet" href="../../css/depth/components/newsletter.css">
+  <link rel="stylesheet" href="../../css/depth/components/about.css">
+  <link rel="stylesheet" href="../../css/depth/components/footer.css">
+  <link rel="stylesheet" href="../../css/depth/components/page.css">
+  <link rel="stylesheet" href="../../css/depth/components/article.css">
+  <link rel="stylesheet" href="../../css/depth/components/ai-longform.css">
+  <link rel="stylesheet" href="../../css/depth/responsive.css">
+</head>
+<body class="article-page theme-ai" data-nav="ai-ml">
+<nav>
+  <a href="../../index.html" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    Depth
+  </a>
+  <div class="nav-center">
+    <a href="../../index.html" class="nav-pill" data-nav="all">All</a>
+    <a href="../system_design.html" class="nav-pill" data-nav="system-design">System Design</a>
+    <a href="../ai_ml.html" class="nav-pill" data-nav="ai-ml">AI / ML</a>
+    <a href="../infrastructure.html" class="nav-pill" data-nav="infrastructure">Infrastructure</a>
+    <a href="../databases.html" class="nav-pill" data-nav="databases">Databases</a>
+    <a href="../security.html" class="nav-pill" data-nav="security">Security</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-search">⌘K&nbsp; Search</div>
+    <a href="#newsletter" class="nav-subscribe">Subscribe</a>
+  </div>
+</nav>
+
+<section class="article-hero" id="top">
+  <div class="article-hero-inner">
+    <div>
+      <div class="breadcrumb">
+        <a href="../../index.html">Depth</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="../ai_ml.html">AI / ML</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>You Searched for an Apple. The Database Returned a Carrot.</span>
+      </div>
+      <div class="article-kicker">AI / ML</div>
+      <h1 class="article-title">You Searched for an <span class="hl">Apple</span>. The Database Returned a <span class="hl2">Carrot</span>.</h1>
+      <p class="article-subtitle">Why vector retrieval quietly returns plausible but wrong neighbors, and the guardrails that keep AI systems honest.</p>
+      <div class="article-meta">
+        <div class="article-meta-item"><strong>45 min read</strong></div>
+        <div class="article-meta-item"><span class="ep-dot"></span>2025</div>
+        <div class="article-meta-item"><span class="ep-dot"></span>Vector Search · Guardrails · Mismatch</div>
+      </div>
+    </div>
+    <aside class="article-panel">
+      <h4>Key Themes</h4>
+      <div class="feat-tags">
+        <span class="ac-visual-tag">Vector Search</span>
+        <span class="ac-visual-tag">Guardrails</span>
+        <span class="ac-visual-tag">Mismatch</span>
+        <span class="ac-visual-tag">Retrieval</span>
+      </div>
+      <p>Why vector retrieval quietly returns plausible but wrong neighbors, and the guardrails that keep AI systems honest.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="article-content">
+  <aside class="article-aside">
+    <h4>On This Page</h4>
+    <div class="article-toc">
+      <a href="#intro"> 01 — The Paradox Why a "Smart" Database Can Be Deeply Foolish</a>
+      <a href="#how-vectors-work"> 02 — Foundations What Vectors Actually Encode (and What They Don't)</a>
+      <a href="#why-bad"> 03 — Taxonomy The Four Classes of Vector Mismatch Failure</a>
+      <a href="#guardrails"> 04 — The Solution Architecture A Layered Guardrail System</a>
+      <a href="#full-system"> 05 — Production Code Assembling the Full Guardrailed Pipeline</a>
+      <a href="#calibration"> 06 — Calibration Science How to Set the Right Threshold (τ)</a>
+      <a href="#domain-partition"> 07 — Structural Solutions Domain Partitioning and Namespace Isolation</a>
+      <a href="#smart-fallback"> 08 — UX Design Designing the Smart Fallback Response</a>
+      <a href="#advanced"> 09 — Advanced Techniques HyDE, Query Expansion, and Embedding Fine-tuning</a>
+      <a href="#monitoring"> 10 — Observability Monitoring Your Guardrails in Production</a>
+      <a href="#conclusion"> 11 — Synthesis A Field Guide: Which Solution for Which Problem</a>
+    </div>
+  </aside>
+  <article class="article-body">
+    <div class="ai-longform">
+<div class="article">
+
+<section id="intro">
+  <h2><span class="sec-num"> 01 — The Paradox</span>Why a "Smart" Database Can Be Deeply Foolish</h2>
+  <p class="drop">
+    Imagine you are building an AI-powered grocery assistant. A user types <em>"show me something sweet and red"</em> and expects strawberries. Instead, they get a red bell pepper. The embedding model thought they were close. Mathematically, they were. Semantically, for the user's intent — they were not. This is the <strong>vector search mismatch problem</strong>, and it is more subtle and more dangerous than almost any other failure mode in modern AI systems.
+  </p>
+  <p>
+    Traditional keyword search fails loudly. It returns zero results, or clearly wrong ones. Vector search fails <em>quietly</em> — it always returns something, it always reports high confidence, and the result looks plausible until a human (or worse, a downstream LLM) reasons on top of it and produces a confident, wrong answer.
+  </p>
+  <p>
+    This article explores the full depth of this problem: what vectors actually encode, why the geometry of high-dimensional space makes "nearest neighbor" mean something different from what users intend, and — most importantly — a layered architecture of real-world solutions including <strong>semantic guardrails, confidence calibration, domain partitioning, and LLM-as-judge re-ranking</strong> that you can deploy today.
+  </p>
+
+  <div class="stat-row">
+    <div class="stat"><span class="n">~1536</span><span class="l">Dimensions in OpenAI ada-002 embeddings</span></div>
+    <div class="stat"><span class="n">0.82</span><span class="l">Cosine similarity of "apple" vs "carrot" in that space</span></div>
+    <div class="stat"><span class="n">72%</span><span class="l">Of RAG failures trace to retrieval quality, not generation</span></div>
+    <div class="stat"><span class="n">∞</span><span class="l">Results returned — vector search never says "nothing found"</span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="ico">⚠️</div>
+    <div class="body"><strong>The Silent Failure Mode:</strong> Unlike a 404 error or SQL exception, a vector search returning the wrong domain quietly passes data into your LLM pipeline. The model then confidently fabricates an answer grounded in incorrect context. By the time the user sees output, the root cause is two layers removed.</div>
+  </div>
+</section>
+
+<div class="div">· · ·</div>
+
+<!-- ════════════════════ SECTION 2 ════════════════════ -->
+<section id="how-vectors-work">
+  <h2><span class="sec-num"> 02 — Foundations</span>What Vectors Actually Encode (and What They Don't)</h2>
+  <p>
+    Before we diagnose the mismatch problem, we need to understand exactly what a vector embedding captures. An embedding model — whether it is <code>text-embedding-3-large</code>, <code>sentence-transformers/all-MiniLM-L6-v2</code>, or a fine-tuned domain model — is trained to project text into a continuous geometric space where <strong>semantic relatedness becomes spatial proximity</strong>.
+  </p>
+  <p>
+    The training objective (typically contrastive learning or masked token prediction) teaches the model that "dog" and "puppy" should be close, and "dog" and "automobile" should be far. But <em>relatedness</em> is not the same as <em>categorical identity</em>. In a general-purpose embedding space, "apple" and "carrot" are both:
+  </p>
+  <ul style="list-style:none;padding-left:0;margin:0 0 22px;">
+    <li style="padding:8px 0 8px 20px;border-left:2px solid var(--accent);margin-bottom:8px;color:#ccc9bc;">🔸 Food items (high overlap in the "food" subspace)</li>
+    <li style="padding:8px 0 8px 20px;border-left:2px solid var(--accent2);margin-bottom:8px;color:#ccc9bc;">🔸 Grocery store items (appear in similar contexts)</li>
+    <li style="padding:8px 0 8px 20px;border-left:2px solid var(--accent3);margin-bottom:8px;color:#ccc9bc;">🔸 Nutritious produce (discussed in similar health articles)</li>
+    <li style="padding:8px 0 8px 20px;border-left:2px solid var(--accent4);margin-bottom:8px;color:#ccc9bc;">🔸 Colorful, plant-based objects (overlapping visual descriptions)</li>
+  </ul>
+  <p>
+    They differ in category (fruit vs. vegetable), taste profile, culinary application, and cultural associations. But in a 1536-dimensional general-purpose space, the overlap dimensions dominate — producing a cosine similarity of approximately 0.82. A search for "apple" legitimately retrieves "carrot" as a near-neighbor.
+  </p>
+</section>
+
+</div><!-- /article -->
+
+<!-- ════ DIAGRAM 1: Vector Space Fruit vs Veg ════ -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 440" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff6b35" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ff6b35" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4ecdc4" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#4ecdc4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffe66d" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#ffe66d" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#ff6b35"/>
+    </marker>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7a7890"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="440" fill="#16161d" rx="12"/>
+
+  <!-- Axes -->
+  <line x1="60" y1="400" x2="860" y2="400" stroke="#2a2a38" stroke-width="1"/>
+  <line x1="60" y1="400" x2="60" y2="30" stroke="#2a2a38" stroke-width="1"/>
+  <text x="870" y="404" fill="#45475a" font-size="11">Dim 1 (food-context)</text>
+  <text x="65" y="28" fill="#45475a" font-size="11" transform="rotate(-90,65,28) translate(-180,0)">Dim 2 (botanical-type)</text>
+
+  <!-- FRUIT cluster -->
+  <ellipse cx="640" cy="180" rx="130" ry="90" fill="url(#g1)" stroke="#ff6b35" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.7"/>
+  <text x="640" y="88" fill="#ff6b35" font-size="13" text-anchor="middle" font-weight="700">FRUIT CLUSTER</text>
+
+  <!-- VEG cluster -->
+  <ellipse cx="430" cy="270" rx="140" ry="85" fill="url(#g2)" stroke="#4ecdc4" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.7"/>
+  <text x="430" y="188" fill="#4ecdc4" font-size="13" text-anchor="middle" font-weight="700">VEGETABLE CLUSTER</text>
+
+  <!-- PRODUCE overlap -->
+  <ellipse cx="530" cy="230" rx="190" ry="120" fill="url(#g3)" stroke="#ffe66d" stroke-width="1" stroke-dasharray="4 6" opacity="0.4"/>
+  <text x="530" y="375" fill="#ffe66d" font-size="11" text-anchor="middle" opacity="0.7">PRODUCE SUPERSPACE (overlap zone)</text>
+
+  <!-- Points - Fruits -->
+  <circle cx="680" cy="155" r="9" fill="#ff6b35"/>
+  <text x="695" y="150" fill="#e8e4d9" font-size="12">🍎 Apple</text>
+  <circle cx="600" cy="170" r="7" fill="#ff8b94"/>
+  <text x="615" y="165" fill="#e8e4d9" font-size="12">🍓 Strawberry</text>
+  <circle cx="660" cy="210" r="7" fill="#ff8b94"/>
+  <text x="675" y="205" fill="#e8e4d9" font-size="12">🍇 Grape</text>
+  <circle cx="720" cy="200" r="7" fill="#ff8b94"/>
+  <text x="735" y="195" fill="#e8e4d9" font-size="12">🍊 Orange</text>
+
+  <!-- Points - Veg -->
+  <circle cx="390" cy="260" r="9" fill="#4ecdc4"/>
+  <text x="320" y="256" fill="#e8e4d9" font-size="12">Carrot 🥕</text>
+  <circle cx="460" cy="300" r="7" fill="#a8e6cf"/>
+  <text x="392" y="296" fill="#e8e4d9" font-size="12">Broccoli 🥦</text>
+  <circle cx="430" cy="235" r="7" fill="#a8e6cf"/>
+  <text x="445" y="230" fill="#e8e4d9" font-size="12">🍅 Tomato</text>
+  <circle cx="360" cy="310" r="7" fill="#a8e6cf"/>
+  <text x="292" y="306" fill="#e8e4d9" font-size="12">Spinach 🥬</text>
+
+  <!-- Distance arrow: Apple to Carrot -->
+  <line x1="680" y1="155" x2="400" y2="258" stroke="#ff6b35" stroke-width="2" marker-end="url(#arr)" stroke-dasharray="8 4"/>
+  <rect x="495" y="175" width="120" height="24" rx="4" fill="#1e1e28" opacity="0.9"/>
+  <text x="555" y="191" fill="#ffe66d" font-size="12" text-anchor="middle" font-weight="700">cos sim ≈ 0.82</text>
+
+  <!-- Query point -->
+  <circle cx="680" cy="155" r="14" fill="none" stroke="#ffe66d" stroke-width="2.5"/>
+  <text x="680" y="135" fill="#ffe66d" font-size="11" text-anchor="middle">QUERY</text>
+
+  <!-- Legend -->
+  <rect x="70" y="40" width="16" height="16" rx="3" fill="#ff6b35" opacity="0.7"/>
+  <text x="92" y="53" fill="#e8e4d9" font-size="12">Fruit cluster</text>
+  <rect x="70" y="65" width="16" height="16" rx="3" fill="#4ecdc4" opacity="0.7"/>
+  <text x="92" y="78" fill="#e8e4d9" font-size="12">Vegetable cluster</text>
+  <rect x="70" y="90" width="16" height="16" rx="3" fill="#ffe66d" opacity="0.5"/>
+  <text x="92" y="103" fill="#e8e4d9" font-size="12">Produce overlap zone</text>
+</svg>
+<figcaption>Fig. 1 — 2D projection of a general-purpose embedding space. Apple (fruit cluster) and Carrot (vegetable cluster) share the "produce superspace," making their cosine similarity high enough to trigger false nearest-neighbor retrieval.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<h3>The Geometry of the Problem</h3>
+<p>
+  In high-dimensional spaces, a counterintuitive phenomenon known as the <strong>curse of dimensionality</strong> causes distances to compress. As you add more dimensions, the ratio between the nearest and farthest points approaches 1 — meaning everything starts to look equally close. At 1536 dimensions, the difference in cosine distance between a conceptually correct result and a plausible-but-wrong result can be less than 0.05. This is smaller than the noise introduced by minor query rephrasing.
+</p>
+<p>
+  This means that if your vector database contains only vegetables and a user queries for fruits, the system will not return an error. It will return the <em>least-wrong vegetable</em> with approximately the same confidence score it would have given for an actual fruit match.
+</p>
+
+<div class="pq">
+  <p>"Vector search is architecturally incapable of saying 'I don't know.' It was not designed to distinguish between a good match and the best available bad match. That is the developer's job to build."</p>
+</div>
+
+<!-- ════ DIAGRAM 2: The Mismatch Pipeline ════ -->
+</div>
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#4ecdc4"/>
+    </marker>
+    <marker id="a2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#e74c3c"/>
+    </marker>
+  </defs>
+  <rect width="900" height="280" fill="#16161d" rx="12"/>
+
+  <!-- Steps -->
+  <!-- Box 1: User Query -->
+  <rect x="30" y="100" width="130" height="80" rx="10" fill="#1e1e28" stroke="#4ecdc4" stroke-width="1.5"/>
+  <text x="95" y="132" fill="#4ecdc4" font-size="12" text-anchor="middle" font-weight="700">USER QUERY</text>
+  <text x="95" y="152" fill="#e8e4d9" font-size="13" text-anchor="middle">🍎 "apple"</text>
+  <text x="95" y="170" fill="#7a7890" font-size="10" text-anchor="middle">intent: fruit</text>
+
+  <!-- Arrow 1 -->
+  <line x1="162" y1="140" x2="208" y2="140" stroke="#4ecdc4" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="185" y="130" fill="#7a7890" font-size="10" text-anchor="middle">embed</text>
+
+  <!-- Box 2: Embedding -->
+  <rect x="210" y="100" width="130" height="80" rx="10" fill="#1e1e28" stroke="#ffe66d" stroke-width="1.5"/>
+  <text x="275" y="132" fill="#ffe66d" font-size="12" text-anchor="middle" font-weight="700">EMBEDDING</text>
+  <text x="275" y="152" fill="#e8e4d9" font-size="11" text-anchor="middle">[0.21, -0.84,</text>
+  <text x="275" y="167" fill="#e8e4d9" font-size="11" text-anchor="middle">0.33, ...]</text>
+
+  <!-- Arrow 2 -->
+  <line x1="342" y1="140" x2="388" y2="140" stroke="#4ecdc4" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="365" y="130" fill="#7a7890" font-size="10" text-anchor="middle">kNN</text>
+
+  <!-- Box 3: Vector DB -->
+  <rect x="390" y="85" width="140" height="110" rx="10" fill="#1e1e28" stroke="#ff6b35" stroke-width="1.5"/>
+  <text x="460" y="112" fill="#ff6b35" font-size="12" text-anchor="middle" font-weight="700">VECTOR DB</text>
+  <text x="460" y="132" fill="#7a7890" font-size="10" text-anchor="middle">(no fruits indexed)</text>
+  <text x="460" y="152" fill="#e8e4d9" font-size="12" text-anchor="middle">🥕 carrot 0.82</text>
+  <text x="460" y="168" fill="#e8e4d9" font-size="12" text-anchor="middle">🥦 broccoli 0.79</text>
+  <text x="460" y="184" fill="#e8e4d9" font-size="12" text-anchor="middle">🍅 tomato 0.77</text>
+
+  <!-- Arrow 3 -->
+  <line x1="532" y1="140" x2="578" y2="140" stroke="#e74c3c" stroke-width="2" marker-end="url(#a2)" stroke-dasharray="6 3"/>
+  <text x="555" y="130" fill="#e74c3c" font-size="10" text-anchor="middle">⚠ wrong</text>
+
+  <!-- Box 4: LLM -->
+  <rect x="580" y="100" width="130" height="80" rx="10" fill="#1e1e28" stroke="#9b59b6" stroke-width="1.5"/>
+  <text x="645" y="128" fill="#9b59b6" font-size="12" text-anchor="middle" font-weight="700">LLM CONTEXT</text>
+  <text x="645" y="148" fill="#e8e4d9" font-size="11" text-anchor="middle">injected: carrot</text>
+  <text x="645" y="164" fill="#e8e4d9" font-size="11" text-anchor="middle">data silently</text>
+
+  <!-- Arrow 4 -->
+  <line x1="712" y1="140" x2="758" y2="140" stroke="#e74c3c" stroke-width="2" marker-end="url(#a2)"/>
+
+  <!-- Box 5: Bad Output -->
+  <rect x="760" y="100" width="110" height="80" rx="10" fill="#2d1515" stroke="#e74c3c" stroke-width="2"/>
+  <text x="815" y="128" fill="#e74c3c" font-size="12" text-anchor="middle" font-weight="700">OUTPUT</text>
+  <text x="815" y="148" fill="#ff8b94" font-size="11" text-anchor="middle">"Here is info</text>
+  <text x="815" y="163" fill="#ff8b94" font-size="11" text-anchor="middle">about carrots..."</text>
+  <text x="815" y="178" fill="#e74c3c" font-size="10" text-anchor="middle">HALLUCINATED</text>
+
+  <!-- Labels -->
+  <text x="450" y="240" fill="#e74c3c" font-size="13" text-anchor="middle" font-weight="700">⬆ The Silent Failure Path — no errors thrown, wrong answer produced with full confidence</text>
+</svg>
+<figcaption>Fig. 2 — The mismatch pipeline. A fruit query enters an embedding model, retrieves vegetables from a domain-limited DB, silently injects wrong context into the LLM, producing a confident but incorrect response.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!-- ════════════════════ SECTION 3 ════════════════════ -->
+<section id="why-bad">
+  <h2><span class="sec-num"> 03 — Taxonomy</span>The Four Classes of Vector Mismatch Failure</h2>
+  <p>
+    Not all mismatch failures are the same. Understanding the class of failure determines the appropriate mitigation strategy. After analyzing production RAG systems across dozens of domains, four distinct failure classes emerge:
+  </p>
+
+  <h3>Class 1: Domain Boundary Failure</h3>
+  <p>
+    The query belongs to a domain (fruits) that simply does not exist in the indexed corpus (which only contains vegetables). The system retrieves the nearest cross-domain neighbor. This is the archetypal case we examine throughout this article. It is the most common class in specialized domain chatbots where the knowledge base is deliberately scoped.
+  </p>
+
+  <h3>Class 2: Semantic Granularity Failure</h3>
+  <p>
+    The correct domain exists in the database, but the query requires a level of specificity that the embedding model collapses. Example: a query for <em>"Fuji apple"</em> returns generic apple nutrition data because the embedding model treats apple varieties as semantically equivalent. The score is high (0.91+), but the retrieved chunk is still wrong for the task.
+  </p>
+
+  <h3>Class 3: Polysemy Collapse</h3>
+  <p>
+    Words with multiple meanings get embedded into an averaged position. The word <em>"apple"</em> in a corpus that also contains Apple Inc. articles creates an embedding that sits between the fruit meaning and the tech company meaning. A query for apple the fruit retrieves Apple the company, or vice versa, with high confidence.
+  </p>
+
+  <h3>Class 4: Temporal Drift Failure</h3>
+  <p>
+    The indexed data existed once but has gone stale. A query for a seasonal fruit returns last year's data (or a substitute product) because the current item was never re-indexed. The embedding is correct; the <em>grounding</em> is wrong.
+  </p>
+
+  <div class="tbl-wrap">
+  <table>
+    <tr>
+      <th>Failure Class</th>
+      <th>Root Cause</th>
+      <th>Detection Method</th>
+      <th>Primary Fix</th>
+    </tr>
+    <tr>
+      <td><strong>Domain Boundary</strong></td>
+      <td>Query outside corpus scope</td>
+      <td>Threshold on top-k similarity</td>
+      <td>Domain classifier + fallback</td>
+    </tr>
+    <tr>
+      <td><strong>Semantic Granularity</strong></td>
+      <td>Embedding model too coarse</td>
+      <td>Re-rank with cross-encoder</td>
+      <td>Fine-tuned domain embeddings</td>
+    </tr>
+    <tr>
+      <td><strong>Polysemy Collapse</strong></td>
+      <td>Ambiguous query term</td>
+      <td>Disambiguation detection</td>
+      <td>Query expansion + context injection</td>
+    </tr>
+    <tr>
+      <td><strong>Temporal Drift</strong></td>
+      <td>Stale index</td>
+      <td>Metadata timestamp checks</td>
+      <td>TTL-based re-indexing pipeline</td>
+    </tr>
+  </table>
+  </div>
+</section>
+
+<div class="div">· · ·</div>
+
+<!-- ════════════════════ SECTION 4 ════════════════════ -->
+<section id="guardrails">
+  <h2><span class="sec-num"> 04 — The Solution Architecture</span>A Layered Guardrail System</h2>
+  <p>
+    There is no single fix for the mismatch problem. Instead, a production-grade system requires <strong>four defensive layers</strong>, each catching failures that slip through the previous one. Think of it like airport security: each gate catches a different threat profile. The full architecture is shown in Fig. 3.
+  </p>
+</section>
+
+</div>
+
+<!-- ════ DIAGRAM 3: 4-Layer Guardrail Architecture ════ -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="da" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#4ecdc4"/>
+    </marker>
+    <marker id="dr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#e74c3c"/>
+    </marker>
+  </defs>
+  <rect width="900" height="520" fill="#16161d" rx="12"/>
+  <text x="450" y="32" fill="#e8e4d9" font-size="16" font-weight="700" text-anchor="middle">4-LAYER GUARDRAIL ARCHITECTURE</text>
+
+  <!-- Query Input -->
+  <rect x="360" y="50" width="180" height="50" rx="8" fill="#1e1e28" stroke="#4ecdc4" stroke-width="1.5"/>
+  <text x="450" y="72" fill="#4ecdc4" font-size="12" text-anchor="middle" font-weight="700">USER QUERY</text>
+  <text x="450" y="89" fill="#e8e4d9" font-size="12" text-anchor="middle">"show me fruits"</text>
+
+  <!-- Down arrow -->
+  <line x1="450" y1="102" x2="450" y2="128" stroke="#4ecdc4" stroke-width="2" marker-end="url(#da)"/>
+
+  <!-- Layer 1: Domain Classifier -->
+  <rect x="100" y="130" width="700" height="70" rx="10" fill="#1e2a1e" stroke="#2ecc71" stroke-width="2"/>
+  <text x="230" y="155" fill="#2ecc71" font-size="13" font-weight="700">LAYER 1: DOMAIN INTENT CLASSIFIER</text>
+  <text x="230" y="177" fill="#a8e6cf" font-size="11">Fast ML classifier checks if query domain ∈ {indexed domains}. If not → reject / reroute immediately.</text>
+  <text x="810" y="162" fill="#2ecc71" font-size="11" text-anchor="middle">~2ms</text>
+  <!-- Reject arrow L1 -->
+  <line x1="800" y1="165" x2="856" y2="165" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#dr)"/>
+  <text x="875" y="162" fill="#e74c3c" font-size="10">REJECT</text>
+
+  <line x1="450" y1="202" x2="450" y2="228" stroke="#4ecdc4" stroke-width="2" marker-end="url(#da)"/>
+
+  <!-- Layer 2: Vector Search + Threshold -->
+  <rect x="100" y="230" width="700" height="70" rx="10" fill="#1e2228" stroke="#3498db" stroke-width="2"/>
+  <text x="230" y="255" fill="#3498db" font-size="13" font-weight="700">LAYER 2: VECTOR SEARCH + CONFIDENCE THRESHOLD</text>
+  <text x="230" y="277" fill="#87c4e8" font-size="11">kNN retrieval. If max(cosine_sim) &lt; τ (e.g. 0.78) → flag as low-confidence. Never silently pass.</text>
+  <text x="810" y="262" fill="#3498db" font-size="11" text-anchor="middle">~15ms</text>
+  <line x1="800" y1="265" x2="856" y2="265" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#dr)"/>
+  <text x="875" y="262" fill="#e74c3c" font-size="10">FLAG</text>
+
+  <line x1="450" y1="302" x2="450" y2="328" stroke="#4ecdc4" stroke-width="2" marker-end="url(#da)"/>
+
+  <!-- Layer 3: Re-ranker -->
+  <rect x="100" y="330" width="700" height="70" rx="10" fill="#221e28" stroke="#9b59b6" stroke-width="2"/>
+  <text x="230" y="355" fill="#9b59b6" font-size="13" font-weight="700">LAYER 3: CROSS-ENCODER RE-RANKER</text>
+  <text x="230" y="377" fill="#c9a8e8" font-size="11">Slower cross-encoder scores (query, doc) pairs jointly. Reorders top-k. Catches granularity failures.</text>
+  <text x="810" y="362" fill="#9b59b6" font-size="11" text-anchor="middle">~80ms</text>
+  <line x1="800" y1="365" x2="856" y2="365" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#dr)"/>
+  <text x="875" y="362" fill="#e74c3c" font-size="10">RE-RANK</text>
+
+  <line x1="450" y1="402" x2="450" y2="428" stroke="#4ecdc4" stroke-width="2" marker-end="url(#da)"/>
+
+  <!-- Layer 4: LLM Judge -->
+  <rect x="100" y="430" width="700" height="60" rx="10" fill="#221a1a" stroke="#ff6b35" stroke-width="2"/>
+  <text x="230" y="455" fill="#ff6b35" font-size="13" font-weight="700">LAYER 4: LLM-AS-JUDGE RELEVANCE GATE</text>
+  <text x="230" y="475" fill="#ffb89a" font-size="11">Small LLM evaluates: "Is this retrieved context actually relevant to the query?" Binary pass/fail.</text>
+  <text x="810" y="462" fill="#ff6b35" font-size="11" text-anchor="middle">~200ms</text>
+  <line x1="800" y1="462" x2="856" y2="462" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#dr)"/>
+  <text x="875" y="462" fill="#e74c3c" font-size="10">BLOCK</text>
+
+  <!-- Reject side labels -->
+  <text x="875" y="505" fill="#7a7890" font-size="10" text-anchor="middle">→ fallback</text>
+  <text x="875" y="515" fill="#7a7890" font-size="10" text-anchor="middle">responses</text>
+</svg>
+<figcaption>Fig. 3 — The 4-layer guardrail architecture. Each layer operates at different latency/cost tradeoffs. Layers can be selectively enabled based on the risk tolerance of the application.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<h3>Layer 1: Domain Intent Classifier</h3>
+<p>
+  The first and fastest defense is a lightweight <strong>multi-class intent classifier</strong> that runs before the embedding model is even called. This classifier (typically a fine-tuned DistilBERT or a fastText model) answers one question: <em>does the user's query belong to the domain(s) covered by this vector database?</em>
+</p>
+<p>
+  The model is trained on examples of in-domain and out-of-domain queries. If the classified domain does not match the indexed domain, the system can immediately respond with a graceful fallback — "I only have information about vegetables; I don't have fruit data" — without burning embedding compute or misleading the downstream LLM.
+</p>
+
+<pre>
+<span class="cm"># Layer 1: Domain Intent Classifier</span>
+<span class="kw">from</span> transformers <span class="kw">import</span> pipeline
+
+<span class="cl">DomainClassifier</span> = pipeline(
+    <span class="st">"text-classification"</span>,
+    model=<span class="st">"your-fine-tuned/domain-classifier"</span>
+)
+
+<span class="kw">def</span> <span class="fn">check_domain</span>(query: str, allowed_domains: list[str]) -> dict:
+    result = <span class="cl">DomainClassifier</span>(query)[<span class="nm">0</span>]
+    domain = result[<span class="st">"label"</span>]
+    confidence = result[<span class="st">"score"</span>]
+
+    <span class="kw">if</span> domain <span class="kw">not in</span> allowed_domains <span class="kw">or</span> confidence &lt; <span class="nm">0.75</span>:
+        <span class="kw">return</span> {
+            <span class="st">"pass"</span>: <span class="kw">False</span>,
+            <span class="st">"reason"</span>: <span class="st">f"Query domain '{domain}' not in indexed corpus"</span>,
+            <span class="st">"fallback"</span>: <span class="st">"I don't have information about that topic."</span>
+        }
+    <span class="kw">return</span> {<span class="st">"pass"</span>: <span class="kw">True</span>, <span class="st">"domain"</span>: domain}
+</pre>
+
+<h3>Layer 2: Similarity Threshold Gating</h3>
+<p>
+  If the query passes the domain classifier (or you're operating in a system where the classifier isn't available), the next defense is a <strong>calibrated confidence threshold</strong> on the vector search results. Rather than blindly passing top-k results downstream, you set a minimum acceptable cosine similarity score below which results are treated as no-match.
+</p>
+
+<div class="callout info">
+  <div class="ico">🔬</div>
+  <div class="body"><strong>Threshold Calibration:</strong> The optimal threshold is domain-specific. A medical QA system should be very conservative (τ ≥ 0.88). A product recommendation system can be more permissive (τ ≈ 0.72). Calibrate using a held-out eval set with known good/bad pairs and optimize for F1 on the "should we retrieve this?" decision.</div>
+</div>
+
+<pre>
+<span class="cm"># Layer 2: Threshold-Gated Vector Search</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">guarded_vector_search</span>(
+    query_vec: np.ndarray,
+    vector_db,
+    k: int = <span class="nm">5</span>,
+    tau: float = <span class="nm">0.78</span>,        <span class="cm"># minimum acceptable similarity</span>
+    domain_label: str = <span class="kw">None</span>
+) -> dict:
+
+    results = vector_db.query(query_vec, top_k=k)
+    best_score = results[<span class="nm">0</span>][<span class="st">"score"</span>]   <span class="cm"># cosine sim of nearest neighbor</span>
+
+    <span class="kw">if</span> best_score &lt; tau:
+        <span class="kw">return</span> {
+            <span class="st">"status"</span>: <span class="st">"low_confidence"</span>,
+            <span class="st">"best_score"</span>: best_score,
+            <span class="st">"threshold"</span>: tau,
+            <span class="st">"results"</span>: [],
+            <span class="st">"message"</span>: (
+                <span class="st">f"Best match score ({best_score:.3f}) is below "</span>
+                <span class="st">f"confidence threshold ({tau}). "</span>
+                <span class="st">"No reliable results found in this corpus."</span>
+            )
+        }
+
+    <span class="cm"># Filter results below threshold (not just top-1)</span>
+    filtered = [r <span class="kw">for</span> r <span class="kw">in</span> results <span class="kw">if</span> r[<span class="st">"score"</span>] >= tau]
+    <span class="kw">return</span> {<span class="st">"status"</span>: <span class="st">"ok"</span>, <span class="st">"results"</span>: filtered}
+</pre>
+
+<h3>Layer 3: Cross-Encoder Re-ranking</h3>
+<p>
+  Bi-encoder embedding models (which power most vector databases) produce query and document vectors independently — they never "look at" the query and document together. A <strong>cross-encoder</strong> does exactly that: it processes the (query, document) pair jointly through a transformer and outputs a single relevance score.
+</p>
+<p>
+  Cross-encoders are slower (cannot pre-index, must run at query time) but dramatically more accurate. The standard production pattern is a <strong>retrieve-then-rerank</strong> pipeline: retrieve top-50 candidates with the fast bi-encoder, then re-score them with the cross-encoder and keep only those above a relevance threshold.
+</p>
+
+</div>
+
+<!-- ════ DIAGRAM 4: Bi-encoder vs Cross-encoder ════ -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="900" height="360" fill="#16161d" rx="12"/>
+  <text x="450" y="30" fill="#e8e4d9" font-size="15" font-weight="700" text-anchor="middle">BI-ENCODER vs CROSS-ENCODER</text>
+
+  <!-- BI-ENCODER (left) -->
+  <text x="215" y="60" fill="#ffe66d" font-size="13" font-weight="700" text-anchor="middle">BI-ENCODER (fast, used for indexing)</text>
+
+  <rect x="60" y="80" width="120" height="44" rx="8" fill="#1e2228" stroke="#3498db" stroke-width="1.5"/>
+  <text x="120" y="98" fill="#87c4e8" font-size="11" text-anchor="middle">QUERY</text>
+  <text x="120" y="114" fill="#e8e4d9" font-size="12" text-anchor="middle">"apple"</text>
+
+  <rect x="60" y="155" width="120" height="44" rx="8" fill="#1e2228" stroke="#3498db" stroke-width="1.5"/>
+  <text x="120" y="173" fill="#87c4e8" font-size="11" text-anchor="middle">DOCUMENT</text>
+  <text x="120" y="189" fill="#e8e4d9" font-size="12" text-anchor="middle">"carrot"</text>
+
+  <rect x="200" y="80" width="90" height="44" rx="8" fill="#222" stroke="#ffe66d" stroke-width="1.5"/>
+  <text x="245" y="98" fill="#ffe66d" font-size="10" text-anchor="middle">ENCODER</text>
+  <text x="245" y="112" fill="#e8e4d9" font-size="10" text-anchor="middle">BERT</text>
+
+  <rect x="200" y="155" width="90" height="44" rx="8" fill="#222" stroke="#ffe66d" stroke-width="1.5"/>
+  <text x="245" y="173" fill="#ffe66d" font-size="10" text-anchor="middle">ENCODER</text>
+  <text x="245" y="187" fill="#e8e4d9" font-size="10" text-anchor="middle">BERT</text>
+
+  <!-- arrows bi -->
+  <line x1="182" y1="102" x2="198" y2="102" stroke="#3498db" stroke-width="1.5" marker-end="url(#da)"/>
+  <line x1="182" y1="177" x2="198" y2="177" stroke="#3498db" stroke-width="1.5" marker-end="url(#da)"/>
+
+  <rect x="310" y="90" width="60" height="30" rx="6" fill="#1e1e28" stroke="#4ecdc4" stroke-width="1"/>
+  <text x="340" y="110" fill="#4ecdc4" font-size="10" text-anchor="middle">vec_q</text>
+  <rect x="310" y="165" width="60" height="30" rx="6" fill="#1e1e28" stroke="#4ecdc4" stroke-width="1"/>
+  <text x="340" y="185" fill="#4ecdc4" font-size="10" text-anchor="middle">vec_d</text>
+
+  <line x1="292" y1="102" x2="308" y2="102" stroke="#ffe66d" stroke-width="1.5"/>
+  <line x1="292" y1="177" x2="308" y2="177" stroke="#ffe66d" stroke-width="1.5"/>
+
+  <!-- dot product -->
+  <circle cx="390" cy="140" r="22" fill="#1e1e28" stroke="#ffe66d" stroke-width="2"/>
+  <text x="390" y="145" fill="#ffe66d" font-size="18" text-anchor="middle">·</text>
+  <line x1="340" y1="105" x2="375" y2="128" stroke="#4ecdc4" stroke-width="1.5"/>
+  <line x1="340" y1="180" x2="375" y2="153" stroke="#4ecdc4" stroke-width="1.5"/>
+
+  <rect x="424" y="122" width="90" height="36" rx="6" fill="#2d2015" stroke="#ff6b35" stroke-width="1.5"/>
+  <text x="469" y="136" fill="#ff6b35" font-size="11" text-anchor="middle">score=0.82</text>
+  <text x="469" y="150" fill="#ffb89a" font-size="10" text-anchor="middle">⚠ false high</text>
+  <line x1="414" y1="140" x2="422" y2="140" stroke="#ffe66d" stroke-width="1.5"/>
+
+  <text x="215" y="270" fill="#7a7890" font-size="11" text-anchor="middle">Each text encoded INDEPENDENTLY</text>
+  <text x="215" y="288" fill="#7a7890" font-size="11" text-anchor="middle">→ fast, scalable, but context-blind</text>
+
+  <!-- Divider -->
+  <line x1="560" y1="50" x2="560" y2="320" stroke="#2a2a38" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+  <!-- CROSS-ENCODER (right) -->
+  <text x="730" y="60" fill="#2ecc71" font-size="13" font-weight="700" text-anchor="middle">CROSS-ENCODER (slower, more accurate)</text>
+
+  <rect x="590" y="105" width="110" height="70" rx="8" fill="#1e2228" stroke="#2ecc71" stroke-width="1.5"/>
+  <text x="645" y="128" fill="#a8e6cf" font-size="11" text-anchor="middle">QUERY</text>
+  <text x="645" y="144" fill="#e8e4d9" font-size="12" text-anchor="middle">"apple"</text>
+  <text x="645" y="158" fill="#a8e6cf" font-size="11" text-anchor="middle">[SEP]</text>
+  <text x="645" y="173" fill="#e8e4d9" font-size="12" text-anchor="middle">"carrot"</text>
+
+  <rect x="720" y="115" width="100" height="50" rx="8" fill="#222" stroke="#2ecc71" stroke-width="1.5"/>
+  <text x="770" y="136" fill="#2ecc71" font-size="10" text-anchor="middle">CROSS-</text>
+  <text x="770" y="150" fill="#2ecc71" font-size="10" text-anchor="middle">ENCODER</text>
+
+  <line x1="702" y1="140" x2="718" y2="140" stroke="#2ecc71" stroke-width="1.5"/>
+
+  <rect x="832" y="120" width="50" height="40" rx="6" fill="#1a2e1a" stroke="#2ecc71" stroke-width="1.5"/>
+  <text x="857" y="138" fill="#2ecc71" font-size="11" text-anchor="middle">0.41</text>
+  <text x="857" y="153" fill="#a8e6cf" font-size="10" text-anchor="middle">✓ low</text>
+  <line x1="822" y1="140" x2="830" y2="140" stroke="#2ecc71" stroke-width="1.5"/>
+
+  <text x="730" y="270" fill="#7a7890" font-size="11" text-anchor="middle">Query + doc processed TOGETHER</text>
+  <text x="730" y="288" fill="#7a7890" font-size="11" text-anchor="middle">→ 2-3× slower but context-aware</text>
+
+  <!-- Comparison bar -->
+  <text x="215" y="320" fill="#3498db" font-size="11" text-anchor="middle">Speed: ████████████ Fast</text>
+  <text x="730" y="320" fill="#2ecc71" font-size="11" text-anchor="middle">Accuracy: ████████████ High</text>
+</svg>
+<figcaption>Fig. 4 — Bi-encoders produce independent vectors (fast, but miss cross-attention context). Cross-encoders process query+document together, dramatically improving relevance scoring at the cost of latency.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<pre>
+<span class="cm"># Layer 3: Cross-encoder Re-ranking</span>
+<span class="kw">from</span> sentence_transformers <span class="kw">import</span> CrossEncoder
+
+reranker = <span class="cl">CrossEncoder</span>(<span class="st">"cross-encoder/ms-marco-MiniLM-L-6-v2"</span>)
+
+<span class="kw">def</span> <span class="fn">rerank_results</span>(query: str, candidates: list[dict], top_n: int = <span class="nm">3</span>) -> list[dict]:
+    pairs = [(query, c[<span class="st">"text"</span>]) <span class="kw">for</span> c <span class="kw">in</span> candidates]
+    scores = reranker.<span class="fn">predict</span>(pairs)
+
+    <span class="cm"># Attach cross-encoder scores</span>
+    <span class="kw">for</span> i, doc <span class="kw">in</span> enumerate(candidates):
+        doc[<span class="st">"ce_score"</span>] = float(scores[i])
+
+    <span class="cm"># Sort by cross-encoder score, apply threshold</span>
+    ranked = sorted(candidates, key=<span class="kw">lambda</span> x: x[<span class="st">"ce_score"</span>], reverse=<span class="kw">True</span>)
+    relevant = [r <span class="kw">for</span> r <span class="kw">in</span> ranked <span class="kw">if</span> r[<span class="st">"ce_score"</span>] > <span class="nm">0.5</span>]
+
+    <span class="kw">return</span> relevant[:top_n]   <span class="cm"># May return empty list — and that's OK</span>
+</pre>
+
+<h3>Layer 4: LLM-as-Judge Relevance Gate</h3>
+<p>
+  The deepest and most expensive guardrail is an LLM that reads both the query and the retrieved context and makes a binary decision: <em>is this context actually relevant to answering the query?</em> This catches polysemy failures and subtle semantic mismatches that even cross-encoders miss.
+</p>
+<p>
+  The key is using a <strong>small, fast model</strong> for this task — not GPT-4. A 3B or 7B instruction-tuned model with a carefully constrained prompt can achieve 94%+ accuracy on this binary task while adding only ~150ms latency. The prompt must be structured to force a binary JSON output to prevent the judge from hedging.
+</p>
+
+<pre>
+<span class="cm"># Layer 4: LLM-as-Judge</span>
+<span class="kw">import</span> json, openai
+
+JUDGE_PROMPT = <span class="st">"""
+You are a strict relevance judge for a retrieval system.
+Given a USER QUERY and a RETRIEVED DOCUMENT, respond ONLY with JSON:
+{"relevant": true/false, "reason": "one sentence"}
+
+Rules:
+- true = the document directly helps answer the query
+- false = the document is from a different domain or topic
+- Be strict. A document about carrots is NOT relevant to a query about fruits.
+"""</span>
+
+<span class="kw">def</span> <span class="fn">llm_relevance_gate</span>(query: str, document: str) -> dict:
+    response = openai.chat.completions.<span class="fn">create</span>(
+        model=<span class="st">"gpt-4o-mini"</span>,    <span class="cm"># fast + cheap judge model</span>
+        messages=[
+            {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: JUDGE_PROMPT},
+            {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>:
+                <span class="st">f"QUERY: {query}\n\nDOCUMENT: {document[:500]}"</span>}
+        ],
+        response_format={<span class="st">"type"</span>: <span class="st">"json_object"</span>},
+        temperature=<span class="nm">0</span>
+    )
+    result = json.<span class="fn">loads</span>(response.choices[<span class="nm">0</span>].message.content)
+    <span class="kw">return</span> result   <span class="cm"># {"relevant": bool, "reason": str}</span>
+</pre>
+
+<div class="div">· · ·</div>
+
+<!-- ════════════════════ SECTION 5 ════════════════════ -->
+<section id="full-system">
+  <h2><span class="sec-num"> 05 — Production Code</span>Assembling the Full Guardrailed Pipeline</h2>
+  <p>
+    The four layers must be orchestrated into a single, coherent pipeline with proper error handling, graceful fallbacks, and observability hooks. Here is a production-ready implementation with all layers integrated:
+  </p>
+</section>
+
+</div>
+
+<!-- ════ DIAGRAM 5: Full System Flow ════ -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="fa" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#4ecdc4"/>
+    </marker>
+    <marker id="fr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#e74c3c"/>
+    </marker>
+    <marker id="fg" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#2ecc71"/>
+    </marker>
+  </defs>
+  <rect width="900" height="600" fill="#16161d" rx="12"/>
+  <text x="450" y="30" fill="#e8e4d9" font-size="15" font-weight="700" text-anchor="middle">COMPLETE GUARDRAILED PIPELINE — EXECUTION FLOW</text>
+
+  <!-- Start -->
+  <ellipse cx="450" cy="65" rx="80" ry="24" fill="#1e1e28" stroke="#4ecdc4" stroke-width="2"/>
+  <text x="450" y="70" fill="#4ecdc4" font-size="12" text-anchor="middle" font-weight="700">QUERY IN</text>
+  <line x1="450" y1="90" x2="450" y2="110" stroke="#4ecdc4" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- L1 Box -->
+  <rect x="260" y="112" width="380" height="52" rx="9" fill="#1e2a1e" stroke="#2ecc71" stroke-width="1.5"/>
+  <text x="450" y="132" fill="#2ecc71" font-size="12" text-anchor="middle" font-weight="700">L1: DOMAIN CLASSIFIER</text>
+  <text x="450" y="152" fill="#a8e6cf" font-size="10" text-anchor="middle">intent → match indexed domains?</text>
+  <!-- L1 fail right -->
+  <line x1="642" y1="138" x2="720" y2="138" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#fr)"/>
+  <rect x="722" y="118" width="130" height="40" rx="6" fill="#2d1515" stroke="#e74c3c" stroke-width="1"/>
+  <text x="787" y="135" fill="#ff8b94" font-size="10" text-anchor="middle">DOMAIN MISS →</text>
+  <text x="787" y="150" fill="#ff8b94" font-size="10" text-anchor="middle">graceful fallback</text>
+  <!-- pass down -->
+  <line x1="450" y1="165" x2="450" y2="183" stroke="#4ecdc4" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- Embed box -->
+  <rect x="310" y="185" width="280" height="44" rx="9" fill="#1e2028" stroke="#ffe66d" stroke-width="1.5"/>
+  <text x="450" y="204" fill="#ffe66d" font-size="12" text-anchor="middle" font-weight="700">EMBED QUERY</text>
+  <text x="450" y="220" fill="#e8e4d9" font-size="10" text-anchor="middle">text-embedding-3-large → float[1536]</text>
+  <line x1="450" y1="230" x2="450" y2="248" stroke="#4ecdc4" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- L2 box -->
+  <rect x="260" y="250" width="380" height="52" rx="9" fill="#1e2228" stroke="#3498db" stroke-width="1.5"/>
+  <text x="450" y="270" fill="#3498db" font-size="12" text-anchor="middle" font-weight="700">L2: kNN + THRESHOLD GATE</text>
+  <text x="450" y="290" fill="#87c4e8" font-size="10" text-anchor="middle">top-50 results; max_score &lt; τ → low-conf path</text>
+  <line x1="642" y1="276" x2="720" y2="276" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#fr)"/>
+  <rect x="722" y="258" width="130" height="40" rx="6" fill="#2d1515" stroke="#e74c3c" stroke-width="1"/>
+  <text x="787" y="274" fill="#ff8b94" font-size="10" text-anchor="middle">LOW CONF →</text>
+  <text x="787" y="289" fill="#ff8b94" font-size="10" text-anchor="middle">"not found" msg</text>
+  <line x1="450" y1="303" x2="450" y2="321" stroke="#4ecdc4" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- L3 box -->
+  <rect x="260" y="323" width="380" height="52" rx="9" fill="#221e28" stroke="#9b59b6" stroke-width="1.5"/>
+  <text x="450" y="343" fill="#9b59b6" font-size="12" text-anchor="middle" font-weight="700">L3: CROSS-ENCODER RE-RANK</text>
+  <text x="450" y="363" fill="#c9a8e8" font-size="10" text-anchor="middle">score (query, doc) pairs; filter ce_score &lt; 0.5</text>
+  <line x1="642" y1="349" x2="720" y2="349" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#fr)"/>
+  <rect x="722" y="331" width="130" height="40" rx="6" fill="#2d1515" stroke="#e74c3c" stroke-width="1"/>
+  <text x="787" y="347" fill="#ff8b94" font-size="10" text-anchor="middle">RERANKED OUT →</text>
+  <text x="787" y="362" fill="#ff8b94" font-size="10" text-anchor="middle">suggest related</text>
+  <line x1="450" y1="376" x2="450" y2="394" stroke="#4ecdc4" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- L4 box -->
+  <rect x="260" y="396" width="380" height="52" rx="9" fill="#221a1a" stroke="#ff6b35" stroke-width="1.5"/>
+  <text x="450" y="416" fill="#ff6b35" font-size="12" text-anchor="middle" font-weight="700">L4: LLM RELEVANCE JUDGE</text>
+  <text x="450" y="436" fill="#ffb89a" font-size="10" text-anchor="middle">LLM binary pass/fail on (query, context) pair</text>
+  <line x1="642" y1="422" x2="720" y2="422" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#fr)"/>
+  <rect x="722" y="404" width="130" height="40" rx="6" fill="#2d1515" stroke="#e74c3c" stroke-width="1"/>
+  <text x="787" y="420" fill="#ff8b94" font-size="10" text-anchor="middle">IRRELEVANT →</text>
+  <text x="787" y="435" fill="#ff8b94" font-size="10" text-anchor="middle">honest decline</text>
+  <line x1="450" y1="449" x2="450" y2="467" stroke="#2ecc71" stroke-width="2" marker-end="url(#fg)"/>
+
+  <!-- LLM Generation box -->
+  <rect x="300" y="469" width="300" height="52" rx="9" fill="#1a2e1a" stroke="#2ecc71" stroke-width="2"/>
+  <text x="450" y="490" fill="#2ecc71" font-size="12" text-anchor="middle" font-weight="700">✅ LLM GENERATION</text>
+  <text x="450" y="510" fill="#a8e6cf" font-size="10" text-anchor="middle">Grounded in verified-relevant context</text>
+
+  <!-- Output -->
+  <line x1="450" y1="522" x2="450" y2="540" stroke="#2ecc71" stroke-width="2" marker-end="url(#fg)"/>
+  <ellipse cx="450" cy="555" rx="100" ry="24" fill="#1e2e1e" stroke="#2ecc71" stroke-width="2"/>
+  <text x="450" y="560" fill="#2ecc71" font-size="12" text-anchor="middle" font-weight="700">✅ SAFE ANSWER</text>
+
+  <!-- Fallback join -->
+  <line x1="852" y1="138" x2="882" y2="138" stroke="#e74c3c" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="882" y1="138" x2="882" y2="555" stroke="#e74c3c" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="882" y1="555" x2="852" y2="555" stroke="#e74c3c" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#fr)"/>
+  <text x="895" y="350" fill="#e74c3c" font-size="10" transform="rotate(90,895,350)">ALL FALLBACKS → HONEST DECLINE</text>
+</svg>
+<figcaption>Fig. 5 — Complete system execution flow showing pass/fail paths at each layer. Every failure path leads to an honest, graceful response rather than a silently wrong one.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<pre>
+<span class="cm"># Complete Guardrailed Pipeline</span>
+<span class="kw">import</span> logging
+<span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass
+<span class="kw">from</span> typing <span class="kw">import</span> Optional
+
+@dataclass
+<span class="kw">class</span> <span class="cl">SearchResult</span>:
+    success: bool
+    results: list[dict]
+    confidence: float
+    fallback_message: Optional[str] = <span class="kw">None</span>
+    layer_failed: Optional[str] = <span class="kw">None</span>
+
+<span class="kw">class</span> <span class="cl">GuardrailedVectorSearch</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, vector_db, domain_classifier,
+                 embedding_model, cross_encoder, llm_client,
+                 allowed_domains: list[str],
+                 similarity_threshold: float = <span class="nm">0.78</span>):
+        self.db = vector_db
+        self.classifier = domain_classifier
+        self.embedder = embedding_model
+        self.reranker = cross_encoder
+        self.llm = llm_client
+        self.domains = allowed_domains
+        self.tau = similarity_threshold
+
+    <span class="kw">def</span> <span class="fn">search</span>(self, query: str) -> <span class="cl">SearchResult</span>:
+        <span class="cm"># ── Layer 1: Domain Check ──</span>
+        domain_check = self.<span class="fn">check_domain</span>(query)
+        <span class="kw">if not</span> domain_check[<span class="st">"pass"</span>]:
+            logging.<span class="fn">info</span>(<span class="st">f"L1 FAIL: {domain_check['reason']}"</span>)
+            <span class="kw">return</span> <span class="cl">SearchResult</span>(
+                success=<span class="kw">False</span>, results=[], confidence=<span class="nm">0.0</span>,
+                fallback_message=domain_check[<span class="st">"fallback"</span>],
+                layer_failed=<span class="st">"domain_classifier"</span>
+            )
+
+        <span class="cm"># ── Layer 2: Vector Search + Threshold ──</span>
+        query_vec = self.embedder.<span class="fn">encode</span>(query)
+        search_result = self.<span class="fn">guarded_search</span>(query_vec)
+        <span class="kw">if</span> search_result[<span class="st">"status"</span>] == <span class="st">"low_confidence"</span>:
+            logging.<span class="fn">info</span>(<span class="st">f"L2 FAIL: score={search_result['best_score']:.3f}"</span>)
+            <span class="kw">return</span> <span class="cl">SearchResult</span>(
+                success=<span class="kw">False</span>, results=[],
+                confidence=search_result[<span class="st">"best_score"</span>],
+                fallback_message=search_result[<span class="st">"message"</span>],
+                layer_failed=<span class="st">"similarity_threshold"</span>
+            )
+
+        <span class="cm"># ── Layer 3: Re-ranking ──</span>
+        reranked = self.<span class="fn">rerank</span>(query, search_result[<span class="st">"results"</span>])
+        <span class="kw">if not</span> reranked:
+            <span class="kw">return</span> <span class="cl">SearchResult</span>(
+                success=<span class="kw">False</span>, results=[], confidence=<span class="nm">0.0</span>,
+                fallback_message=<span class="st">"No sufficiently relevant results after re-ranking."</span>,
+                layer_failed=<span class="st">"cross_encoder_rerank"</span>
+            )
+
+        <span class="cm"># ── Layer 4: LLM Judge ──</span>
+        top_doc = reranked[<span class="nm">0</span>][<span class="st">"text"</span>]
+        judgment = self.<span class="fn">llm_judge</span>(query, top_doc)
+        <span class="kw">if not</span> judgment[<span class="st">"relevant"</span>]:
+            logging.<span class="fn">warning</span>(<span class="st">f"L4 FAIL: {judgment['reason']}"</span>)
+            <span class="kw">return</span> <span class="cl">SearchResult</span>(
+                success=<span class="kw">False</span>, results=[], confidence=<span class="nm">0.0</span>,
+                fallback_message=(
+                    <span class="st">"I found related information, but it doesn't "</span>
+                    <span class="st">"directly answer your query."</span>
+                ),
+                layer_failed=<span class="st">"llm_judge"</span>
+            )
+
+        <span class="cm"># ── All layers passed ──</span>
+        <span class="kw">return</span> <span class="cl">SearchResult</span>(
+            success=<span class="kw">True</span>,
+            results=reranked,
+            confidence=reranked[<span class="nm">0</span>][<span class="st">"ce_score"</span>]
+        )
+</pre>
+
+<div class="callout tip">
+  <div class="ico">💡</div>
+  <div class="body"><strong>Latency Budget Tip:</strong> In latency-sensitive applications, layers 3 and 4 can be run in parallel for the top-5 candidates. Set a timeout of 300ms total. If the LLM judge doesn't respond in time, fall back to the cross-encoder result alone. Never let guardrails make your system slower than the user experience can tolerate.</div>
+</div>
+
+<div class="div">· · ·</div>
+
+<!-- ════════════════════ SECTION 6 ════════════════════ -->
+<section id="calibration">
+  <h2><span class="sec-num"> 06 — Calibration Science</span>How to Set the Right Threshold (τ)</h2>
+  <p>
+    The similarity threshold τ is the most consequential single number in your guardrail system. Setting it too high causes false negatives (rejecting valid results). Setting it too low lets wrong answers through. The correct calibration method uses a held-out evaluation dataset and optimizes for the operating point that matches your application's risk profile.
+  </p>
+</section>
+
+</div>
+
+<!-- ════ DIAGRAM 6: Threshold Calibration Curve ════ -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="900" height="380" fill="#16161d" rx="12"/>
+  <text x="450" y="30" fill="#e8e4d9" font-size="15" font-weight="700" text-anchor="middle">THRESHOLD CALIBRATION: PRECISION vs RECALL vs F1</text>
+
+  <!-- Axes -->
+  <line x1="80" y1="320" x2="820" y2="320" stroke="#2a2a38" stroke-width="1.5"/>
+  <line x1="80" y1="320" x2="80" y2="55" stroke="#2a2a38" stroke-width="1.5"/>
+
+  <!-- X-axis label -->
+  <text x="450" y="360" fill="#7a7890" font-size="12" text-anchor="middle">Similarity Threshold (τ)</text>
+
+  <!-- Y-axis label -->
+  <text x="30" y="190" fill="#7a7890" font-size="12" text-anchor="middle" transform="rotate(-90,30,190)">Score</text>
+
+  <!-- X ticks -->
+  <text x="155" y="338" fill="#7a7890" font-size="10" text-anchor="middle">0.60</text>
+  <text x="230" y="338" fill="#7a7890" font-size="10" text-anchor="middle">0.65</text>
+  <text x="305" y="338" fill="#7a7890" font-size="10" text-anchor="middle">0.70</text>
+  <text x="380" y="338" fill="#7a7890" font-size="10" text-anchor="middle">0.75</text>
+  <text x="455" y="338" fill="#7a7890" font-size="10" text-anchor="middle">0.78</text>
+  <text x="530" y="338" fill="#7a7890" font-size="10" text-anchor="middle">0.80</text>
+  <text x="605" y="338" fill="#7a7890" font-size="10" text-anchor="middle">0.85</text>
+  <text x="680" y="338" fill="#7a7890" font-size="10" text-anchor="middle">0.90</text>
+  <text x="755" y="338" fill="#7a7890" font-size="10" text-anchor="middle">0.95</text>
+
+  <!-- Y ticks -->
+  <text x="70" y="323" fill="#7a7890" font-size="10" text-anchor="end">0.0</text>
+  <text x="70" y="248" fill="#7a7890" font-size="10" text-anchor="end">0.5</text>
+  <text x="70" y="63" fill="#7a7890" font-size="10" text-anchor="end">1.0</text>
+
+  <!-- Grid lines -->
+  <line x1="80" y1="248" x2="820" y2="248" stroke="#2a2a38" stroke-width="0.8" stroke-dasharray="4 4"/>
+  <line x1="80" y1="188" x2="820" y2="188" stroke="#2a2a38" stroke-width="0.8" stroke-dasharray="4 4"/>
+  <line x1="80" y1="128" x2="820" y2="128" stroke="#2a2a38" stroke-width="0.8" stroke-dasharray="4 4"/>
+
+  <!-- Precision curve (goes up as threshold increases) -->
+  <polyline points="155,295 230,278 305,255 380,220 455,175 530,148 605,108 680,80 755,68"
+    fill="none" stroke="#3498db" stroke-width="2.5"/>
+
+  <!-- Recall curve (goes down as threshold increases) -->
+  <polyline points="155,68 230,78 305,95 380,122 455,162 530,198 605,240 680,275 755,300"
+    fill="none" stroke="#ff6b35" stroke-width="2.5"/>
+
+  <!-- F1 curve (bell shape) -->
+  <polyline points="155,170 230,158 305,148 380,133 455,115 530,148 605,168 680,195 755,215"
+    fill="none" stroke="#2ecc71" stroke-width="3"/>
+
+  <!-- Optimal point -->
+  <circle cx="455" cy="115" r="8" fill="#ffe66d" opacity="0.9"/>
+  <line x1="455" y1="55" x2="455" y2="320" stroke="#ffe66d" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.7"/>
+  <text x="460" y="55" fill="#ffe66d" font-size="11">τ = 0.78 (F1 max)</text>
+
+  <!-- Legend -->
+  <line x1="560" y1="60" x2="590" y2="60" stroke="#3498db" stroke-width="2.5"/>
+  <text x="596" y="65" fill="#87c4e8" font-size="12">Precision</text>
+  <line x1="660" y1="60" x2="690" y2="60" stroke="#ff6b35" stroke-width="2.5"/>
+  <text x="696" y="65" fill="#ffb89a" font-size="12">Recall</text>
+  <line x1="750" y1="60" x2="780" y2="60" stroke="#2ecc71" stroke-width="3"/>
+  <text x="786" y="65" fill="#a8e6cf" font-size="12">F1</text>
+
+  <!-- Annotations -->
+  <rect x="88" y="200" width="180" height="40" rx="6" fill="#1e1e28" stroke="#2a2a38" stroke-width="1" opacity="0.9"/>
+  <text x="178" y="218" fill="#ff6b35" font-size="10" text-anchor="middle">← too permissive zone</text>
+  <text x="178" y="232" fill="#7a7890" font-size="10" text-anchor="middle">false matches pass through</text>
+
+  <rect x="630" y="200" width="180" height="40" rx="6" fill="#1e1e28" stroke="#2a2a38" stroke-width="1" opacity="0.9"/>
+  <text x="720" y="218" fill="#3498db" font-size="10" text-anchor="middle">too restrictive zone →</text>
+  <text x="720" y="232" fill="#7a7890" font-size="10" text-anchor="middle">valid results rejected</text>
+</svg>
+<figcaption>Fig. 6 — Threshold calibration curve. The optimal τ = 0.78 maximizes F1 score. Below this, false matches pass through (precision drops). Above, valid results are rejected (recall drops).</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<p>
+  The calibration process requires a <strong>labeled evaluation dataset</strong> of (query, retrieved_result, relevant: true/false) triples. You compute precision, recall, and F1 across a grid of threshold values (0.60 to 0.95 in steps of 0.01) and select the τ that maximizes F1 — or, for safety-critical applications, the τ that maximizes precision at a minimum recall of 0.90.
+</p>
+
+<div class="callout warn">
+  <div class="ico">⚠️</div>
+  <div class="body"><strong>Never calibrate on the training domain alone.</strong> The optimal threshold for in-domain queries is different from the optimal threshold for cross-domain mismatch detection. Your calibration set must include out-of-domain queries — specifically the fruit/vegetable-style cases — to find the threshold that catches the failure mode you care about.</div>
+</div>
+
+<div class="div">· · ·</div>
+
+<!-- ════════════════════ SECTION 7 ════════════════════ -->
+<section id="domain-partition">
+  <h2><span class="sec-num"> 07 — Structural Solutions</span>Domain Partitioning and Namespace Isolation</h2>
+  <p>
+    All the guardrails described so far are <em>reactive</em> — they catch failures after the database is queried. A more elegant structural solution is <strong>domain partitioning</strong>: separating your vector database into isolated namespaces, one per domain, and routing queries to the correct namespace before the vector search begins.
+  </p>
+  <p>
+    Most production vector databases (Pinecone, Weaviate, Qdrant, Milvus) support this natively via namespaces, collections, or payload-based filtering. The architecture is shown in Fig. 7.
+  </p>
+</section>
+
+</div>
+
+<!-- ════ DIAGRAM 7: Domain Partitioning ════ -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="pa" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#4ecdc4"/>
+    </marker>
+    <marker id="pr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#e74c3c"/>
+    </marker>
+  </defs>
+  <rect width="900" height="400" fill="#16161d" rx="12"/>
+  <text x="450" y="30" fill="#e8e4d9" font-size="15" font-weight="700" text-anchor="middle">DOMAIN PARTITIONING IN VECTOR DB</text>
+
+  <!-- Router -->
+  <rect x="320" y="50" width="260" height="60" rx="10" fill="#1e1e28" stroke="#ffe66d" stroke-width="2"/>
+  <text x="450" y="76" fill="#ffe66d" font-size="13" text-anchor="middle" font-weight="700">QUERY ROUTER</text>
+  <text x="450" y="97" fill="#e8e4d9" font-size="11" text-anchor="middle">domain_classifier(query) → namespace</text>
+
+  <!-- Arrows to namespaces -->
+  <line x1="350" y1="112" x2="185" y2="172" stroke="#4ecdc4" stroke-width="1.5" marker-end="url(#pa)"/>
+  <line x1="415" y1="112" x2="345" y2="172" stroke="#4ecdc4" stroke-width="1.5" marker-end="url(#pa)"/>
+  <line x1="450" y1="112" x2="450" y2="172" stroke="#4ecdc4" stroke-width="1.5" marker-end="url(#pa)"/>
+  <line x1="520" y1="112" x2="590" y2="172" stroke="#4ecdc4" stroke-width="1.5" marker-end="url(#pa)"/>
+  <line x1="560" y1="112" x2="730" y2="172" stroke="#4ecdc4" stroke-width="1.5" marker-end="url(#pa)"/>
+  <!-- No-match arrow -->
+  <line x1="450" y1="112" x2="450" y2="355" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#pr)"/>
+
+  <!-- Namespace boxes -->
+  <rect x="100" y="175" width="135" height="80" rx="9" fill="#1e2228" stroke="#3498db" stroke-width="1.5"/>
+  <text x="167" y="200" fill="#3498db" font-size="11" text-anchor="middle">ns:fruits</text>
+  <text x="167" y="218" fill="#e8e4d9" font-size="13" text-anchor="middle">🍎🍓🍇🍊</text>
+  <text x="167" y="246" fill="#7a7890" font-size="10" text-anchor="middle">12,000 vectors</text>
+
+  <rect x="255" y="175" width="135" height="80" rx="9" fill="#1e2228" stroke="#2ecc71" stroke-width="1.5"/>
+  <text x="322" y="200" fill="#2ecc71" font-size="11" text-anchor="middle">ns:vegetables</text>
+  <text x="322" y="218" fill="#e8e4d9" font-size="13" text-anchor="middle">🥕🥦🍅🥬</text>
+  <text x="322" y="246" fill="#7a7890" font-size="10" text-anchor="middle">9,400 vectors</text>
+
+  <rect x="410" y="175" width="120" height="80" rx="9" fill="#1e2228" stroke="#9b59b6" stroke-width="1.5"/>
+  <text x="470" y="200" fill="#9b59b6" font-size="11" text-anchor="middle">ns:grains</text>
+  <text x="470" y="218" fill="#e8e4d9" font-size="13" text-anchor="middle">🌾🍞🌽</text>
+  <text x="470" y="246" fill="#7a7890" font-size="10" text-anchor="middle">6,200 vectors</text>
+
+  <rect x="553" y="175" width="130" height="80" rx="9" fill="#1e2228" stroke="#ff6b35" stroke-width="1.5"/>
+  <text x="618" y="200" fill="#ff6b35" font-size="11" text-anchor="middle">ns:proteins</text>
+  <text x="618" y="218" fill="#e8e4d9" font-size="13" text-anchor="middle">🥩🐟🥚</text>
+  <text x="618" y="246" fill="#7a7890" font-size="10" text-anchor="middle">8,800 vectors</text>
+
+  <rect x="700" y="175" width="120" height="80" rx="9" fill="#1e2228" stroke="#ffe66d" stroke-width="1.5"/>
+  <text x="760" y="200" fill="#ffe66d" font-size="11" text-anchor="middle">ns:dairy</text>
+  <text x="760" y="218" fill="#e8e4d9" font-size="13" text-anchor="middle">🧀🥛🧈</text>
+  <text x="760" y="246" fill="#7a7890" font-size="10" text-anchor="middle">4,100 vectors</text>
+
+  <!-- No match box -->
+  <rect x="340" y="330" width="230" height="48" rx="9" fill="#2d1515" stroke="#e74c3c" stroke-width="1.5"/>
+  <text x="455" y="352" fill="#e74c3c" font-size="12" text-anchor="middle" font-weight="700">NO NAMESPACE MATCH</text>
+  <text x="455" y="369" fill="#ff8b94" font-size="10" text-anchor="middle">→ "I don't have data on that topic"</text>
+
+  <!-- Labels showing isolation benefit -->
+  <text x="450" y="290" fill="#7a7890" font-size="11" text-anchor="middle">Each namespace is ISOLATED — fruit query NEVER touches vegetable namespace</text>
+</svg>
+<figcaption>Fig. 7 — Domain-partitioned vector database. The query router classifies the query and restricts the kNN search to the matching namespace, making cross-domain contamination structurally impossible.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<pre>
+<span class="cm"># Domain-Partitioned Search with Qdrant</span>
+<span class="kw">from</span> qdrant_client <span class="kw">import</span> QdrantClient
+<span class="kw">from</span> qdrant_client.models <span class="kw">import</span> Filter, FieldCondition, MatchValue
+
+client = <span class="cl">QdrantClient</span>(url=<span class="st">"http://localhost:6333"</span>)
+
+<span class="kw">def</span> <span class="fn">partitioned_search</span>(query: str, query_vec: list[float]) -> list:
+    <span class="cm"># Step 1: Classify the query domain</span>
+    domain = <span class="fn">classify_domain</span>(query)   <span class="cm"># e.g. "fruits"</span>
+
+    <span class="kw">if</span> domain == <span class="st">"unknown"</span>:
+        <span class="kw">return</span> {<span class="st">"error"</span>: <span class="st">"Query domain not recognized"</span>}
+
+    <span class="cm"># Step 2: Search ONLY within the matched namespace</span>
+    results = client.<span class="fn">search</span>(
+        collection_name=<span class="st">"food_knowledge_base"</span>,
+        query_vector=query_vec,
+        query_filter=<span class="cl">Filter</span>(
+            must=[
+                <span class="cl">FieldCondition</span>(
+                    key=<span class="st">"domain"</span>,          <span class="cm"># metadata field on each vector</span>
+                    match=<span class="cl">MatchValue</span>(value=domain)
+                )
+            ]
+        ),
+        limit=<span class="nm">10</span>,
+        score_threshold=<span class="nm">0.78</span>          <span class="cm"># still apply threshold within namespace</span>
+    )
+    <span class="kw">return</span> results
+</pre>
+
+<p>
+  Domain partitioning is structurally more robust than threshold-based guardrails because it prevents cross-domain retrieval at the database level, before any scoring happens. The cost is maintaining multiple namespaces and a reliable domain classifier. For most production systems, this is well worth the operational overhead.
+</p>
+
+<div class="div">· · ·</div>
+
+<!-- ════════════════════ SECTION 8 ════════════════════ -->
+<section id="smart-fallback">
+  <h2><span class="sec-num"> 08 — UX Design</span>Designing the Smart Fallback Response</h2>
+  <p>
+    When all guardrails agree that no relevant answer exists, the worst thing you can do is return a generic error message. The best thing you can do is return a <strong>constructive, honest, domain-aware response</strong> that helps the user reframe their query or understand the system's scope.
+  </p>
+  <p>
+    This is an area where the investment in domain classification pays back doubly: you know <em>what the user asked for</em> and <em>what you have</em>, which allows you to craft an intelligent "no match" response that closes the semantic gap with empathy.
+  </p>
+</section>
+
+</div>
+
+<!-- ════ DIAGRAM 8: Fallback Response Taxonomy ════ -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="900" height="300" fill="#16161d" rx="12"/>
+  <text x="450" y="30" fill="#e8e4d9" font-size="15" font-weight="700" text-anchor="middle">FALLBACK RESPONSE QUALITY SPECTRUM</text>
+
+  <!-- Bad -->
+  <rect x="50" y="55" width="230" height="210" rx="10" fill="#2d1515" stroke="#e74c3c" stroke-width="2"/>
+  <text x="165" y="80" fill="#e74c3c" font-size="13" text-anchor="middle" font-weight="700">❌ BAD (No Guardrail)</text>
+  <rect x="68" y="95" width="194" height="60" rx="6" fill="#1e1e28" stroke="#e74c3c" stroke-width="1"/>
+  <text x="165" y="118" fill="#e8e4d9" font-size="11" text-anchor="middle">User: "show me apples"</text>
+  <text x="165" y="138" fill="#ff8b94" font-size="10" text-anchor="middle">→ returns carrot silently</text>
+  <text x="165" y="155" fill="#ff8b94" font-size="10" text-anchor="middle">→ LLM "confidently" describes</text>
+  <rect x="68" y="165" width="194" height="80" rx="6" fill="#1e1e28" stroke="#e74c3c" stroke-width="1"/>
+  <text x="165" y="186" fill="#ff8b94" font-size="11" text-anchor="middle">"Here is info about</text>
+  <text x="165" y="202" fill="#ff8b94" font-size="11" text-anchor="middle">apples: [carrot data]</text>
+  <text x="165" y="218" fill="#ff8b94" font-size="11" text-anchor="middle">Apples are rich in</text>
+  <text x="165" y="234" fill="#ff8b94" font-size="11" text-anchor="middle">beta-carotene..."</text>
+
+  <!-- Mediocre -->
+  <rect x="335" y="55" width="230" height="210" rx="10" fill="#1e2220" stroke="#ffe66d" stroke-width="2"/>
+  <text x="450" y="80" fill="#ffe66d" font-size="13" text-anchor="middle" font-weight="700">⚠ MEDIOCRE</text>
+  <rect x="353" y="95" width="194" height="60" rx="6" fill="#1e1e28" stroke="#ffe66d" stroke-width="1"/>
+  <text x="450" y="118" fill="#e8e4d9" font-size="11" text-anchor="middle">User: "show me apples"</text>
+  <text x="450" y="138" fill="#ffe66d" font-size="10" text-anchor="middle">→ generic error thrown</text>
+  <rect x="353" y="165" width="194" height="80" rx="6" fill="#1e1e28" stroke="#ffe66d" stroke-width="1"/>
+  <text x="450" y="186" fill="#ffe66d" font-size="11" text-anchor="middle">"No results found."</text>
+  <text x="450" y="206" fill="#7a7890" font-size="10" text-anchor="middle">(unhelpful, confusing,</text>
+  <text x="450" y="222" fill="#7a7890" font-size="10" text-anchor="middle">no guidance given)</text>
+
+  <!-- Great -->
+  <rect x="620" y="55" width="230" height="210" rx="10" fill="#1a2e1a" stroke="#2ecc71" stroke-width="2"/>
+  <text x="735" y="80" fill="#2ecc71" font-size="13" text-anchor="middle" font-weight="700">✅ GREAT (Guardrailed)</text>
+  <rect x="638" y="95" width="194" height="60" rx="6" fill="#1e1e28" stroke="#2ecc71" stroke-width="1"/>
+  <text x="735" y="118" fill="#e8e4d9" font-size="11" text-anchor="middle">User: "show me apples"</text>
+  <text x="735" y="138" fill="#a8e6cf" font-size="10" text-anchor="middle">→ domain miss detected cleanly</text>
+  <rect x="638" y="165" width="194" height="80" rx="6" fill="#1e1e28" stroke="#2ecc71" stroke-width="1"/>
+  <text x="735" y="183" fill="#a8e6cf" font-size="10" text-anchor="middle">"I don't have fruit data,</text>
+  <text x="735" y="198" fill="#a8e6cf" font-size="10" text-anchor="middle">but I can help with</text>
+  <text x="735" y="213" fill="#a8e6cf" font-size="10" text-anchor="middle">vegetables, grains, or</text>
+  <text x="735" y="228" fill="#a8e6cf" font-size="10" text-anchor="middle">dairy. Want any of those?"</text>
+</svg>
+<figcaption>Fig. 8 — The spectrum of fallback quality. A guardrailed system can provide domain-aware, actionable fallback responses instead of silent wrong answers or unhelpful errors.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<pre>
+<span class="cm"># Smart Fallback Response Generator</span>
+FALLBACK_TEMPLATES = {
+    <span class="st">"domain_miss"</span>: (
+        <span class="st">"I don't have information about {query_domain} in my knowledge base. "</span>
+        <span class="st">"I can help with: {available_domains}. "</span>
+        <span class="st">"Would any of those topics be useful?"</span>
+    ),
+    <span class="st">"low_confidence"</span>: (
+        <span class="st">"I found some related content, but I'm not confident it "</span>
+        <span class="st">"directly answers '{query}'. The closest match was about "</span>
+        <span class="st">"{best_match_topic} (similarity: {score:.0%}). "</span>
+        <span class="st">"Could you rephrase or clarify what you're looking for?"</span>
+    ),
+    <span class="st">"llm_judge_fail"</span>: (
+        <span class="st">"I retrieved some information but my relevance check "</span>
+        <span class="st">"flagged it as not directly applicable to your query. "</span>
+        <span class="st">"Reason: {judge_reason}"</span>
+    )
+}
+
+<span class="kw">def</span> <span class="fn">build_fallback</span>(result: <span class="cl">SearchResult</span>, query: str,
+                    query_domain: str, available_domains: list) -> str:
+    template = FALLBACK_TEMPLATES.get(result.layer_failed, <span class="st">"No results found."</span>)
+    <span class="kw">return</span> template.<span class="fn">format</span>(
+        query=query,
+        query_domain=query_domain,
+        available_domains=<span class="st">", "</span>.<span class="fn">join</span>(available_domains),
+        score=result.confidence,
+        best_match_topic=result.results[<span class="nm">0</span>][<span class="st">"topic"</span>] <span class="kw">if</span> result.results <span class="kw">else</span> <span class="st">"unknown"</span>,
+        judge_reason=<span class="st">""</span>   <span class="cm"># populated from LLM judge response</span>
+    )
+</pre>
+
+<div class="div">· · ·</div>
+
+<!-- ════════════════════ SECTION 9 ════════════════════ -->
+<section id="advanced">
+  <h2><span class="sec-num"> 09 — Advanced Techniques</span>HyDE, Query Expansion, and Embedding Fine-tuning</h2>
+
+  <h3>Hypothetical Document Embeddings (HyDE)</h3>
+  <p>
+    One of the most elegant solutions to the domain mismatch problem is <strong>HyDE</strong> (Gao et al., 2022). Instead of embedding the raw query and searching for nearest neighbors, you first ask an LLM to generate a <em>hypothetical document</em> that would answer the query — then embed that hypothetical document.
+  </p>
+  <p>
+    The key insight is that a hypothetical answer to a query lives closer in embedding space to real answers than the bare query does. A hypothetical apple description would retrieve other apple descriptions (or fail more clearly on a vegetable-only corpus) compared to the ambiguous word "apple" alone.
+  </p>
+
+<pre>
+<span class="cm"># HyDE: Hypothetical Document Embeddings</span>
+<span class="kw">def</span> <span class="fn">hyde_search</span>(query: str, vector_db, embedding_model, llm) -> list:
+    <span class="cm"># Step 1: Generate hypothetical answer</span>
+    hyp_prompt = <span class="st">f"""Write a short, factual paragraph that would answer:
+'{query}'
+Be specific and accurate. Write as if from an expert knowledge base."""</span>
+
+    hypothetical_doc = llm.<span class="fn">generate</span>(hyp_prompt, max_tokens=<span class="nm">150</span>)
+
+    <span class="cm"># Step 2: Embed the hypothetical document (not the query)</span>
+    hyp_vec = embedding_model.<span class="fn">encode</span>(hypothetical_doc)
+
+    <span class="cm"># Step 3: Search with the hypothetical embedding</span>
+    <span class="cm"># This vector is far more semantically specific than the query</span>
+    results = vector_db.<span class="fn">search</span>(hyp_vec, top_k=<span class="nm">5</span>)
+    <span class="kw">return</span> results
+</pre>
+
+  <h3>Query Expansion with Semantic Enrichment</h3>
+  <p>
+    Before sending a query to the vector database, you can use an LLM to <strong>expand the query</strong> with synonyms, related concepts, and contextual descriptors. This increases the surface area of the search and helps when the exact terminology in the user's query does not match the terminology in the indexed corpus.
+  </p>
+  <p>
+    Crucially, for domain-mismatch detection, you can also use query expansion to generate <em>expected category labels</em> — "this query is about: fruits, produce, food items" — which can then be compared against the metadata of retrieved results to detect mismatches before they reach the LLM.
+  </p>
+
+  <h3>Domain-Specific Embedding Fine-tuning</h3>
+  <p>
+    The most powerful long-term solution is fine-tuning your embedding model on domain-specific contrastive pairs. For a grocery AI, this means training the model to understand that <em>apple ≠ carrot at the category level</em>, even if they share many context words. This requires:
+  </p>
+
+  <div class="tbl-wrap">
+  <table>
+    <tr>
+      <th>Step</th>
+      <th>Action</th>
+      <th>Data Needed</th>
+      <th>Tool</th>
+    </tr>
+    <tr>
+      <td>1. Collect Pairs</td>
+      <td>Generate positive (same category) and negative (different category) pairs</td>
+      <td>~5,000 labeled pairs</td>
+      <td>Manual + LLM augmentation</td>
+    </tr>
+    <tr>
+      <td>2. Hard Negatives</td>
+      <td>Mine cross-domain pairs that a general model thinks are similar</td>
+      <td>Mining from existing DB</td>
+      <td>Sentence-Transformers mining utils</td>
+    </tr>
+    <tr>
+      <td>3. Fine-tune</td>
+      <td>Contrastive loss (MultipleNegativesRankingLoss) on domain data</td>
+      <td>Positive + hard negatives</td>
+      <td>sentence-transformers library</td>
+    </tr>
+    <tr>
+      <td>4. Evaluate</td>
+      <td>Measure cross-domain cosine distances before/after</td>
+      <td>Held-out eval set</td>
+      <td>BEIR benchmark suite</td>
+    </tr>
+    <tr>
+      <td>5. Re-index</td>
+      <td>Re-embed all documents with the fine-tuned model</td>
+      <td>Full corpus</td>
+      <td>Batch embedding pipeline</td>
+    </tr>
+  </table>
+  </div>
+
+<div class="div">· · ·</div>
+
+<!-- ════════════════════ SECTION 10 ════════════════════ -->
+<section id="monitoring">
+  <h2><span class="sec-num"> 10 — Observability</span>Monitoring Your Guardrails in Production</h2>
+  <p>
+    Guardrails are not fire-and-forget. The embedding space you calibrated against today will shift as your corpus grows, your users' language evolves, and your LLMs are updated. You must actively monitor the health of your retrieval system with structured telemetry.
+  </p>
+</section>
+
+</div>
+
+<!-- ════ DIAGRAM 9: Monitoring Dashboard ════ -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="900" height="320" fill="#16161d" rx="12"/>
+  <text x="450" y="30" fill="#e8e4d9" font-size="15" font-weight="700" text-anchor="middle">PRODUCTION MONITORING METRICS DASHBOARD</text>
+
+  <!-- Metric 1 -->
+  <rect x="50" y="55" width="170" height="105" rx="10" fill="#1e2228" stroke="#3498db" stroke-width="1.5"/>
+  <text x="135" y="80" fill="#3498db" font-size="11" text-anchor="middle">L1 REJECT RATE</text>
+  <text x="135" y="118" fill="#ffe66d" font-size="38" font-weight="700" text-anchor="middle">8.2%</text>
+  <text x="135" y="148" fill="#7a7890" font-size="10" text-anchor="middle">of queries out-of-domain</text>
+
+  <!-- Metric 2 -->
+  <rect x="240" y="55" width="170" height="105" rx="10" fill="#1e2228" stroke="#9b59b6" stroke-width="1.5"/>
+  <text x="325" y="80" fill="#9b59b6" font-size="11" text-anchor="middle">L2 BELOW-τ RATE</text>
+  <text x="325" y="118" fill="#ffe66d" font-size="38" font-weight="700" text-anchor="middle">4.7%</text>
+  <text x="325" y="148" fill="#7a7890" font-size="10" text-anchor="middle">queries with low sim score</text>
+
+  <!-- Metric 3 -->
+  <rect x="430" y="55" width="170" height="105" rx="10" fill="#1e2228" stroke="#ff6b35" stroke-width="1.5"/>
+  <text x="515" y="80" fill="#ff6b35" font-size="11" text-anchor="middle">L4 JUDGE FAIL RATE</text>
+  <text x="515" y="118" fill="#ffe66d" font-size="38" font-weight="700" text-anchor="middle">1.3%</text>
+  <text x="515" y="148" fill="#7a7890" font-size="10" text-anchor="middle">passed L1-3, failed judge</text>
+
+  <!-- Metric 4 -->
+  <rect x="620" y="55" width="230" height="105" rx="10" fill="#1e2228" stroke="#2ecc71" stroke-width="1.5"/>
+  <text x="735" y="80" fill="#2ecc71" font-size="11" text-anchor="middle">OVERALL SUCCESS RATE</text>
+  <text x="735" y="118" fill="#2ecc71" font-size="38" font-weight="700" text-anchor="middle">85.8%</text>
+  <text x="735" y="148" fill="#7a7890" font-size="10" text-anchor="middle">queries get valid answers</text>
+
+  <!-- Drift chart -->
+  <text x="450" y="190" fill="#e8e4d9" font-size="13" font-weight="700" text-anchor="middle">SIMILARITY SCORE DISTRIBUTION DRIFT ALERT</text>
+  <text x="450" y="210" fill="#7a7890" font-size="11" text-anchor="middle">Monitor weekly histogram of top-1 cosine scores — distribution shift signals embedding model or corpus drift</text>
+
+  <!-- Mini histogram baseline vs current -->
+  <rect x="130" y="225" width="60" height="60" rx="3" fill="#3498db" opacity="0.5"/>
+  <rect x="200" y="240" width="60" height="45" rx="3" fill="#3498db" opacity="0.5"/>
+  <rect x="270" y="250" width="60" height="35" rx="3" fill="#3498db" opacity="0.5"/>
+  <rect x="340" y="270" width="60" height="15" rx="3" fill="#3498db" opacity="0.5"/>
+  <text x="270" y="305" fill="#3498db" font-size="11" text-anchor="middle">Week 1 (baseline)</text>
+
+  <rect x="500" y="250" width="60" height="35" rx="3" fill="#e74c3c" opacity="0.5"/>
+  <rect x="570" y="230" width="60" height="55" rx="3" fill="#e74c3c" opacity="0.5"/>
+  <rect x="640" y="240" width="60" height="45" rx="3" fill="#e74c3c" opacity="0.5"/>
+  <rect x="710" y="262" width="60" height="23" rx="3" fill="#e74c3c" opacity="0.5"/>
+  <text x="610" y="305" fill="#e74c3c" font-size="11" text-anchor="middle">Week 8 (drift detected ⚠)</text>
+</svg>
+<figcaption>Fig. 9 — Production monitoring dashboard. Track rejection rates per layer, judge failure rate, and weekly similarity score distribution to detect embedding drift before it causes silent failures.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<pre>
+<span class="cm"># Telemetry: Log every pipeline decision for monitoring</span>
+<span class="kw">import</span> time
+<span class="kw">from</span> dataclasses <span class="kw">import</span> asdict
+
+<span class="kw">def</span> <span class="fn">log_search_event</span>(
+    query: str, result: <span class="cl">SearchResult</span>,
+    latency_ms: float, user_id: str = <span class="kw">None</span>
+):
+    event = {
+        <span class="st">"timestamp"</span>: time.<span class="fn">time</span>(),
+        <span class="st">"user_id"</span>: user_id,
+        <span class="st">"query_hash"</span>: <span class="fn">hash</span>(query),    <span class="cm"># privacy-safe</span>
+        <span class="st">"query_length"</span>: len(query),
+        <span class="st">"success"</span>: result.success,
+        <span class="st">"layer_failed"</span>: result.layer_failed,
+        <span class="st">"top_similarity"</span>: result.confidence,
+        <span class="st">"latency_ms"</span>: latency_ms,
+        <span class="cm"># Key signal for drift detection:</span>
+        <span class="st">"below_threshold"</span>: result.confidence &lt; <span class="nm">0.78</span>,
+    }
+    <span class="cm"># Ship to your observability stack (Datadog, Grafana, etc.)</span>
+    metrics.<span class="fn">emit</span>(<span class="st">"vector_search.event"</span>, event)
+
+    <span class="cm"># Alert if L1 reject rate exceeds 15% in a 1h window</span>
+    <span class="kw">if</span> event[<span class="st">"layer_failed"</span>] == <span class="st">"domain_classifier"</span>:
+        metrics.<span class="fn">increment</span>(<span class="st">"vector_search.l1_reject"</span>)
+</pre>
+
+<div class="div">· · ·</div>
+
+<!-- ════════════════════ CONCLUSION ════════════════════ -->
+<section id="conclusion">
+  <h2><span class="sec-num"> 11 — Synthesis</span>A Field Guide: Which Solution for Which Problem</h2>
+  <p>
+    After all of this, the practical question is: <em>which of these solutions should you actually build?</em> The answer depends on your application's risk profile, latency budget, and operational complexity tolerance. Here is the decision framework:
+  </p>
+
+  <div class="tbl-wrap">
+  <table>
+    <tr>
+      <th>Scenario</th>
+      <th>Recommended Layers</th>
+      <th>Latency Add</th>
+      <th>Engineering Cost</th>
+    </tr>
+    <tr>
+      <td>MVP / Prototype</td>
+      <td>L2 only (threshold gating)</td>
+      <td>&lt;1ms</td>
+      <td>Low (10 lines of code)</td>
+    </tr>
+    <tr>
+      <td>Consumer App</td>
+      <td>L1 + L2 + Smart Fallback</td>
+      <td>~5ms</td>
+      <td>Medium (classifier training)</td>
+    </tr>
+    <tr>
+      <td>Enterprise RAG</td>
+      <td>L1 + L2 + L3 + Domain Partitioning</td>
+      <td>~100ms</td>
+      <td>High (re-ranker + partitioning)</td>
+    </tr>
+    <tr>
+      <td>Safety-Critical (medical, legal)</td>
+      <td>All 4 layers + HyDE + Fine-tuned embeddings</td>
+      <td>~300ms</td>
+      <td>Very High (full system)</td>
+    </tr>
+    <tr>
+      <td>High Throughput (&gt;1k QPS)</td>
+      <td>L1 + L2 + async L4 (offline eval)</td>
+      <td>&lt;5ms sync</td>
+      <td>Medium + infra</td>
+    </tr>
+  </table>
+  </div>
+
+  <div class="pq">
+    <p>"The fruit-and-carrot problem is not a quirk of one application. It is the fundamental tension at the heart of all retrieval-augmented AI: the model must confidently retrieve despite uncertainty, but the system must gracefully handle the cases where that confidence is misplaced."</p>
+  </div>
+
+  <p>
+    The vector search mismatch problem is ultimately a <strong>systems problem</strong>, not a model problem. No embedding model, no matter how large or capable, can guarantee that its nearest-neighbor search produces semantically correct results when the query falls outside the distribution of the indexed corpus. The solution is a well-engineered pipeline with clear failure modes, explicit confidence handling, and graceful degradation at every layer.
+  </p>
+  <p>
+    When a user asks for an apple and your database only contains carrots, the right answer is: <em>"I don't have apples, but here is what I have."</em> Building a system that says this clearly, quickly, and helpfully — instead of silently returning a carrot and calling it an apple — is the difference between a trustworthy AI product and a liability.
+  </p>
+
+  <div class="callout tip">
+    <div class="ico">✅</div>
+    <div class="body"><strong>Start Here:</strong> If you implement nothing else from this article, implement Layer 2: threshold-gated vector search. It takes fewer than 20 lines of code, adds essentially zero latency, and immediately eliminates the most dangerous class of silent mismatch failures. Then layer in the rest as your system matures.</div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><span class="n">4</span><span class="l">Defensive layers in the full architecture</span></div>
+    <div class="stat"><span class="n">τ=0.78</span><span class="l">Recommended starting threshold for general domains</span></div>
+    <div class="stat"><span class="n">&lt;300ms</span><span class="l">End-to-end latency for full 4-layer system</span></div>
+    <div class="stat"><span class="n">0%</span><span class="l">Silent wrong answers when all layers operational</span></div>
+  </div>
+</section>
+
+<div class="div">· · ·</div>
+
+<section>
+  <h2><span class="sec-num">References</span>Further Reading</h2>
+  <p style="font-size:15px;line-height:2;color:#7a7890;">
+    Gao et al. (2022). <em>Precise Zero-Shot Dense Retrieval without Relevance Labels (HyDE).</em> arXiv:2212.10496<br>
+    Karpukhin et al. (2020). <em>Dense Passage Retrieval for Open-Domain Question Answering (DPR).</em> EMNLP 2020.<br>
+    Nogueira &amp; Cho (2019). <em>Passage Re-ranking with BERT.</em> arXiv:1901.04085<br>
+    Thakur et al. (2021). <em>BEIR: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models.</em> NeurIPS 2021.<br>
+    Reimers &amp; Gurevych (2019). <em>Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks.</em> EMNLP 2019.<br>
+    Johnson et al. (2021). <em>Billion-Scale Similarity Search with GPUs (FAISS).</em> IEEE Transactions on Big Data.<br>
+    Lewis et al. (2020). <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.</em> NeurIPS 2020.
+  </p>
+</section>
+
+</div><!-- /article -->
+    </div>
+
+    <div class="article-cta">
+      <h4>Continue Exploring</h4>
+      <p>Dive deeper into AI / ML or browse the full archive for related systems engineering research.</p>
+      <div class="related-links">
+        <a href="../ai_ml.html">More AI / ML</a>
+        <a href="../archive.html">View Archive</a>
+      </div>
+    </div>
+  </article>
+</section>
+
+<div class="wrap">
+  <div class="nl" id="newsletter">
+  <div>
+    <div class="nl-eyebrow">Stay Sharp</div>
+    <h3>New deep dives, twice a month.<br>No noise. No sponsorships.</h3>
+    <p>Get notified when the next research-level article drops. Unsubscribe at any time — no dark patterns, no re-engagement campaigns, no ads.</p>
+  </div>
+  <div class="nl-form">
+    <input type="email" class="nl-input" placeholder="your@email.com">
+    <button class="nl-btn">Subscribe →</button>
+    <span class="nl-note">Join 4,200+ engineers. No spam, ever.</span>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-col footer-logo-area">
+      <div class="footer-logo">
+        <span class="footer-logo-dot"></span>
+        Depth
+      </div>
+      <p class="footer-tagline">Research-grade writing on system design, AI/ML, infrastructure, databases, security and data systems.</p>
+      <div class="footer-social">
+        <a href="#">X</a>
+        <a href="#">GH</a>
+        <a href="#">LI</a>
+        <a href="#">RSS</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Topics</div>
+      <a href="../system_design.html">System Design</a>
+      <a href="../ai_ml.html">AI / ML</a>
+      <a href="../infrastructure.html">Infrastructure</a>
+      <a href="../databases.html">Databases</a>
+      <a href="../security.html">Security</a>
+      <a href="../data_systems.html">Data Systems</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Articles</div>
+      <a href="../../index.html#articles">Latest</a>
+      <a href="../archive.html#most-read">Most Read</a>
+      <a href="../archive.html#editors">Editor's Picks</a>
+      <a href="../archive.html#series">Series</a>
+      <a href="../archive.html">Archive</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Publication</div>
+      <a href="../about.html">About</a>
+      <a href="../editorial_standards.html">Editorial Standards</a>
+      <a href="../write_for_depth.html">Write for Depth</a>
+      <a href="#newsletter">Newsletter</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Depth · Article</span>
+    <div class="footer-bottom-links">
+      <a href="../privacy.html">Privacy</a>
+      <a href="../terms.html">Terms</a>
+      <a href="../rss.html">RSS Feed</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../js/depth/main.js" defer></script>
+</body>
+</html>

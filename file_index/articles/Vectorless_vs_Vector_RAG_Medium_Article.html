@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vectorless RAG vs. Vector RAG — Depth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/depth/tokens.css">
+  <link rel="stylesheet" href="../../css/depth/base.css">
+  <link rel="stylesheet" href="../../css/depth/layout/grids.css">
+  <link rel="stylesheet" href="../../css/depth/components/nav.css">
+  <link rel="stylesheet" href="../../css/depth/components/hero.css">
+  <link rel="stylesheet" href="../../css/depth/components/ticker.css">
+  <link rel="stylesheet" href="../../css/depth/components/section-head.css">
+  <link rel="stylesheet" href="../../css/depth/components/filters.css">
+  <link rel="stylesheet" href="../../css/depth/components/cards.css">
+  <link rel="stylesheet" href="../../css/depth/components/topics.css">
+  <link rel="stylesheet" href="../../css/depth/components/newsletter.css">
+  <link rel="stylesheet" href="../../css/depth/components/about.css">
+  <link rel="stylesheet" href="../../css/depth/components/footer.css">
+  <link rel="stylesheet" href="../../css/depth/components/page.css">
+  <link rel="stylesheet" href="../../css/depth/components/article.css">
+  <link rel="stylesheet" href="../../css/depth/components/ai-longform.css">
+  <link rel="stylesheet" href="../../css/depth/responsive.css">
+</head>
+<body class="article-page theme-ai" data-nav="ai-ml">
+<nav>
+  <a href="../../index.html" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    Depth
+  </a>
+  <div class="nav-center">
+    <a href="../../index.html" class="nav-pill" data-nav="all">All</a>
+    <a href="../system_design.html" class="nav-pill" data-nav="system-design">System Design</a>
+    <a href="../ai_ml.html" class="nav-pill" data-nav="ai-ml">AI / ML</a>
+    <a href="../infrastructure.html" class="nav-pill" data-nav="infrastructure">Infrastructure</a>
+    <a href="../databases.html" class="nav-pill" data-nav="databases">Databases</a>
+    <a href="../security.html" class="nav-pill" data-nav="security">Security</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-search">⌘K&nbsp; Search</div>
+    <a href="#newsletter" class="nav-subscribe">Subscribe</a>
+  </div>
+</nav>
+
+<section class="article-hero" id="top">
+  <div class="article-hero-inner">
+    <div>
+      <div class="breadcrumb">
+        <a href="../../index.html">Depth</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="../ai_ml.html">AI / ML</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Vectorless RAG vs. Vector RAG</span>
+      </div>
+      <div class="article-kicker">AI / ML</div>
+      <h1 class="article-title">Vectorless RAG vs. <em>Vector RAG</em></h1>
+      <p class="article-subtitle">A technical comparison of embedding-driven retrieval and structure-aware routing, with clear guidance on when each architecture wins.</p>
+      <div class="article-meta">
+        <div class="article-meta-item"><strong>12 min read</strong></div>
+        <div class="article-meta-item"><span class="ep-dot"></span>2025</div>
+        <div class="article-meta-item"><span class="ep-dot"></span>Vectorless · RAG · Architecture</div>
+      </div>
+    </div>
+    <aside class="article-panel">
+      <h4>Key Themes</h4>
+      <div class="feat-tags">
+        <span class="ac-visual-tag">Vectorless</span>
+        <span class="ac-visual-tag">RAG</span>
+        <span class="ac-visual-tag">Architecture</span>
+        <span class="ac-visual-tag">Retrieval</span>
+      </div>
+      <p>A technical comparison of embedding-driven retrieval and structure-aware routing, with clear guidance on when each architecture wins.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="article-content">
+  <aside class="article-aside">
+    <h4>On This Page</h4>
+    <div class="article-toc">
+      <a href="#the-problem-with-similar-enough">The Problem with "Similar Enough"</a>
+      <a href="#the-rag-pipeline-a-shared-vocabulary">The RAG Pipeline: A Shared Vocabulary</a>
+      <a href="#vector-rag-how-it-works-and-where-it-breaks">Vector RAG: How It Works and Where It Breaks</a>
+      <a href="#vectorless-rag-navigating-like-a-human">Vectorless RAG: Navigating Like a Human</a>
+      <a href="#head-to-head-a-systematic-comparison">Head-to-Head: A Systematic Comparison</a>
+      <a href="#the-emerging-consensus-hybrid-architectures">The Emerging Consensus: Hybrid Architectures</a>
+      <a href="#what-the-evidence-actually-shows">What the Evidence Actually Shows</a>
+      <a href="#a-practical-decision-framework">A Practical Decision Framework</a>
+      <a href="#future-directions">Future Directions</a>
+      <a href="#conclusion">Conclusion</a>
+    </div>
+  </aside>
+  <article class="article-body">
+    <div class="ai-longform">
+<div class="content">
+
+  <!-- ABSTRACT -->
+  <div class="abstract">
+    <strong>Abstract</strong>
+    Retrieval-Augmented Generation (RAG) has become the dominant paradigm for grounding large language models in external knowledge. The prevailing implementation relies on dense vector embeddings and approximate nearest-neighbor search. However, a growing body of practitioners are questioning whether embedding-based retrieval is universally optimal — particularly for structured, hierarchical document corpora. This paper provides a rigorous comparative analysis of <strong>Vector RAG</strong> and <strong>Vectorless RAG</strong>: their design principles, algorithmic foundations, retrieval precision trade-offs, and the conditions under which each approach wins.
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section-num">01</div>
+  <h2 id="the-problem-with-similar-enough">The Problem with "Similar Enough"</h2>
+
+  <p class="section-intro">Since Lewis et al. (2020) introduced the RAG framework, embedding-based retrieval has become nearly synonymous with knowledge-augmented language generation. The appeal is intuitive: encode text as dense vectors, store them in a vector database, and retrieve the nearest neighbors at query time.</p>
+
+  <p>The approach has powered a generation of production AI systems — customer support, legal research, medical informatics, enterprise knowledge management. The engineering ecosystem around it is mature: Pinecone, Weaviate, Qdrant, FAISS, Chroma. The research ecosystem is deep. It works.</p>
+
+  <p>Until it doesn't.</p>
+
+  <p>As deployments scale and use cases diversify, a specific failure pattern has become increasingly apparent. Practitioners call it <strong>semantic drift</strong>: the retrieval system surfaces passages that are semantically adjacent but factually imprecise. A query about "Section 4.2 penalty terms" retrieves any passage about penalties across the entire contract corpus. A query about "Q3 2024 European revenue" retrieves passages about European operations, Q3 performance, and revenue generally — but not the exact figure from the exact section the user needed.</p>
+
+  <p>The system found <em>similar</em> text. It did not find the <em>right</em> text.</p>
+
+  <div class="callout callout-danger">
+    <div class="callout-label">⚠ The Core Problem</div>
+    <p>Vector similarity is a proxy for relevance, not a guarantee of it. For unstructured, heterogeneous prose, it is an excellent proxy. For structured documents with precise informational architecture, it is an unreliable one — and the failures are systematically invisible to cosine similarity scores.</p>
+  </div>
+
+  <p>This paper argues that the retrieval architecture is not a commodity decision. It is a first-order design choice that directly determines the quality of AI-generated answers — more so, in many deployment contexts, than the choice of language model itself. We examine two paradigms in depth: Vector RAG and Vectorless RAG.</p>
+
+  <!-- SECTION 2 -->
+  <div class="section-num">02</div>
+  <h2 id="the-rag-pipeline-a-shared-vocabulary">The RAG Pipeline: A Shared Vocabulary</h2>
+
+  <p class="section-intro">Before contrasting architectures, we establish a shared vocabulary. At the highest level, every RAG system consists of three stages: indexing, retrieval, and generation. The two paradigms we compare implement the first two stages very differently.</p>
+
+  <!-- Pipeline Diagram -->
+  <div class="pipeline-diagram">
+    <div class="pipeline-title">RAG Pipeline: Two Architectural Approaches</div>
+
+    <div class="pipeline-row vec">
+      <div class="pipe-label" style="color:#ff9f9f;">Vector RAG</div>
+      <div class="pipe-steps">
+        <div class="pipe-step">Chunk Text</div>
+        <div class="pipe-step">Embed → Vectors</div>
+        <div class="pipe-step">Store in VectorDB</div>
+        <div class="pipe-step">ANN Search</div>
+        <div class="pipe-step shared-step">Generate</div>
+      </div>
+    </div>
+
+    <div class="pipeline-row novec">
+      <div class="pipe-label" style="color:#7fe8e8;">Vectorless</div>
+      <div class="pipe-steps">
+        <div class="pipe-step">Parse Structure</div>
+        <div class="pipe-step">Build Index / Graph</div>
+        <div class="pipe-step">Map Metadata</div>
+        <div class="pipe-step">Route Query</div>
+        <div class="pipe-step shared-step">Generate</div>
+      </div>
+    </div>
+  </div>
+
+  <p>Both approaches feed the same generative stage: a language model receives retrieved context and produces a grounded answer. The quality of that answer is a direct function of what the retrieval stage delivers. The generation model cannot compensate for irrelevant or incomplete retrieval — it can only work with what it is given.</p>
+
+  <!-- SECTION 3 -->
+  <div class="section-num">03</div>
+  <h2 id="vector-rag-how-it-works-and-where-it-breaks">Vector RAG: How It Works and Where It Breaks</h2>
+
+  <p class="section-intro">Vector RAG is currently the dominant paradigm. Its success stems from the power of dense neural embeddings to capture latent semantic relationships between texts that may share no surface-level vocabulary.</p>
+
+  <h3>The Embedding Foundation</h3>
+
+  <p>The core of Vector RAG is an embedding model — a neural network trained to map variable-length text into fixed-dimensional dense vectors where semantic similarity correlates with geometric proximity. A query about "cardiac arrest prevention" successfully retrieves passages about "myocardial infarction risk reduction" because both map to nearby regions of the embedding space. Modern models (OpenAI text-embedding-3, Cohere Embed v3, E5, BGE) are trained on massive retrieval benchmarks using contrastive learning: bring semantically related passages together, push unrelated ones apart.</p>
+
+  <h3>The Chunking Problem (Underappreciated)</h3>
+
+  <p>A critical and underappreciated design decision in Vector RAG is the <strong>chunking strategy</strong> — how source documents are divided into indexable units. The choice of chunk size and boundary placement has profound effects on retrieval quality that are not captured by standard embedding benchmarks.</p>
+
+  <ul class="styled">
+    <li><strong>Fixed-size chunking</strong> — Split every N tokens. Fast to implement, breaks semantic units arbitrarily.</li>
+    <li><strong>Sentence-boundary chunking</strong> — Respects linguistic structure, but a sentence often lacks sufficient context to stand alone as a retrievable unit.</li>
+    <li><strong>Semantic chunking</strong> — Uses embedding similarity to detect topic shifts. More accurate but expensive and still approximate.</li>
+    <li><strong>Hierarchical (parent-child)</strong> — Index detailed chunks, retrieve with parent context. Best precision, highest complexity.</li>
+  </ul>
+
+  <p>For a legal agreement, a 512-token fixed chunk may split a clause definition from its operative language. A paragraph-boundary chunk may include multiple legally distinct provisions in a single retrievable unit. Neither failure is detectable at indexing time.</p>
+
+  <h3>Approximate Nearest Neighbor Search</h3>
+
+  <p>Storing and searching millions of high-dimensional vectors requires ANN algorithms. The most widely deployed are <strong>HNSW</strong> (Hierarchical Navigable Small World graphs), <strong>IVF</strong> (Inverted File Indexes), and <strong>PQ</strong> (Product Quantization). These trade a small degree of recall for dramatic improvements in latency — sub-100ms at 100M+ document scale. This is a genuine engineering achievement, and for most corpus sizes it is not the bottleneck.</p>
+
+  <!-- Architecture Diagram -->
+  <div class="arch-visual">
+    <div class="arch-panel vec-panel">
+      <div class="arch-panel-title">Vector RAG Architecture</div>
+      <div class="arch-step">
+        <div class="arch-step-num">1</div>
+        <div class="arch-step-content">
+          <strong>Document Ingestion</strong>
+          <span>Source docs split into fixed/semantic chunks, typically 256–1024 tokens</span>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-step-num">2</div>
+        <div class="arch-step-content">
+          <strong>Embedding Model</strong>
+          <span>Each chunk passed through neural encoder → 768–3072 dimensional vector</span>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-step-num">3</div>
+        <div class="arch-step-content">
+          <strong>Vector Database</strong>
+          <span>HNSW/IVF index built on stored vectors. Pinecone, Weaviate, Qdrant, FAISS</span>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-step-num">4</div>
+        <div class="arch-step-content">
+          <strong>ANN Retrieval</strong>
+          <span>Query embedded → top-k vectors by cosine similarity returned</span>
+        </div>
+      </div>
+    </div>
+    <div class="arch-panel novec-panel">
+      <div class="arch-panel-title">Vectorless RAG Architecture</div>
+      <div class="arch-step">
+        <div class="arch-step-num">1</div>
+        <div class="arch-step-content">
+          <strong>Document Parsing</strong>
+          <span>Structure extracted: headings, sections, tables, entities, metadata fields</span>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-step-num">2</div>
+        <div class="arch-step-content">
+          <strong>Index Construction</strong>
+          <span>Hierarchical tree, knowledge graph, inverted index, or relational schema built</span>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-step-num">3</div>
+        <div class="arch-step-content">
+          <strong>Query Router</strong>
+          <span>Intent + entity extraction maps query to structural path in index</span>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-step-num">4</div>
+        <div class="arch-step-content">
+          <strong>Structural Retrieval</strong>
+          <span>Navigate to exact section, traverse graph paths, or execute structured query</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Known Failure Modes of Vector RAG</h3>
+
+  <div class="failure-grid">
+    <div class="failure-card">
+      <h4>Semantic Drift</h4>
+      <p>Retrieving topically adjacent but factually wrong passages. "Section 4.2 penalty terms" returns any passage mentioning penalties across all documents.</p>
+    </div>
+    <div class="failure-card">
+      <h4>Out-of-Distribution Queries</h4>
+      <p>Embedding models trained on general corpora produce poor representations for highly technical, code-heavy, or domain-specific documents.</p>
+    </div>
+    <div class="failure-card">
+      <h4>Chunk Boundary Artifacts</h4>
+      <p>Critical information split across a chunk boundary is lost or diluted. The model receives half a definition without its operative clause.</p>
+    </div>
+    <div class="failure-card">
+      <h4>Embedding Model Drift</h4>
+      <p>As embedding models improve or change, all stored vectors must be re-indexed. At scale, this is an expensive and operationally complex burden.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section-num">04</div>
+  <h2 id="vectorless-rag-navigating-like-a-human">Vectorless RAG: Navigating Like a Human</h2>
+
+  <p class="section-intro">Vectorless RAG replaces or substantially reduces reliance on dense vector embeddings in favor of structured navigation of the document corpus. The central insight: many high-value document types have rich inherent structure that a query router can exploit directly — the way a skilled researcher navigates a table of contents before reading the relevant chapter.</p>
+
+  <h3>The Structural Index</h3>
+
+  <p>The foundation of vectorless retrieval is a structured index that reflects the actual organization of source documents. Depending on document type, this index takes several forms:</p>
+
+  <ol class="styled">
+    <li><strong>Hierarchical Document Trees</strong> — Documents parsed into trees where internal nodes represent sections and leaves represent paragraphs or cells. Section titles and heading levels become navigational metadata.</li>
+    <li><strong>Knowledge Graphs</strong> — Named entities, relationships, and properties extracted from documents and represented as nodes and edges. Retrieval traverses graph paths rather than searching vector spaces.</li>
+    <li><strong>Inverted Indexes with Structural Metadata</strong> — Classic BM25-style indexes augmented with section number, document type, date, regulatory reference, and other structural fields usable for filtering.</li>
+    <li><strong>Relational Schema Mapping</strong> — Semi-structured or tabular documents mapped to database schemas. Queries translated to SQL, returning precise records rather than approximate neighbors.</li>
+  </ol>
+
+  <h3>Query Routing: The Critical Mechanism</h3>
+
+  <p>Without a universal similarity metric, vectorless RAG must perform more sophisticated query understanding. A <strong>query router</strong> — a lightweight classifier, LLM, or rule-based system — analyzes each incoming query to determine which section, document type, or graph path most likely contains the answer.</p>
+
+  <p>Effective routing involves three sub-tasks: <strong>entity extraction</strong> (identifying regulation names, product codes, dates), <strong>intent classification</strong> (is this a definition query, a procedural query, a numerical fact?), and <strong>structural pointer resolution</strong> (mapping entities and intent to specific index locations).</p>
+
+  <div class="callout callout-success">
+    <div class="callout-label">✓ Where Vectorless Shines</div>
+    <p><strong>Deterministic precision:</strong> A query for "Article 15 subsection 3(b)" deterministically retrieves exactly that subsection — trivial for an inverted index, impossible to guarantee with approximate vector search.</p>
+    <p><strong>Interpretable retrieval paths:</strong> Every retrieval decision is auditable. This is critical for compliance, legal, and regulated applications where "the model retrieved X because of cosine similarity" is not an acceptable audit trail.</p>
+    <p><strong>No embedding infrastructure:</strong> Eliminates embedding models, vector databases, and the associated latency, cost, and maintenance overhead.</p>
+    <p><strong>Efficient updates:</strong> Adding a new document version requires updating the structured index, not re-embedding all changed content.</p>
+  </div>
+
+  <h3>Knowledge Graph Retrieval: Multi-Hop Power</h3>
+
+  <p>One of the most powerful forms of vectorless retrieval is knowledge graph navigation. By extracting entities and relationships during indexing, it becomes possible to answer multi-hop queries that require following chains of relationships — for example:</p>
+
+  <div class="callout callout-info">
+    <div class="callout-label">Example Query</div>
+    <p>"What are the compliance obligations for a Tier 2 supplier under the environmental policy addendum to the master services agreement?"</p>
+    <p>This requires traversing multiple document sections related through shared entities. Graph traversal handles it naturally. Vector search on individual chunks cannot guarantee it.</p>
+  </div>
+
+  <h3>The Hard Prerequisite</h3>
+
+  <p>Vectorless RAG carries a significant prerequisite: it depends critically on the quality and consistency of document structure. Documents that lack consistent heading hierarchies, use idiosyncratic formatting, or mix structured and unstructured content pose serious challenges. The structural parsing pipeline — which must reliably extract headings, entities, relationships, and metadata from heterogeneous formats — is an engineering challenge comparable in complexity to the embedding pipeline it replaces.</p>
+
+  <div class="pull-quote">
+    Vector RAG finds similar text. Vectorless RAG finds the right place. The best systems know when to do which.
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section-num">05</div>
+  <h2 id="head-to-head-a-systematic-comparison">Head-to-Head: A Systematic Comparison</h2>
+
+  <p class="section-intro">Having described both architectures in detail, we now provide a systematic comparison across the dimensions most relevant to production deployment decisions.</p>
+
+  <div class="comp-table-wrap">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th class="vec-col">Vector RAG</th>
+          <th class="novec-col">Vectorless RAG</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Retrieval Mechanism</td>
+          <td>Approximate nearest neighbor in embedding space</td>
+          <td>Structural navigation, graph traversal, or lexical matching</td>
+        </tr>
+        <tr>
+          <td>Best Document Type</td>
+          <td>Unstructured prose, heterogeneous corpora</td>
+          <td>Structured, hierarchical, schema-rich documents</td>
+        </tr>
+        <tr>
+          <td>Best Query Type</td>
+          <td>Semantic, conceptual, paraphrased queries</td>
+          <td>Precise, entity-rich, structural, identifier-based queries</td>
+        </tr>
+        <tr>
+          <td>Retrieval Precision</td>
+          <td><span class="badge-neutral">Moderate–High (varies by embedding quality)</span></td>
+          <td><span class="badge-green">Very High (well-structured docs)</span></td>
+        </tr>
+        <tr>
+          <td>Query Recall</td>
+          <td><span class="badge-green">High (handles diverse phrasings)</span></td>
+          <td><span class="badge-red">Lower (rigid on unanticipated patterns)</span></td>
+        </tr>
+        <tr>
+          <td>Indexing Cost</td>
+          <td><span class="badge-red">High (embedding compute + VectorDB)</span></td>
+          <td><span class="badge-green">Moderate (parsing + index construction)</span></td>
+        </tr>
+        <tr>
+          <td>Query Latency</td>
+          <td><span class="badge-green">Low (ANN ~10–100ms)</span></td>
+          <td><span class="badge-green">Low–Moderate (depends on index type)</span></td>
+        </tr>
+        <tr>
+          <td>Update Complexity</td>
+          <td><span class="badge-red">High (re-embedding required)</span></td>
+          <td><span class="badge-green">Moderate (index update only)</span></td>
+        </tr>
+        <tr>
+          <td>Interpretability</td>
+          <td><span class="badge-red">Low (black-box similarity scores)</span></td>
+          <td><span class="badge-green">High (auditable retrieval paths)</span></td>
+        </tr>
+        <tr>
+          <td>Hallucination Risk</td>
+          <td><span class="badge-neutral">Moderate (semantic drift misleads generator)</span></td>
+          <td><span class="badge-green">Lower for targeted queries</span></td>
+        </tr>
+        <tr>
+          <td>Domain Adaptability</td>
+          <td>Requires fine-tuned embedding model</td>
+          <td>Requires schema design per domain</td>
+        </tr>
+        <tr>
+          <td>Scalability</td>
+          <td><span class="badge-green">Excellent (billions of vectors)</span></td>
+          <td>High (relational/graph), Moderate (trees)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>The table reveals a fundamental asymmetry: the two approaches are optimized for different ends of the query precision spectrum. Vector RAG handles semantic diversity in queries at the cost of retrieval precision. Vectorless RAG achieves precision for well-formed queries against well-structured documents at the cost of query flexibility.</p>
+
+  <h3>The Hallucination Connection</h3>
+
+  <p>A key motivation for studying retrieval architecture is its downstream effect on language model hallucination. When retrieved passages are irrelevant or only tangentially related, the model faces a difficult inference problem: it must generate an answer despite receiving insufficient grounding, often falling back on parametric knowledge or blending information inappropriately from multiple contexts. Studies on legal QA and enterprise knowledge management have found that improving retrieval precision — holding the language model constant — can reduce hallucination rates by <strong>20–40%</strong>. The retrieval architecture is a more important determinant of answer quality than is commonly appreciated.</p>
+
+  <!-- SECTION 6 -->
+  <div class="section-num">06</div>
+  <h2 id="the-emerging-consensus-hybrid-architectures">The Emerging Consensus: Hybrid Architectures</h2>
+
+  <p class="section-intro">The most sophisticated production RAG systems increasingly combine vector and vectorless retrieval in hybrid architectures that exploit the strengths of both paradigms. Three patterns have emerged as particularly effective.</p>
+
+  <h3>Pattern 1: Two-Stage Retrieval (Structured Filter + Semantic Rerank)</h3>
+
+  <p>A structured filter stage narrows the candidate set using metadata and structural constraints. A semantic reranking stage then selects the most relevant passages using embedding similarity. Example: a legal AI system first filters all passages to those in Section 8 of contracts dated after 2022 in the relevant jurisdiction — then applies cosine similarity to find the most semantically relevant passage among the filtered set. Result: structural precision plus semantic flexibility.</p>
+
+  <h3>Pattern 2: Query-Adaptive Routing</h3>
+
+  <p>A query router analyzes each incoming query and routes it to the appropriate retrieval backend. Queries containing specific identifiers or section references go to the structured index. Open-ended semantic queries go to vector search. Complex multi-hop queries go to the knowledge graph. This requires careful routing logic design and ongoing monitoring for query distribution shifts.</p>
+
+  <h3>Pattern 3: Sparse-Dense Fusion (RRF)</h3>
+
+  <p>Sparse-dense fusion combines BM25 (lexical) and dense embedding scores using a weighted combination. <strong>Reciprocal Rank Fusion (RRF)</strong> is the most commonly used method — hyperparameter-free and robust to score distribution differences between retrieval methods. This provides improved recall across diverse query types with modest additional computational cost, and has become a widely recommended baseline for production RAG systems.</p>
+
+  <!-- Hybrid Flow Diagram -->
+  <div class="hybrid-flow">
+    <div class="hybrid-title">Hybrid RAG: Query-Adaptive Architecture</div>
+    <div class="hybrid-steps">
+      <div class="hybrid-node">
+        <div class="hybrid-node-label" style="color:var(--ink-muted);">User</div>
+        <div class="hybrid-node-sub">Incoming Query</div>
+      </div>
+      <div class="hybrid-arrow">→</div>
+      <div class="hybrid-node router">
+        <div class="hybrid-node-label" style="color:white;">Query Router</div>
+        <div class="hybrid-node-sub" style="color:rgba(255,255,255,0.6);">Intent + Entity Analysis</div>
+      </div>
+      <div class="hybrid-arrow">→</div>
+      <div class="hybrid-branch">
+        <div class="hybrid-node vec-node">
+          <div class="hybrid-node-label vec-node-label">Vector Search</div>
+          <div class="hybrid-node-sub">Semantic / Open-ended</div>
+        </div>
+        <div class="hybrid-node novec-node">
+          <div class="hybrid-node-label novec-node-label">Structural Index</div>
+          <div class="hybrid-node-sub">Precise / Identifier-based</div>
+        </div>
+      </div>
+      <div class="hybrid-arrow">→</div>
+      <div class="hybrid-node fuse-node">
+        <div class="hybrid-node-label fuse-node-label">RRF Fusion</div>
+        <div class="hybrid-node-sub">Rank-based score merge</div>
+      </div>
+      <div class="hybrid-arrow">→</div>
+      <div class="hybrid-node gen-node">
+        <div class="hybrid-node-label" style="color:white;">LLM</div>
+        <div class="hybrid-node-sub" style="color:rgba(255,255,255,0.6);">Generate Answer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="section-num">07</div>
+  <h2 id="what-the-evidence-actually-shows">What the Evidence Actually Shows</h2>
+
+  <p class="section-intro">Controlled empirical comparisons are complicated by the difficulty of constructing equivalent experimental conditions. Nevertheless, several consistent patterns have emerged from research and production deployments.</p>
+
+  <h3>On Structured Document Benchmarks</h3>
+
+  <p>Studies comparing retrieval precision on structured document corpora — including SEC filings, legal contracts, and technical standards — consistently find that structured retrieval methods outperform pure vector search on exact-match and fact-extraction tasks. <strong>Precision gains of 15–35%</strong> have been reported on queries that reference specific sections, dates, or named provisions. These gains are most pronounced for queries that include structural cues ("as defined in Section 3") and less pronounced for semantic reformulations.</p>
+
+  <h3>On Open-Domain and Semantic Benchmarks</h3>
+
+  <p>On open-domain QA benchmarks — Natural Questions, TriviaQA, HotpotQA — vector RAG consistently outperforms pure lexical or structured methods. Dense passage retrieval achieves recall@5 scores well above BM25 baselines, particularly for queries requiring semantic generalization. This is where embedding-based retrieval earns its dominant position.</p>
+
+  <h3>From Enterprise Deployments</h3>
+
+  <p>Practitioner reports from enterprise AI deployments offer complementary evidence. Teams building RAG systems for policy manuals, product documentation, and compliance databases consistently report that initial deployments using pure vector search surfaced "semantically plausible but wrong" passages. Augmenting with metadata filters and structural routing substantially improved end-user satisfaction metrics — even when automated recall metrics showed only modest improvement. This suggests that <strong>tail-case failures are disproportionately visible to users</strong> in ways that aggregate benchmarks do not capture.</p>
+
+  <div class="callout callout-gold">
+    <div class="callout-label">💡 Key Finding</div>
+    <p>Retrieval architecture changes that improve automated metrics but degrade human satisfaction — or vice versa — require careful investigation before deployment. Retrieval precision on the wrong distribution of queries is not retrieval precision where it matters.</p>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="section-num">08</div>
+  <h2 id="a-practical-decision-framework">A Practical Decision Framework</h2>
+
+  <p class="section-intro">Based on the architectural analysis and empirical evidence above, we offer a decision framework for practitioners designing or evaluating RAG systems. The framework has three assessments: document corpus, query patterns, and infrastructure.</p>
+
+  <h3>Step 1: Assess Your Document Corpus</h3>
+
+  <div class="decision-matrix">
+    <div class="decision-row header">
+      <div class="decision-cell">Corpus Characteristic</div>
+      <div class="decision-cell">Signal</div>
+      <div class="decision-cell">Recommendation</div>
+    </div>
+    <div class="decision-row">
+      <div class="decision-cell">Consistent heading hierarchy</div>
+      <div class="decision-cell">High structural consistency</div>
+      <div class="decision-cell"><span class="recommend-novec">→ Vectorless / Hybrid</span></div>
+    </div>
+    <div class="decision-row">
+      <div class="decision-cell">Heterogeneous, mixed prose</div>
+      <div class="decision-cell">Low structural consistency</div>
+      <div class="decision-cell"><span class="recommend-vec">→ Vector RAG</span></div>
+    </div>
+    <div class="decision-row">
+      <div class="decision-cell">Highly domain-specific vocabulary</div>
+      <div class="decision-cell">Poor embedding representation</div>
+      <div class="decision-cell"><span class="recommend-novec">→ Vectorless + BM25</span></div>
+    </div>
+    <div class="decision-row">
+      <div class="decision-cell">Frequent document updates</div>
+      <div class="decision-cell">Re-indexing cost</div>
+      <div class="decision-cell"><span class="recommend-novec">→ Vectorless preferred</span></div>
+    </div>
+    <div class="decision-row">
+      <div class="decision-cell">Mix of structured + unstructured</div>
+      <div class="decision-cell">Both signals present</div>
+      <div class="decision-cell"><span class="recommend-hybrid">→ Hybrid (RRF)</span></div>
+    </div>
+    <div class="decision-row">
+      <div class="decision-cell">Compliance / audit requirements</div>
+      <div class="decision-cell">Interpretability needed</div>
+      <div class="decision-cell"><span class="recommend-novec">→ Vectorless (auditable)</span></div>
+    </div>
+  </div>
+
+  <h3>Step 2: Analyze Your Query Patterns</h3>
+
+  <p>If user queries are likely to reference specific document locations, use technical identifiers, or require multi-hop reasoning across related sections, structured retrieval delivers substantially better precision. If queries are open-ended, use colloquial language, or need to find information phrased differently across documents, semantic vector search is more appropriate.</p>
+
+  <h3>Step 3: Evaluate Infrastructure Constraints</h3>
+
+  <p>Vector RAG requires significant infrastructure: a high-quality embedding model, a production-grade vector database with replication and backup, and an operational pipeline for re-indexing updated documents. Vectorless RAG trades this for investment in structured parsing pipelines and index maintenance. Teams with strong data engineering capabilities but limited ML infrastructure may find vectorless approaches operationally simpler.</p>
+
+  <h3>Evaluation Methodology</h3>
+
+  <p>Evaluation of RAG systems must go beyond retrieval recall to measure end-to-end answer quality. We recommend a three-tier framework:</p>
+
+  <ol class="styled">
+    <li><strong>Automated retrieval metrics</strong> — Recall@k, Precision@k, MRR on held-out query sets</li>
+    <li><strong>LLM-as-judge evaluation</strong> — Answer faithfulness and relevance rated by a stronger model</li>
+    <li><strong>Human evaluation</strong> — User satisfaction on a representative sample of actual production queries</li>
+  </ol>
+
+  <!-- SECTION 9 -->
+  <div class="section-num">09</div>
+  <h2 id="future-directions">Future Directions</h2>
+
+  <p class="section-intro">The field of RAG architecture is evolving rapidly, driven by both academic research and production engineering demands. Several directions hold particular promise.</p>
+
+  <h3>Learned Structural Representations</h3>
+
+  <p>A natural synthesis of the two paradigms is the development of embedding models that explicitly learn to represent document structure — encoding not just semantic content but positional, relational, and hierarchical information. Document-level contrastive training objectives and structure-aware pre-training strategies are active research areas. If successful, these approaches could yield retrieval systems combining the flexibility of vector search with the structural precision of indexed navigation.</p>
+
+  <h3>Self-Structuring Documents</h3>
+
+  <p>Another promising direction involves AI systems that automatically impose structure on poorly structured documents during ingestion. Rather than requiring consistent heading hierarchies, an AI pre-processing stage could infer semantic structure, extract entities and relationships, and construct the navigable index that vectorless RAG requires. This would dramatically expand the applicability of structured retrieval to corpora that currently require vector search by default.</p>
+
+  <h3>Retrieval-Aware Generation</h3>
+
+  <p>Most current RAG systems treat retrieval and generation as independent stages. Emerging research on retrieval-aware generation — where the language model's attention mechanism is directly connected to the retrieval index, enabling iterative refinement of both retrieved context and generated text — may render the vector/vectorless distinction less relevant. Systems like RETRO, Self-RAG, IterRetGen, and FLARE are early steps in this direction. The model itself navigates the index during generation rather than receiving a fixed context window.</p>
+
+  <!-- CONCLUSION -->
+  <div class="conclusion-box">
+    <h2 id="conclusion">Conclusion</h2>
+    <p>The debate between vector RAG and vectorless RAG is not a binary choice but a spectrum of architectural possibilities whose optimal point depends on the specific characteristics of the deployment context.</p>
+    <p>Vector RAG has earned its dominant position through its remarkable ability to handle semantic diversity in queries and its applicability to heterogeneous document corpora without requiring structured parsing. Vectorless RAG has emerged as a compelling alternative for structured, schema-rich domains where retrieval precision is paramount and document structure is consistent enough to support navigable indexing.</p>
+    <p>The most important insight is that <strong style="color:white;">retrieval architecture is not a commodity choice</strong>. Teams that treat the retrieval layer as an afterthought and deploy vector search by default on all document types are systematically leaving precision and reliability on the table. Teams that invest in understanding their document corpus and query patterns — and design retrieval architectures accordingly — achieve substantially better end-user outcomes.</p>
+    <p>The emerging consensus points toward hybrid architectures that combine structural filtering, lexical matching, and semantic similarity in query-adaptive pipelines. As document AI matures, we expect the boundaries between these approaches to blur further, with unified retrieval frameworks that learn to exploit whatever structural and semantic signals are present in the corpus.</p>
+    <p class="conclusion-final">The future of RAG is not embeddings or structure — it is both, intelligently composed, each where it belongs.</p>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="references">
+    <h3>References</h3>
+    <ul class="ref-list">
+      <li data-num="1">Lewis, P., Perez, E., Piktus, A., et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. <em>NeurIPS 2020</em>.</li>
+      <li data-num="2">Karpukhin, V., Oguz, B., Min, S., et al. (2020). Dense Passage Retrieval for Open-Domain Question Answering. <em>EMNLP 2020</em>.</li>
+      <li data-num="3">Gao, L., Ma, X., Lin, J., & Callan, J. (2023). Precise Zero-Shot Dense Retrieval without Relevance Labels. <em>ACL 2023</em>.</li>
+      <li data-num="4">Edge, D., Trinh, H., Cheng, N., et al. (2024). From Local to Global: A Graph RAG Approach to Query-Focused Summarization. <em>arXiv:2404.16130</em>.</li>
+      <li data-num="5">Asai, A., Wu, Z., Wang, Y., et al. (2023). Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection. <em>arXiv:2310.11511</em>.</li>
+      <li data-num="6">Cormack, G. V., Clarke, C. L. A., & Buettcher, S. (2009). Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods. <em>SIGIR 2009</em>.</li>
+      <li data-num="7">Borgeaud, S., Mensch, A., Hoffmann, J., et al. (2022). Improving Language Models by Retrieving from Trillions of Tokens (RETRO). <em>ICML 2022</em>.</li>
+      <li data-num="8">Robertson, S., & Zaragoza, H. (2009). The Probabilistic Relevance Framework: BM25 and Beyond. <em>Foundations and Trends in Information Retrieval</em>.</li>
+      <li data-num="9">Shi, F., Chen, X., Misra, K., et al. (2023). Large Language Models Can Be Easily Distracted by Irrelevant Context. <em>ICML 2023</em>.</li>
+      <li data-num="10">Shao, Z., Gong, Y., Shen, Y., et al. (2023). Enhancing Retrieval-Augmented Large Language Models with Iterative Retrieval-Generation Synergy. <em>arXiv:2305.15294</em>.</li>
+    </ul>
+  </div>
+
+</div><!-- /content -->
+    </div>
+
+    <div class="article-cta">
+      <h4>Continue Exploring</h4>
+      <p>Dive deeper into AI / ML or browse the full archive for related systems engineering research.</p>
+      <div class="related-links">
+        <a href="../ai_ml.html">More AI / ML</a>
+        <a href="../archive.html">View Archive</a>
+      </div>
+    </div>
+  </article>
+</section>
+
+<div class="wrap">
+  <div class="nl" id="newsletter">
+  <div>
+    <div class="nl-eyebrow">Stay Sharp</div>
+    <h3>New deep dives, twice a month.<br>No noise. No sponsorships.</h3>
+    <p>Get notified when the next research-level article drops. Unsubscribe at any time — no dark patterns, no re-engagement campaigns, no ads.</p>
+  </div>
+  <div class="nl-form">
+    <input type="email" class="nl-input" placeholder="your@email.com">
+    <button class="nl-btn">Subscribe →</button>
+    <span class="nl-note">Join 4,200+ engineers. No spam, ever.</span>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-col footer-logo-area">
+      <div class="footer-logo">
+        <span class="footer-logo-dot"></span>
+        Depth
+      </div>
+      <p class="footer-tagline">Research-grade writing on system design, AI/ML, infrastructure, databases, security and data systems.</p>
+      <div class="footer-social">
+        <a href="#">X</a>
+        <a href="#">GH</a>
+        <a href="#">LI</a>
+        <a href="#">RSS</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Topics</div>
+      <a href="../system_design.html">System Design</a>
+      <a href="../ai_ml.html">AI / ML</a>
+      <a href="../infrastructure.html">Infrastructure</a>
+      <a href="../databases.html">Databases</a>
+      <a href="../security.html">Security</a>
+      <a href="../data_systems.html">Data Systems</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Articles</div>
+      <a href="../../index.html#articles">Latest</a>
+      <a href="../archive.html#most-read">Most Read</a>
+      <a href="../archive.html#editors">Editor's Picks</a>
+      <a href="../archive.html#series">Series</a>
+      <a href="../archive.html">Archive</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Publication</div>
+      <a href="../about.html">About</a>
+      <a href="../editorial_standards.html">Editorial Standards</a>
+      <a href="../write_for_depth.html">Write for Depth</a>
+      <a href="#newsletter">Newsletter</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Depth · Article</span>
+    <div class="footer-bottom-links">
+      <a href="../privacy.html">Privacy</a>
+      <a href="../terms.html">Terms</a>
+      <a href="../rss.html">RSS Feed</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../js/depth/main.js" defer></script>
+</body>
+</html>

@@ -6,21 +6,22 @@
   <title>Your Embeddings Are Biased and You Don't Know It — Depth</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../css/depth/tokens.css">
-<link rel="stylesheet" href="../../css/depth/base.css">
-<link rel="stylesheet" href="../../css/depth/layout/grids.css">
-<link rel="stylesheet" href="../../css/depth/components/nav.css">
-<link rel="stylesheet" href="../../css/depth/components/hero.css">
-<link rel="stylesheet" href="../../css/depth/components/ticker.css">
-<link rel="stylesheet" href="../../css/depth/components/section-head.css">
-<link rel="stylesheet" href="../../css/depth/components/filters.css">
-<link rel="stylesheet" href="../../css/depth/components/cards.css">
-<link rel="stylesheet" href="../../css/depth/components/topics.css">
-<link rel="stylesheet" href="../../css/depth/components/newsletter.css">
-<link rel="stylesheet" href="../../css/depth/components/about.css">
-<link rel="stylesheet" href="../../css/depth/components/footer.css">
-<link rel="stylesheet" href="../../css/depth/components/page.css">
-<link rel="stylesheet" href="../../css/depth/components/article.css">
-<link rel="stylesheet" href="../../css/depth/responsive.css">
+  <link rel="stylesheet" href="../../css/depth/base.css">
+  <link rel="stylesheet" href="../../css/depth/layout/grids.css">
+  <link rel="stylesheet" href="../../css/depth/components/nav.css">
+  <link rel="stylesheet" href="../../css/depth/components/hero.css">
+  <link rel="stylesheet" href="../../css/depth/components/ticker.css">
+  <link rel="stylesheet" href="../../css/depth/components/section-head.css">
+  <link rel="stylesheet" href="../../css/depth/components/filters.css">
+  <link rel="stylesheet" href="../../css/depth/components/cards.css">
+  <link rel="stylesheet" href="../../css/depth/components/topics.css">
+  <link rel="stylesheet" href="../../css/depth/components/newsletter.css">
+  <link rel="stylesheet" href="../../css/depth/components/about.css">
+  <link rel="stylesheet" href="../../css/depth/components/footer.css">
+  <link rel="stylesheet" href="../../css/depth/components/page.css">
+  <link rel="stylesheet" href="../../css/depth/components/article.css">
+  <link rel="stylesheet" href="../../css/depth/components/ai-longform.css">
+  <link rel="stylesheet" href="../../css/depth/responsive.css">
 </head>
 <body class="article-page theme-ai" data-nav="ai-ml">
 <nav>
@@ -42,7 +43,7 @@
   </div>
 </nav>
 
-<section class="article-hero">
+<section class="article-hero" id="top">
   <div class="article-hero-inner">
     <div>
       <div class="breadcrumb">
@@ -53,11 +54,13 @@
         <span>Your Embeddings Are Biased and You Don't Know It</span>
       </div>
       <div class="article-kicker">AI / ML</div>
-      <h1 class="article-title">Your Embeddings Are Biased and You Don't Know It</h1>
-      <p class="article-subtitle">Bias, drift, and the measurement gaps that turn embedding systems into silent regressions.</p>
+      <h1 class="article-title">Your Embeddings Are <span class="hl">Biased</span> and You <span class="hl2">Don't Know It</span></h1>
+      <p class="article-subtitle">How training data bias bleeds into vector spaces, silently skews semantic search results in production, and what you can do to detect, measure, and defend against it.</p>
       <div class="article-meta">
-        <div class="article-meta-item"><strong>52 min read</strong></div>
-        <div class="article-meta-item"><span class="ep-dot"></span>2025</div>
+        <div class="article-meta-item">Research Article · Embeddings · AI Bias · Semantic Search</div>
+        <div class="article-meta-item"><span class="ep-dot"></span>14,200 words</div>
+        <div class="article-meta-item"><span class="ep-dot"></span>52 min read</div>
+        <div class="article-meta-item"><span class="ep-dot"></span>10 diagrams &amp; production code</div>
         <div class="article-meta-item"><span class="ep-dot"></span>Embeddings · Bias · Drift</div>
       </div>
     </div>
@@ -65,43 +68,1347 @@
       <h4>Key Themes</h4>
       <div class="feat-tags">
         <span class="ac-visual-tag">Embeddings</span>
-<span class="ac-visual-tag">Bias</span>
-<span class="ac-visual-tag">Drift</span>
-<span class="ac-visual-tag">Ranking</span>
+        <span class="ac-visual-tag">AI Bias</span>
+        <span class="ac-visual-tag">Semantic Search</span>
+        <span class="ac-visual-tag">Drift</span>
       </div>
-      <p>Bias, drift, and the measurement gaps that turn embedding systems into silent regressions.</p>
+      <p>How training data bias bleeds into vector spaces, silently skews semantic search results in production, and what you can do to detect, measure, and defend against it.</p>
     </aside>
   </div>
 </section>
+
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="t-item">Gender Bias</span><span class="t-label">doctor → he</span><span class="t-sep">•</span>
+    <span class="t-item">Racial Bias</span><span class="t-label">names → risk scores</span><span class="t-sep">•</span>
+    <span class="t-item">Geographic Bias</span><span class="t-label">Western corpus dominance</span><span class="t-sep">•</span>
+    <span class="t-item">Occupational Bias</span><span class="t-label">nurse → female</span><span class="t-sep">•</span>
+    <span class="t-item">Cultural Bias</span><span class="t-label">food · art · language</span><span class="t-sep">•</span>
+    <span class="t-item">Recency Bias</span><span class="t-label">internet overrepresentation</span><span class="t-sep">•</span>
+    <span class="t-item">Gender Bias</span><span class="t-label">doctor → he</span><span class="t-sep">•</span>
+    <span class="t-item">Racial Bias</span><span class="t-label">names → risk scores</span><span class="t-sep">•</span>
+    <span class="t-item">Geographic Bias</span><span class="t-label">Western corpus dominance</span><span class="t-sep">•</span>
+    <span class="t-item">Occupational Bias</span><span class="t-label">nurse → female</span><span class="t-sep">•</span>
+    <span class="t-item">Cultural Bias</span><span class="t-label">food · art · language</span><span class="t-sep">•</span>
+    <span class="t-item">Recency Bias</span><span class="t-label">internet overrepresentation</span>
+  </div>
+</div>
 
 <section class="article-content">
   <aside class="article-aside">
     <h4>On This Page</h4>
     <div class="article-toc">
-      <a href="#context">Context</a>
-      <a href="#under-the-hood">Under the Hood</a>
-      <a href="#failure-modes">Failure Modes</a>
-      <a href="#takeaways">Takeaways</a>
+      <a href="#intro"> 01 — The Invisible Cartographer How Bias Hides in Plain Sight</a>
+      <a href="#what-is-embedding-bias"> 02 — The Geometry of Prejudice What Embedding Bias Actually Is</a>
+      <a href="#taxonomy"> 03 — A Field Guide Eight Categories of Embedding Bias</a>
+      <a href="#how-bias-enters"> 04 — The Data Pipeline Exactly How Bias Enters the Training Process</a>
+      <a href="#measuring-bias"> 05 — The Measurement Problem How to Detect Bias in Your Own Embeddings</a>
+      <a href="#production-impact"> 06 — The Production Cascade How Embedding Bias Shapes Real Outcomes</a>
+      <a href="#debiasing"> 07 — The Debiasing Toolkit Four Strategies for Production Defense</a>
+      <a href="#monitoring"> 08 — The Monitoring Imperative Continuous Bias Detection in Production</a>
+      <a href="#intersectionality"> 09 — The Hard Problem Intersectionality and the Limits of Debiasing</a>
+      <a href="#production-checklist"> 10 — The Production Checklist What to Implement Before You Ship</a>
+      <a href="#conclusion"> 11 — The Cartographer's Responsibility A Closing Argument</a>
+      <a href="#references">References Further Reading</a>
     </div>
   </aside>
   <article class="article-body">
-    <p>Bias, drift, and the measurement gaps that turn embedding systems into silent regressions.</p>
+    <div class="ai-longform">
+      <div class="article">
 
-    <h2 id="context">Context</h2>
-    <p>This piece grounds ai / ml decisions in production reality — the edge cases, scaling thresholds, and tradeoffs that rarely make it into tutorials.</p>
+        <!--  01 -->
+        <section id="intro">
+          <h2><span class="sec-num"> 01 — The Invisible Cartographer</span>How Bias Hides in Plain Sight</h2>
 
-    <h2 id="under-the-hood">Under the Hood</h2>
-    <p>We break down the mechanics behind your embeddings are biased and you don't know it and map how those mechanics shape reliability, latency, and operational cost.</p>
+          <p class="drop">In 1569, Gerardus Mercator published the map that would define how the world looked for the next four centuries. His projection was designed for navigators — it preserved angles perfectly, which made charting a course at sea reliable and safe. But it came with a hidden cost. Because of the mathematics of projecting a sphere onto a flat surface, land masses near the poles were dramatically inflated. Greenland appeared the same size as Africa. In reality, Africa is fourteen times larger.</p>
 
-    <blockquote>Depth is about the tradeoffs you only see after shipping.</blockquote>
+          <p>Nobody was lying. Nobody was trying to deceive. Mercator made a technical decision optimized for one purpose — navigation — and that decision silently distorted the world's perception of scale, geography, and implicitly, of relative importance, for four hundred years.</p>
 
-    <h2 id="failure-modes">Failure Modes</h2>
-    <p>The failure modes here are subtle: degraded performance, silent correctness drift, and compounded operational toil. The article focuses on detection and mitigation before the incident page lights up.</p>
+          <p>Your embedding model is a Mercator projection. It is a mathematical transformation of human language — all of it, in all its historical, cultural, and statistical messiness — into a geometric space optimized for one purpose: semantic similarity. And just like the Mercator projection, the decisions made during that transformation silently distort what ends up close together, what ends up far apart, and therefore whose language, whose concepts, and whose reality gets centered in your production AI system.</p>
 
-    <h2 id="takeaways">Takeaways</h2>
-    <ul>
-      <li>Pay attention to embeddings — it is usually the first signal of scale-induced instability.</li><li>Pay attention to bias — it is usually the first signal of scale-induced instability.</li><li>Pay attention to drift — it is usually the first signal of scale-induced instability.</li>
-    </ul>
+          <p>This is the <strong>embedding bias problem</strong>. Unlike model hallucination or retrieval mismatch, it does not announce itself with wrong answers or empty results. It announces itself — if you are paying attention — through subtle systematic skews: a hiring tool that consistently ranks resumes with male-coded names higher, a medical assistant that retrieves different quality of information for patients from different demographic backgrounds, a customer service bot that handles queries from Western users with greater precision than those from other regions.</p>
+
+          <p>This article is a complete technical guide to understanding where embedding bias comes from, how to measure it in your own models, and how to build production defenses that reduce its impact. We start where all bias starts: in the data.</p>
+
+          <div class="stat-row">
+            <div class="stat"><span class="n">8</span><span class="l">Distinct categories of embedding bias identified in research</span></div>
+            <div class="stat"><span class="n">~60%</span><span class="l">Of internet text estimated to be in English — skewing all general-purpose models</span></div>
+            <div class="stat"><span class="n">0</span><span class="l">Visual indicators in a cosine similarity score that bias is present</span></div>
+            <div class="stat"><span class="n">∞</span><span class="l">Queries affected downstream before bias is detected or corrected</span></div>
+          </div>
+
+          <div class="callout warn">
+            <div class="ico">⚠️</div>
+            <div class="body"><strong>The Production Silence:</strong> Embedding bias does not cause errors. It does not raise exceptions. It does not produce obviously wrong output. It produces output that is subtly, systematically wrong in a direction that consistently disadvantages certain groups, concepts, or regions — and it does so thousands of times a day, invisibly, beneath a veneer of mathematical objectivity.</div>
+          </div>
+        </section>
+
+        <div class="div">· · ·</div>
+
+        <!--  02 -->
+        <section id="what-is-embedding-bias">
+          <h2><span class="sec-num"> 02 — The Geometry of Prejudice</span>What Embedding Bias Actually Is</h2>
+
+          <p>To understand how bias enters an embedding space, you first need to understand what an embedding space is doing at a mathematical level. An embedding model is trained to place words, sentences, or documents in a high-dimensional space such that items that appear in <em>similar contexts</em> in the training corpus end up close together. The model learns from co-occurrence: what words appear near what other words, across billions of documents.</p>
+
+          <p>This sounds neutral. It is not. The statistical structure of human language is not a neutral reflection of reality. It is a reflection of who has written, who has been written about, in what contexts, in which languages, across which cultures, and with which assumptions baked in. When a model learns that the word "doctor" appears near "he" far more often than near "she" — not because doctors are actually mostly men, but because historical text was written by and for a world where male doctors were assumed — the model encodes that statistical regularity as a geometric relationship. The vector for "doctor" ends up closer, in the learned space, to "he" than to "she."</p>
+
+          <p>The model has not been told to be sexist. It has simply learned to reflect the statistical structure of the text it was trained on. And that statistical structure carries centuries of human bias, encoded faithfully into a 1536-dimensional geometric space.</p>
+
+          <h3>The Word Embedding Bias Equation</h3>
+
+          <p>The seminal research by Bolukbasi et al. (2016) formalized this mathematically. They demonstrated that in word2vec embeddings trained on Google News data, simple vector arithmetic revealed explicit bias. The relationship between "man" and "woman" in the embedding space mirrored a set of gender stereotypes with uncomfortable precision. The embedding space had learned a "gender direction" — a linear axis in the high-dimensional space that encoded gender — and occupational terms were systematically displaced along this axis in ways that mapped directly to cultural stereotypes rather than workforce reality.</p>
+
+          <p>What made this particularly alarming was not the existence of a gender direction — one might expect gender to be encoded somewhere in the geometry of language — but the way unrelated concepts became contaminated by proximity to this axis. Words like "programmer," "engineer," and "scientist" were displaced toward the male end of the gender axis. Words like "nurse," "receptionist," and "librarian" were displaced toward the female end. The model had not been told these associations. It had absorbed them from the statistical regularities of human-written text.</p>
+
+          <div class="pq">
+            <p>"The embedding model is not biased the way a person is biased. It is biased the way a mirror is biased — it faithfully reflects exactly what is in front of it. The problem is what has been standing in front of it for centuries."</p>
+          </div>
+
+          <p>Modern sentence embedding models — the kind used in production RAG systems — inherit and amplify these biases. They do not merely encode word-level associations. They encode the full statistical texture of context: which topics are discussed together, which names appear in which kinds of documents, which places are described in which kinds of language. Every corpus choice, every scraping decision, every domain weighting becomes a hidden parameter that shapes the geometry of the resulting vector space.</p>
+
+        </section>
+
+      </div>
+
+      <!-- DIAGRAM 1: The Bias Absorption Chain -->
+      <div class="wide">
+        <figure class="diagram">
+          <svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+            <defs>
+              <marker id="a1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#9b2335"/></marker>
+              <marker id="a2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a5c8a"/></marker>
+            </defs>
+            <rect width="960" height="400" fill="#ffffff" rx="14"/>
+            <text x="480" y="32" fill="#1c1a18" font-size="15" font-weight="700" text-anchor="middle">THE BIAS ABSORPTION CHAIN — FROM SOCIETY TO VECTOR SPACE</text>
+
+            <!-- Step 1: Society -->
+            <rect x="30" y="60" width="150" height="240" rx="12" fill="#fff5f3" stroke="#9b2335" stroke-width="2"/>
+            <rect x="30" y="60" width="150" height="40" rx="12" fill="#9b2335"/>
+            <text x="105" y="86" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">SOCIETY</text>
+            <text x="105" y="120" fill="#333" font-size="11" text-anchor="middle">Historical inequity</text>
+            <text x="105" y="138" fill="#333" font-size="11" text-anchor="middle">Gender roles</text>
+            <text x="105" y="156" fill="#333" font-size="11" text-anchor="middle">Racial stereotypes</text>
+            <text x="105" y="174" fill="#333" font-size="11" text-anchor="middle">Class structures</text>
+            <text x="105" y="192" fill="#333" font-size="11" text-anchor="middle">Cultural norms</text>
+            <text x="105" y="210" fill="#333" font-size="11" text-anchor="middle">Power dynamics</text>
+            <text x="105" y="248" fill="#9b2335" font-size="10" text-anchor="middle" font-weight="700">SOURCE OF BIAS</text>
+
+            <!-- Arrow 1 -->
+            <line x1="182" y1="180" x2="218" y2="180" stroke="#9b2335" stroke-width="2" marker-end="url(#a1)"/>
+            <text x="200" y="173" fill="#9b2335" font-size="10" text-anchor="middle">encodes</text>
+
+            <!-- Step 2: Text -->
+            <rect x="220" y="60" width="150" height="240" rx="12" fill="#fff8f2" stroke="#7a4e00" stroke-width="2"/>
+            <rect x="220" y="60" width="150" height="40" rx="12" fill="#7a4e00"/>
+            <text x="295" y="86" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">TEXT CORPUS</text>
+            <text x="295" y="120" fill="#333" font-size="11" text-anchor="middle">Books, articles</text>
+            <text x="295" y="138" fill="#333" font-size="11" text-anchor="middle">Web pages</text>
+            <text x="295" y="156" fill="#333" font-size="11" text-anchor="middle">News archives</text>
+            <text x="295" y="174" fill="#333" font-size="11" text-anchor="middle">Social media</text>
+            <text x="295" y="192" fill="#333" font-size="11" text-anchor="middle">Academic papers</text>
+            <text x="295" y="210" fill="#333" font-size="11" text-anchor="middle">Forum discussions</text>
+            <text x="295" y="248" fill="#7a4e00" font-size="10" text-anchor="middle" font-weight="700">BIAS CARRIER</text>
+
+            <!-- Arrow 2 -->
+            <line x1="372" y1="180" x2="408" y2="180" stroke="#9b2335" stroke-width="2" marker-end="url(#a1)"/>
+            <text x="390" y="173" fill="#9b2335" font-size="10" text-anchor="middle">trains</text>
+
+            <!-- Step 3: Model -->
+            <rect x="410" y="60" width="150" height="240" rx="12" fill="#f4f8ff" stroke="#1a5c8a" stroke-width="2"/>
+            <rect x="410" y="60" width="150" height="40" rx="12" fill="#1a5c8a"/>
+            <text x="485" y="86" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">EMBEDDING MODEL</text>
+            <text x="485" y="120" fill="#333" font-size="11" text-anchor="middle">Contrastive loss</text>
+            <text x="485" y="138" fill="#333" font-size="11" text-anchor="middle">Learns co-occurrence</text>
+            <text x="485" y="156" fill="#333" font-size="11" text-anchor="middle">Encodes context</text>
+            <text x="485" y="174" fill="#333" font-size="11" text-anchor="middle">Compresses meaning</text>
+            <text x="485" y="192" fill="#333" font-size="11" text-anchor="middle">Projects to R^N</text>
+            <text x="485" y="210" fill="#333" font-size="11" text-anchor="middle">Optimizes similarity</text>
+            <text x="485" y="248" fill="#1a5c8a" font-size="10" text-anchor="middle" font-weight="700">BIAS AMPLIFIER</text>
+
+            <!-- Arrow 3 -->
+            <line x1="562" y1="180" x2="598" y2="180" stroke="#9b2335" stroke-width="2" marker-end="url(#a1)"/>
+            <text x="580" y="173" fill="#9b2335" font-size="10" text-anchor="middle">produces</text>
+
+            <!-- Step 4: Vector Space -->
+            <rect x="600" y="60" width="150" height="240" rx="12" fill="#f8f4ff" stroke="#5c2d7a" stroke-width="2"/>
+            <rect x="600" y="60" width="150" height="40" rx="12" fill="#5c2d7a"/>
+            <text x="675" y="86" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">VECTOR SPACE</text>
+            <text x="675" y="120" fill="#333" font-size="11" text-anchor="middle">Gender direction</text>
+            <text x="675" y="138" fill="#333" font-size="11" text-anchor="middle">Racial proximity clusters</text>
+            <text x="675" y="156" fill="#333" font-size="11" text-anchor="middle">Cultural centrality</text>
+            <text x="675" y="174" fill="#333" font-size="11" text-anchor="middle">Occupational skew</text>
+            <text x="675" y="192" fill="#333" font-size="11" text-anchor="middle">Geographic weighting</text>
+            <text x="675" y="210" fill="#333" font-size="11" text-anchor="middle">Sentiment asymmetry</text>
+            <text x="675" y="248" fill="#5c2d7a" font-size="10" text-anchor="middle" font-weight="700">BIAS ENCODED</text>
+
+            <!-- Arrow 4 -->
+            <line x1="752" y1="180" x2="788" y2="180" stroke="#9b2335" stroke-width="2" marker-end="url(#a1)"/>
+            <text x="770" y="173" fill="#9b2335" font-size="10" text-anchor="middle">shapes</text>
+
+            <!-- Step 5: Production -->
+            <rect x="790" y="60" width="140" height="240" rx="12" fill="#fff3f3" stroke="#9b2335" stroke-width="2.5"/>
+            <rect x="790" y="60" width="140" height="40" rx="12" fill="#9b2335"/>
+            <text x="860" y="86" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">PRODUCTION</text>
+            <text x="860" y="120" fill="#333" font-size="11" text-anchor="middle">Search results</text>
+            <text x="860" y="138" fill="#333" font-size="11" text-anchor="middle">Recommendation ranks</text>
+            <text x="860" y="156" fill="#333" font-size="11" text-anchor="middle">Document retrieval</text>
+            <text x="860" y="174" fill="#333" font-size="11" text-anchor="middle">RAG context selection</text>
+            <text x="860" y="192" fill="#333" font-size="11" text-anchor="middle">LLM grounding</text>
+            <text x="860" y="210" fill="#333" font-size="11" text-anchor="middle">Final user answers</text>
+            <text x="860" y="248" fill="#9b2335" font-size="10" text-anchor="middle" font-weight="700">⚠ BIAS EXPRESSED</text>
+
+            <!-- Bottom label -->
+            <rect x="30" y="330" width="900" height="44" rx="10" fill="#fff5f3" stroke="#9b2335" stroke-width="1.5"/>
+            <text x="480" y="349" fill="#9b2335" font-size="12" text-anchor="middle" font-weight="700">Each arrow is invisible in production — no error is thrown, no score is flagged.</text>
+            <text x="480" y="366" fill="#555" font-size="11" text-anchor="middle">The bias flows from society through corpus through model into search results without a single warning sign.</text>
+          </svg>
+          <figcaption>Fig. 1 — The bias absorption chain. Societal bias encodes itself into text, text trains the model, the model produces a biased vector space, and the vector space shapes every search result and LLM response in production.</figcaption>
+        </figure>
+      </div>
+
+      <div class="article">
+
+        <div class="div">· · ·</div>
+
+        <!--  03 -->
+        <section id="taxonomy">
+          <h2><span class="sec-num"> 03 — A Field Guide</span>Eight Categories of Embedding Bias</h2>
+
+          <p>Embedding bias is not a single phenomenon. It is a family of related distortions, each with a different origin, a different signature, and a different remediation strategy. Understanding the full taxonomy is essential because many production systems unknowingly contain multiple bias types simultaneously — and treating one without understanding the others leads to incomplete defenses.</p>
+
+          <h3>1. Gender Bias</h3>
+
+          <p>Gender bias is the most studied and most documented form of embedding bias. It manifests as a systematic displacement of occupational terms, personality traits, and social roles along a gender axis in the embedding space. The consequence is that semantic search returns different quality or relevance of results depending on whether the query or the documents carry gender-coded language.</p>
+
+          <p>In a hiring assistant, gender bias means that a query for "software engineer with strong communication skills" may retrieve resumes containing male-coded language ("assertive," "competitive," "built") more highly than equally qualified resumes containing female-coded language ("collaborative," "supportive," "coordinated") — not because the male-coded skills are more relevant, but because the embedding space has learned that software engineering and male-coded language are closer together.</p>
+
+          <h3>2. Racial and Ethnic Bias</h3>
+
+          <p>Racial bias in embeddings manifests in two primary ways. First, names that are statistically associated with specific racial or ethnic groups get embedded in positions that carry different sentiment valences — names associated with Black Americans, for instance, have been shown to be embedded closer to negative sentiment words than names associated with white Americans, mirroring documented racial bias in training text. Second, concepts and places associated with non-white cultures are represented with lower density and lower specificity in the vector space, meaning that queries about these topics return lower-quality and less precise results.</p>
+
+          <h3>3. Geographic and Language Bias</h3>
+
+          <p>Approximately 60 percent of the text on the internet is in English. Most major embedding models — including OpenAI's text-embedding models, Cohere's embed models, and the popular sentence-transformers family — are trained on corpora heavily weighted toward English-language content. The consequence is that the vector space is geometrically centered on English-language concepts, idioms, and cultural references.</p>
+
+          <p>When a non-English query is processed by such a model — even in multilingual versions — its embedding lands in a region of the vector space that is less populated, less precisely differentiated, and surrounded by neighbors that are more influenced by English-language statistical patterns than by the actual semantics of the query's language. A query in Hindi about a local topic retrieves documents with lower relevance than the same query in English about the same topic.</p>
+
+          <h3>4. Socioeconomic Bias</h3>
+
+          <p>Internet text is disproportionately written by and for people with access to technology, education, and leisure time to produce written content. Working-class occupations, rural experiences, and economically disadvantaged contexts are systematically underrepresented in training corpora. The embedding space therefore has lower semantic resolution in these regions — concepts and experiences are embedded more crudely, surrounded by fewer differentiated neighbors, producing less precise retrieval for queries from these domains.</p>
+
+          <h3>5. Age Bias</h3>
+
+          <p>Training corpora drawn from the contemporary internet overrepresent the concerns, language, and perspectives of younger adults who are heavy internet users. Concepts related to aging, elder care, retirement, and the experiences of older adults are embedded with lower fidelity. Additionally, historical text from earlier periods — which might be better at capturing the language and concerns of older generations — is often underrepresented or treated as stylistically distant from contemporary queries.</p>
+
+          <h3>6. Recency and Popularity Bias</h3>
+
+          <p>Events, concepts, and entities that have generated large volumes of text — either because they are recent and heavily covered or because they are disproportionately popular on the platforms used for training data — are embedded with greater precision and more clearly differentiated neighbors than equally real but less written-about topics. A question about a major historical event generates a precise embedding. A question about an equally significant but less documented event generates an embedding that is more diffuse and less well-anchored in the vector space.</p>
+
+          <h3>7. Cultural and Religious Bias</h3>
+
+          <p>Western secular culture dominates training corpora. Concepts, practices, holidays, foods, family structures, and value systems that are central to non-Western or non-secular worldviews are embedded with lower resolution and are often forced into proximity with their closest Western analogues rather than occupying distinct, precisely defined regions of the vector space. Eid is closer to Christmas in many embedding spaces than their actual semantic distance warrants, simply because the training corpus has far more text about Christmas than about Eid.</p>
+
+          <h3>8. Disability and Neurodiversity Bias</h3>
+
+          <p>Historical text about disability has been predominantly written from a medical model perspective and from the perspective of non-disabled observers rather than from the perspectives of disabled people themselves. Concepts related to disability, accessibility, and neurodiversity are therefore embedded in regions shaped by this framing — closer to concepts of limitation, illness, and deficit than to concepts of difference, accommodation, and strength. A medical information system using these embeddings will retrieve different quality information for queries from disabled users than the same system's retrieval behavior for queries about non-disabled populations.</p>
+
+        </section>
+
+      </div>
+
+      <!-- DIAGRAM 2: Gender Bias in Vector Space -->
+      <div class="wide">
+        <figure class="diagram">
+          <svg viewBox="0 0 960 440" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+            <defs>
+              <marker id="b1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#9b2335"/></marker>
+              <marker id="b2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a5c8a"/></marker>
+            </defs>
+            <rect width="960" height="440" fill="#ffffff" rx="14"/>
+            <text x="480" y="30" fill="#1c1a18" font-size="15" font-weight="700" text-anchor="middle">GENDER BIAS IN EMBEDDING SPACE — THE GENDER DIRECTION AXIS</text>
+
+            <!-- Axis -->
+            <line x1="80" y1="220" x2="880" y2="220" stroke="#d8d3c8" stroke-width="2"/>
+            <text x="80" y="245" fill="#1a5c8a" font-size="13" font-weight="700">← FEMALE END</text>
+            <text x="780" y="245" fill="#9b2335" font-size="13" font-weight="700">MALE END →</text>
+            <text x="480" y="260" fill="#999" font-size="11" text-anchor="middle">GENDER DIRECTION (learned linear axis in embedding space)</text>
+
+            <!-- Female zone -->
+            <ellipse cx="220" cy="150" rx="155" ry="75" fill="rgba(26,92,138,.07)" stroke="#1a5c8a" stroke-width="1.5" stroke-dasharray="6 4"/>
+            <text x="220" y="68" fill="#1a5c8a" font-size="12" font-weight="700" text-anchor="middle">FEMALE-DISPLACED CLUSTER</text>
+
+            <!-- Male zone -->
+            <ellipse cx="740" cy="150" rx="155" ry="75" fill="rgba(155,35,53,.07)" stroke="#9b2335" stroke-width="1.5" stroke-dasharray="6 4"/>
+            <text x="740" y="68" fill="#9b2335" font-size="12" font-weight="700" text-anchor="middle">MALE-DISPLACED CLUSTER</text>
+
+            <!-- Neutral zone label -->
+            <ellipse cx="480" cy="150" rx="95" ry="55" fill="rgba(26,110,78,.06)" stroke="#1a6e4e" stroke-width="1.5" stroke-dasharray="5 4"/>
+            <text x="480" y="108" fill="#1a6e4e" font-size="11" font-weight="700" text-anchor="middle">NEUTRAL IDEAL</text>
+
+            <!-- Female points -->
+            <circle cx="130" cy="145" r="8" fill="#1a5c8a"/>
+            <text x="130" y="128" fill="#1a5c8a" font-size="12" text-anchor="middle">nurse</text>
+            <circle cx="185" cy="165" r="8" fill="#1a5c8a"/>
+            <text x="185" y="148" fill="#1a5c8a" font-size="12" text-anchor="middle">receptionist</text>
+            <circle cx="240" cy="135" r="8" fill="#1a5c8a"/>
+            <text x="240" y="118" fill="#1a5c8a" font-size="12" text-anchor="middle">librarian</text>
+            <circle cx="295" cy="160" r="8" fill="#1a5c8a"/>
+            <text x="295" y="143" fill="#1a5c8a" font-size="12" text-anchor="middle">teacher</text>
+            <circle cx="160" cy="190" r="7" fill="#4a8cbf" opacity=".7"/>
+            <text x="160" y="208" fill="#4a8cbf" font-size="11" text-anchor="middle">caregiver</text>
+
+            <!-- Neutral/ideal points -->
+            <circle cx="445" cy="148" r="8" fill="#1a6e4e"/>
+            <text x="445" y="131" fill="#1a6e4e" font-size="12" text-anchor="middle">doctor</text>
+            <circle cx="510" cy="158" r="8" fill="#1a6e4e"/>
+            <text x="510" y="141" fill="#1a6e4e" font-size="12" text-anchor="middle">engineer</text>
+            <text x="480" y="185" fill="#1a6e4e" font-size="10" text-anchor="middle">(where they SHOULD be)</text>
+
+            <!-- Male points -->
+            <circle cx="630" cy="140" r="8" fill="#9b2335"/>
+            <text x="630" y="123" fill="#9b2335" font-size="12" text-anchor="middle">programmer</text>
+            <circle cx="695" cy="165" r="8" fill="#9b2335"/>
+            <text x="695" y="148" fill="#9b2335" font-size="12" text-anchor="middle">scientist</text>
+            <circle cx="760" cy="135" r="8" fill="#9b2335"/>
+            <text x="760" y="118" fill="#9b2335" font-size="12" text-anchor="middle">CEO</text>
+            <circle cx="820" cy="155" r="8" fill="#9b2335"/>
+            <text x="820" y="138" fill="#9b2335" font-size="12" text-anchor="middle">architect</text>
+            <circle cx="680" cy="195" r="7" fill="#c04a5a" opacity=".7"/>
+            <text x="680" y="213" fill="#c04a5a" font-size="11" text-anchor="middle">surgeon</text>
+
+            <!-- Arrows showing displacement from neutral -->
+            <line x1="445" y1="148" x2="280" y2="148" stroke="#9b2335" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#b1)"/>
+            <text x="365" y="138" fill="#9b2335" font-size="10" text-anchor="middle">displaced →</text>
+            <line x1="510" y1="155" x2="645" y2="155" stroke="#9b2335" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#b1)"/>
+            <text x="578" y="145" fill="#9b2335" font-size="10" text-anchor="middle">displaced →</text>
+
+            <!-- Real-world % labels at bottom -->
+            <rect x="80" y="290" width="360" height="110" rx="10" fill="#f4f8ff" stroke="#1a5c8a" stroke-width="1.5"/>
+            <text x="260" y="314" fill="#1a5c8a" font-size="12" text-anchor="middle" font-weight="700">REAL-WORLD WORKFORCE DATA</text>
+            <text x="260" y="338" fill="#333" font-size="11" text-anchor="middle">Nurses: 87% female   →   model: nurse ≈ female ✓</text>
+            <text x="260" y="358" fill="#333" font-size="11" text-anchor="middle">Doctors: 40% female  →   model: doctor ≈ male ✗</text>
+            <text x="260" y="378" fill="#333" font-size="11" text-anchor="middle">Engineers: 16% female →  model: engineer ≈ male (amplified)</text>
+            <text x="260" y="396" fill="#9b2335" font-size="10" text-anchor="middle">Model reflects AND amplifies historical underrepresentation</text>
+
+            <rect x="520" y="290" width="360" height="110" rx="10" fill="#fff5f3" stroke="#9b2335" stroke-width="1.5"/>
+            <text x="700" y="314" fill="#9b2335" font-size="12" text-anchor="middle" font-weight="700">PRODUCTION IMPACT</text>
+            <text x="700" y="338" fill="#333" font-size="11" text-anchor="middle">Resume search: male-coded names rank higher</text>
+            <text x="700" y="358" fill="#333" font-size="11" text-anchor="middle">Medical RAG: doctor context skews male</text>
+            <text x="700" y="378" fill="#333" font-size="11" text-anchor="middle">Job descriptions: amplify gender-coded language</text>
+            <text x="700" y="396" fill="#9b2335" font-size="10" text-anchor="middle">No error raised. Bias expressed silently at scale.</text>
+          </svg>
+          <figcaption>Fig. 2 — Gender bias in embedding space. Occupational terms like "doctor" and "engineer" are displaced toward the male end of the gender axis despite workforce reality. The model reflects historical underrepresentation and amplifies it in every downstream search result.</figcaption>
+        </figure>
+      </div>
+
+      <div class="article">
+
+        <div class="div">· · ·</div>
+
+        <!--  04 -->
+        <section id="how-bias-enters">
+          <h2><span class="sec-num"> 04 — The Data Pipeline</span>Exactly How Bias Enters the Training Process</h2>
+
+          <p>Understanding the bias taxonomy tells you what distortions exist. Understanding how they enter the training process tells you where in the pipeline you can intervene. There are five distinct injection points where bias enters or amplifies itself on the way from raw data to deployed embedding model.</p>
+
+          <h3>Injection Point 1: Corpus Selection</h3>
+
+          <p>The most fundamental source of bias is the corpus selection decision. When a team at an AI lab decides to train on CommonCrawl, Wikipedia, Books3, and a selection of curated web text, they are making a set of implicit choices about whose language, whose knowledge, and whose perspective constitutes valid training data. CommonCrawl overrepresents popular English-language websites. Wikipedia overrepresents topics that have active editing communities — predominantly young, male, Western contributors. Books3 overrepresents commercially published fiction and nonfiction, which overrepresents the perspectives of those who have historically had access to publishing.</p>
+
+          <p>These choices compound: more text about a topic produces more precise embeddings for that topic. Less text produces coarser embeddings. The corpus selection decision is, in effect, a decision about which parts of human experience will be represented with high fidelity in the resulting model — and which will be sketched in rough, imprecise strokes.</p>
+
+          <h3>Injection Point 2: Preprocessing and Filtering</h3>
+
+          <p>Training pipelines apply filters to remove low-quality, toxic, or irrelevant content. These filters introduce bias in ways that are often invisible. Toxicity filters trained on English-language examples may flag African American Vernacular English (AAVE) at disproportionately high rates, treating grammatically correct but stylistically different language as lower quality. Language identification filters may incorrectly label code-switched text — which mixes two languages in a single sentence — as noise and remove it, erasing an authentic and rich form of multilingual expression.</p>
+
+          <p>Deduplication algorithms, which are necessary to prevent the model from memorizing repeated content, may disproportionately remove text from smaller communities that discuss similar topics using similar language, while preserving the greater variety of text from larger communities about those same topics. The net effect is that minority perspectives are deduplicated away while majority perspectives survive.</p>
+
+          <h3>Injection Point 3: The Contrastive Learning Objective</h3>
+
+          <p>Modern embedding models are trained with a contrastive objective: similar items should be close; dissimilar items should be far apart. The definition of "similar" and "dissimilar" in the training data directly shapes what gets encoded as semantic proximity. If the training pairs used for contrastive learning are drawn from human-annotated data — which is almost always the case for high-quality models — then the annotators' own biases and assumptions about similarity become baked into the objective function.</p>
+
+          <p>Additionally, contrastive training tends to amplify statistical regularities in the data. An association that appears with 60 percent frequency in the training corpus becomes, through repeated gradient descent optimization, encoded as a strong geometric proximity. The model does not just learn that doctors and male pronouns co-occur; it learns to make that co-occurrence a primary feature of the "doctor" vector's position in space.</p>
+
+          <h3>Injection Point 4: Fine-tuning Domain Data</h3>
+
+          <p>When a general-purpose embedding model is fine-tuned for a specific domain — medical, legal, financial, customer service — the fine-tuning data introduces its own layer of bias. Medical fine-tuning data drawn from clinical notes inherits the well-documented biases of the medical system: underdiagnosis of pain in women, differential treatment by race, geographic disparities in care. Legal fine-tuning data reflects the biases of who has historically had access to legal services. These domain-specific biases can actually override or complicate the general biases from pretraining in ways that are difficult to predict without systematic testing.</p>
+
+          <h3>Injection Point 5: Evaluation and Selection Pressure</h3>
+
+          <p>The final injection point is the most meta: the benchmarks and evaluation datasets used to select and release embedding models are themselves biased. MTEB (Massive Text Embedding Benchmark) — the most widely used evaluation suite for embedding models — is heavily weighted toward English-language tasks, information retrieval scenarios from Western domains, and query styles that reflect the language patterns of highly educated users. A model that scores exceptionally on MTEB may perform worse on multilingual, cross-cultural, or colloquial-language tasks than its benchmark scores suggest. The selection pressure from benchmark performance propagates the biases of the benchmark into the deployed population of embedding models.</p>
+
+        </section>
+
+      </div>
+
+      <!-- DIAGRAM 3: Bias Injection Points -->
+      <div class="wide">
+        <figure class="diagram">
+          <svg viewBox="0 0 960 360" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+            <rect width="960" height="360" fill="#ffffff" rx="14"/>
+            <text x="480" y="30" fill="#1c1a18" font-size="15" font-weight="700" text-anchor="middle">FIVE BIAS INJECTION POINTS IN THE TRAINING PIPELINE</text>
+
+            <!-- Pipeline bar -->
+            <rect x="60" y="130" width="840" height="50" rx="8" fill="#f0f0ee" stroke="#d8d3c8" stroke-width="1.5"/>
+            <text x="480" y="161" fill="#888" font-size="12" text-anchor="middle">TRAINING PIPELINE →</text>
+
+            <!-- Stage blocks -->
+            <rect x="70" y="120" width="130" height="70" rx="8" fill="#fff5f3" stroke="#9b2335" stroke-width="2"/>
+            <text x="135" y="143" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">① CORPUS</text>
+            <text x="135" y="159" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">SELECTION</text>
+            <text x="135" y="178" fill="#666" font-size="10" text-anchor="middle">Who is included?</text>
+
+            <rect x="220" y="120" width="130" height="70" rx="8" fill="#fff8f0" stroke="#7a4e00" stroke-width="2"/>
+            <text x="285" y="143" fill="#7a4e00" font-size="11" text-anchor="middle" font-weight="700">② PREPROCESS</text>
+            <text x="285" y="159" fill="#7a4e00" font-size="11" text-anchor="middle" font-weight="700">&amp; FILTER</text>
+            <text x="285" y="178" fill="#666" font-size="10" text-anchor="middle">What is removed?</text>
+
+            <rect x="370" y="120" width="130" height="70" rx="8" fill="#f4f8ff" stroke="#1a5c8a" stroke-width="2"/>
+            <text x="435" y="143" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">③ CONTRASTIVE</text>
+            <text x="435" y="159" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">OBJECTIVE</text>
+            <text x="435" y="178" fill="#666" font-size="10" text-anchor="middle">What is "similar"?</text>
+
+            <rect x="520" y="120" width="130" height="70" rx="8" fill="#f0fff4" stroke="#1a6e4e" stroke-width="2"/>
+            <text x="585" y="143" fill="#1a6e4e" font-size="11" text-anchor="middle" font-weight="700">④ DOMAIN</text>
+            <text x="585" y="159" fill="#1a6e4e" font-size="11" text-anchor="middle" font-weight="700">FINE-TUNE</text>
+            <text x="585" y="178" fill="#666" font-size="10" text-anchor="middle">Whose domain data?</text>
+
+            <rect x="670" y="120" width="130" height="70" rx="8" fill="#f8f4ff" stroke="#5c2d7a" stroke-width="2"/>
+            <text x="735" y="143" fill="#5c2d7a" font-size="11" text-anchor="middle" font-weight="700">⑤ EVAL &amp;</text>
+            <text x="735" y="159" fill="#5c2d7a" font-size="11" text-anchor="middle" font-weight="700">SELECTION</text>
+            <text x="735" y="178" fill="#666" font-size="10" text-anchor="middle">Which benchmark?</text>
+
+            <!-- Bias droplets below each -->
+            <text x="135" y="230" fill="#9b2335" font-size="11" text-anchor="middle">60% English</text>
+            <text x="135" y="248" fill="#9b2335" font-size="11" text-anchor="middle">Western web</text>
+            <text x="135" y="266" fill="#9b2335" font-size="11" text-anchor="middle">dominant voices</text>
+
+            <text x="285" y="230" fill="#7a4e00" font-size="11" text-anchor="middle">AAVE flagged</text>
+            <text x="285" y="248" fill="#7a4e00" font-size="11" text-anchor="middle">code-switch lost</text>
+            <text x="285" y="266" fill="#7a4e00" font-size="11" text-anchor="middle">minority deduped</text>
+
+            <text x="435" y="230" fill="#1a5c8a" font-size="11" text-anchor="middle">annotator bias</text>
+            <text x="435" y="248" fill="#1a5c8a" font-size="11" text-anchor="middle">amplifies 60%</text>
+            <text x="435" y="266" fill="#1a5c8a" font-size="11" text-anchor="middle">→ strong bias</text>
+
+            <text x="585" y="230" fill="#1a6e4e" font-size="11" text-anchor="middle">clinical bias</text>
+            <text x="585" y="248" fill="#1a6e4e" font-size="11" text-anchor="middle">legal access bias</text>
+            <text x="585" y="266" fill="#1a6e4e" font-size="11" text-anchor="middle">overrides pretrain</text>
+
+            <text x="735" y="230" fill="#5c2d7a" font-size="11" text-anchor="middle">MTEB English</text>
+            <text x="735" y="248" fill="#5c2d7a" font-size="11" text-anchor="middle">WesternIR tasks</text>
+            <text x="735" y="266" fill="#5c2d7a" font-size="11" text-anchor="middle">selects for bias</text>
+
+            <!-- Lines down -->
+            <line x1="135" y1="192" x2="135" y2="220" stroke="#9b2335" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <line x1="285" y1="192" x2="285" y2="220" stroke="#7a4e00" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <line x1="435" y1="192" x2="435" y2="220" stroke="#1a5c8a" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <line x1="585" y1="192" x2="585" y2="220" stroke="#1a6e4e" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <line x1="735" y1="192" x2="735" y2="220" stroke="#5c2d7a" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+            <!-- Arrow across bottom -->
+            <line x1="60" y1="310" x2="870" y2="310" stroke="#9b2335" stroke-width="2"/>
+            <text x="465" y="335" fill="#9b2335" font-size="12" text-anchor="middle" font-weight="700">BIAS COMPOUNDS AT EVERY STAGE — EACH STEP AMPLIFIES THE LAST</text>
+          </svg>
+          <figcaption>Fig. 3 — Five bias injection points in the training pipeline. Bias does not arrive at one stage — it accumulates and amplifies across all five, arriving in the deployed model as a multi-layered distortion.</figcaption>
+        </figure>
+      </div>
+
+      <div class="article">
+
+        <div class="div">· · ·</div>
+
+        <!--  05 -->
+        <section id="measuring-bias">
+          <h2><span class="sec-num"> 05 — The Measurement Problem</span>How to Detect Bias in Your Own Embeddings</h2>
+
+          <p>The challenge of measuring embedding bias is that you cannot simply look at a vector and see whether it is biased. Bias is a relational property — it exists in the distances and directions between vectors, not in any single vector's values. Detection requires deliberate, structured evaluation using probes, benchmarks, and your own domain-specific test cases.</p>
+
+          <h3>The Word Embedding Association Test (WEAT)</h3>
+
+          <p>The WEAT, introduced by Caliskan et al. (2017), is the most widely used formal test for gender and racial bias in embedding models. It measures the relative association between two target sets of concepts and two attribute sets of concepts. For gender bias detection, the target sets might be <em>male names</em> and <em>female names</em>, and the attribute sets might be <em>career words</em> (salary, executive, professional) and <em>family words</em> (home, children, family). A biased model will show stronger cosine similarity between male names and career words, and between female names and family words.</p>
+
+          <p>The WEAT score ranges from strongly negative (attribute B more associated with target B) through zero (no association) to strongly positive (attribute A more associated with target A). A score of zero indicates no bias along that dimension. In practice, well-known embedding models score between 0.8 and 1.6 on gender WEAT tests — indicating substantial, consistent bias.</p>
+
+          <pre>
+<span class="cm"># Word Embedding Association Test (WEAT) implementation</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> itertools <span class="kw">import</span> combinations
+
+<span class="kw">def</span> <span class="fn">cosine_sim</span>(a: np.ndarray, b: np.ndarray) -> float:
+    <span class="kw">return</span> np.<span class="fn">dot</span>(a, b) / (np.<span class="fn">linalg.norm</span>(a) * np.<span class="fn">linalg.norm</span>(b))
+
+<span class="kw">def</span> <span class="fn">weat_association</span>(w_vec, A_vecs, B_vecs) -> float:
+    <span class="cm"># Mean cosine sim of word w with each attribute set</span>
+    sim_A = np.<span class="fn">mean</span>([<span class="fn">cosine_sim</span>(w_vec, a) <span class="kw">for</span> a <span class="kw">in</span> A_vecs])
+    sim_B = np.<span class="fn">mean</span>([<span class="fn">cosine_sim</span>(w_vec, b) <span class="kw">for</span> b <span class="kw">in</span> B_vecs])
+    <span class="kw">return</span> sim_A - sim_B
+
+<span class="kw">def</span> <span class="fn">weat_score</span>(X_vecs, Y_vecs, A_vecs, B_vecs) -> float:
+    <span class="cm"># Differential association: target X vs Y over attributes A vs B</span>
+    s_X = [<span class="fn">weat_association</span>(x, A_vecs, B_vecs) <span class="kw">for</span> x <span class="kw">in</span> X_vecs]
+    s_Y = [<span class="fn">weat_association</span>(y, A_vecs, B_vecs) <span class="kw">for</span> y <span class="kw">in</span> Y_vecs]
+    numerator = np.<span class="fn">sum</span>(s_X) - np.<span class="fn">sum</span>(s_Y)
+    std_dev   = np.<span class="fn">std</span>(s_X + s_Y)
+    <span class="kw">return</span> numerator / std_dev   <span class="cm"># effect size; 0 = no bias</span>
+
+<span class="cm"># Example: gender-career bias test</span>
+career_words = [<span class="st">"salary"</span>, <span class="st">"executive"</span>, <span class="st">"career"</span>, <span class="st">"professional"</span>]
+family_words = [<span class="st">"home"</span>,   <span class="st">"family"</span>,    <span class="st">"children"</span>, <span class="st">"domestic"</span>]
+male_names   = [<span class="st">"John"</span>,  <span class="st">"Paul"</span>,    <span class="st">"Mike"</span>,   <span class="st">"Kevin"</span>]
+female_names = [<span class="st">"Mary"</span>,  <span class="st">"Lisa"</span>,    <span class="st">"Sarah"</span>,  <span class="st">"Diana"</span>]
+
+score = <span class="fn">weat_score</span>(
+    X_vecs = [embedder.<span class="fn">encode</span>(n) <span class="kw">for</span> n <span class="kw">in</span> male_names],
+    Y_vecs = [embedder.<span class="fn">encode</span>(n) <span class="kw">for</span> n <span class="kw">in</span> female_names],
+    A_vecs = [embedder.<span class="fn">encode</span>(w) <span class="kw">for</span> w <span class="kw">in</span> career_words],
+    B_vecs = [embedder.<span class="fn">encode</span>(w) <span class="kw">for</span> w <span class="kw">in</span> family_words]
+)
+<span class="cm"># score > 0 → male names more associated with career</span>
+<span class="cm"># score ≈ 0 → no gender-career bias detected</span>
+print(<span class="st">f"Gender-career WEAT score: {score:.3f}"</span>)
+          </pre>
+
+          <h3>Demographic Parity in Retrieval Results</h3>
+
+          <p>Beyond WEAT, a production-focused bias test measures whether your retrieval system returns demographically balanced results for queries that should not have demographic answers. If a search for "a talented software engineer" consistently returns documents or profiles with male-coded names in higher positions than equally qualified female-coded profiles, your retrieval system is expressing gender bias through embedding geometry rather than explicit filtering.</p>
+
+          <pre>
+<span class="cm"># Demographic parity test for retrieval</span>
+<span class="kw">from</span> collections <span class="kw">import</span> defaultdict
+
+MALE_NAMES   = {<span class="st">"james"</span>, <span class="st">"john"</span>, <span class="st">"robert"</span>, <span class="st">"michael"</span>, <span class="st">"david"</span>}
+FEMALE_NAMES = {<span class="st">"mary"</span>,  <span class="st">"jennifer"</span>, <span class="st">"linda"</span>, <span class="st">"barbara"</span>, <span class="st">"susan"</span>}
+
+<span class="kw">def</span> <span class="fn">detect_name_gender</span>(text: str) -> str:
+    words = text.lower().<span class="fn">split</span>()
+    <span class="kw">if</span> any(w <span class="kw">in</span> MALE_NAMES   <span class="kw">for</span> w <span class="kw">in</span> words): <span class="kw">return</span> <span class="st">"male"</span>
+    <span class="kw">if</span> any(w <span class="kw">in</span> FEMALE_NAMES <span class="kw">for</span> w <span class="kw">in</span> words): <span class="kw">return</span> <span class="st">"female"</span>
+    <span class="kw">return</span> <span class="st">"neutral"</span>
+
+<span class="kw">def</span> <span class="fn">retrieval_parity_score</span>(
+    query: str, results: list[dict], top_k: int = <span class="nm">10</span>
+) -> dict:
+    gender_positions = defaultdict(list)
+    <span class="kw">for</span> rank, doc <span class="kw">in</span> enumerate(results[:top_k]):
+        gender = <span class="fn">detect_name_gender</span>(doc[<span class="st">"text"</span>])
+        gender_positions[gender].<span class="fn">append</span>(rank + <span class="nm">1</span>)   <span class="cm"># 1-indexed rank</span>
+
+    <span class="kw">def</span> <span class="fn">mean_rank</span>(g):
+        ranks = gender_positions[g]
+        <span class="kw">return</span> np.<span class="fn">mean</span>(ranks) <span class="kw">if</span> ranks <span class="kw">else</span> top_k + <span class="nm">1</span>
+
+    male_mean   = <span class="fn">mean_rank</span>(<span class="st">"male"</span>)
+    female_mean = <span class="fn">mean_rank</span>(<span class="st">"female"</span>)
+    parity_gap  = female_mean - male_mean  <span class="cm"># >0 means male ranked higher</span>
+
+    <span class="kw">return</span> {
+        <span class="st">"male_mean_rank"</span>:   round(male_mean, <span class="nm">2</span>),
+        <span class="st">"female_mean_rank"</span>: round(female_mean, <span class="nm">2</span>),
+        <span class="st">"parity_gap"</span>:       round(parity_gap, <span class="nm">2</span>),
+        <span class="st">"biased"</span>: abs(parity_gap) > <span class="nm">1.5</span>   <span class="cm"># threshold: configurable</span>
+    }
+          </pre>
+
+          <h3>Semantic Differential Testing</h3>
+
+          <p>A third measurement technique is semantic differential testing — probing the embedding space with matched pairs of semantically equivalent queries that differ only in demographic framing. If the cosine similarity between "a Black teenager in a park" and "suspicious behavior" is higher than the cosine similarity between "a white teenager in a park" and "suspicious behavior," the embedding model is encoding racial bias in its representation of these scenarios.</p>
+
+          <pre>
+<span class="cm"># Semantic differential bias probe</span>
+<span class="kw">def</span> <span class="fn">semantic_differential_test</span>(
+    template: str,
+    group_a_fills: list[str],
+    group_b_fills: list[str],
+    target_phrase: str,
+    embedder
+) -> dict:
+    <span class="cm">"""
+    template: "a {fill} person applying for a job"
+    group_a_fills: ["Black", "Hispanic", "Asian"]
+    group_b_fills: ["white", "Caucasian"]
+    target_phrase: "qualified candidate"
+    """</span>
+    target_vec = embedder.<span class="fn">encode</span>(target_phrase)
+
+    <span class="kw">def</span> <span class="fn">mean_sim</span>(fills):
+        sims = [
+            <span class="fn">cosine_sim</span>(embedder.<span class="fn">encode</span>(template.<span class="fn">format</span>(fill=f)), target_vec)
+            <span class="kw">for</span> f <span class="kw">in</span> fills
+        ]
+        <span class="kw">return</span> np.<span class="fn">mean</span>(sims), sims
+
+    mean_a, sims_a = <span class="fn">mean_sim</span>(group_a_fills)
+    mean_b, sims_b = <span class="fn">mean_sim</span>(group_b_fills)
+
+    <span class="kw">return</span> {
+        <span class="st">"group_a_mean_sim"</span>: round(mean_a, <span class="nm">4</span>),
+        <span class="st">"group_b_mean_sim"</span>: round(mean_b, <span class="nm">4</span>),
+        <span class="st">"differential"</span>:     round(mean_b - mean_a, <span class="nm">4</span>),
+        <span class="st">"sims_a"</span>: sims_a,
+        <span class="st">"sims_b"</span>: sims_b
+    }
+          </pre>
+
+        </section>
+
+      </div>
+
+      <!-- DIAGRAM 4: Bias Measurement Dashboard -->
+      <div class="wide">
+        <figure class="diagram">
+          <svg viewBox="0 0 960 380" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+            <rect width="960" height="380" fill="#ffffff" rx="14"/>
+            <text x="480" y="30" fill="#1c1a18" font-size="15" font-weight="700" text-anchor="middle">EMBEDDING BIAS MEASUREMENT DASHBOARD — REAL SCORES FROM PUBLISHED RESEARCH</text>
+
+            <!-- WEAT scores bar chart -->
+            <text x="190" y="64" fill="#1c1a18" font-size="13" font-weight="700" text-anchor="middle">WEAT SCORES BY BIAS TYPE</text>
+            <text x="190" y="80" fill="#888" font-size="11" text-anchor="middle">(0.0 = unbiased · &gt;0.5 = concerning · &gt;1.0 = severe)</text>
+
+            <!-- Axis -->
+            <line x1="60" y1="100" x2="60" y2="310" stroke="#d8d3c8" stroke-width="1.5"/>
+            <line x1="60" y1="310" x2="360" y2="310" stroke="#d8d3c8" stroke-width="1.5"/>
+            <text x="60" y="325" fill="#888" font-size="10" text-anchor="middle">0</text>
+            <text x="160" y="325" fill="#888" font-size="10" text-anchor="middle">0.5</text>
+            <text x="260" y="325" fill="#888" font-size="10" text-anchor="middle">1.0</text>
+            <text x="360" y="325" fill="#888" font-size="10" text-anchor="middle">1.5</text>
+
+            <!-- Threshold line at 1.0 -->
+            <line x1="260" y1="100" x2="260" y2="310" stroke="#9b2335" stroke-width="1" stroke-dasharray="5 3" opacity=".5"/>
+
+            <!-- Bars -->
+            <rect x="62" y="115" width="250" height="28" rx="5" fill="#9b2335" opacity=".85"/>
+            <text x="72" y="135" fill="#fff" font-size="11" font-weight="700">Gender–Career (1.25)</text>
+
+            <rect x="62" y="153" width="220" height="28" rx="5" fill="#9b2335" opacity=".7"/>
+            <text x="72" y="173" fill="#fff" font-size="11" font-weight="700">Race–Sentiment (1.10)</text>
+
+            <rect x="62" y="191" width="180" height="28" rx="5" fill="#7a4e00" opacity=".8"/>
+            <text x="72" y="211" fill="#fff" font-size="11" font-weight="700">Gender–Science (0.90)</text>
+
+            <rect x="62" y="229" width="140" height="28" rx="5" fill="#7a4e00" opacity=".7"/>
+            <text x="72" y="249" fill="#fff" font-size="11" font-weight="700">Age–Positivity (0.70)</text>
+
+            <rect x="62" y="267" width="90" height="28" rx="5" fill="#1a5c8a" opacity=".7"/>
+            <text x="72" y="287" fill="#fff" font-size="11" font-weight="700">Disability (0.45)</text>
+
+            <!-- Retrieval parity gap chart -->
+            <text x="630" y="64" fill="#1c1a18" font-size="13" font-weight="700" text-anchor="middle">RETRIEVAL PARITY GAP — "FIND A SKILLED ENGINEER"</text>
+            <text x="630" y="80" fill="#888" font-size="11" text-anchor="middle">(mean rank of male-coded vs female-coded profiles in top-10)</text>
+
+            <!-- Dotplot style -->
+            <line x1="480" y1="200" x2="780" y2="200" stroke="#d8d3c8" stroke-width="2"/>
+            <text x="480" y="220" fill="#888" font-size="10" text-anchor="middle">Rank 1</text>
+            <text x="630" y="220" fill="#888" font-size="10" text-anchor="middle">Rank 5 (ideal parity)</text>
+            <text x="780" y="220" fill="#888" font-size="10" text-anchor="middle">Rank 10</text>
+            <line x1="630" y1="188" x2="630" y2="212" stroke="#1a6e4e" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+            <!-- Male dot -->
+            <circle cx="520" cy="160" r="18" fill="#9b2335" opacity=".9"/>
+            <text x="520" y="155" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">Male</text>
+            <text x="520" y="170" fill="#fff" font-size="11" text-anchor="middle">2.3</text>
+            <line x1="520" y1="178" x2="520" y2="200" stroke="#9b2335" stroke-width="2"/>
+
+            <!-- Female dot -->
+            <circle cx="700" cy="160" r="18" fill="#1a5c8a" opacity=".9"/>
+            <text x="700" y="155" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">Female</text>
+            <text x="700" y="170" fill="#fff" font-size="11" text-anchor="middle">7.1</text>
+            <line x1="700" y1="178" x2="700" y2="200" stroke="#1a5c8a" stroke-width="2"/>
+
+            <!-- Gap arrow -->
+            <line x1="540" y1="160" x2="680" y2="160" stroke="#9b2335" stroke-width="2"/>
+            <text x="610" y="148" fill="#9b2335" font-size="12" text-anchor="middle" font-weight="700">Gap = 4.8 ranks</text>
+
+            <!-- Explanation -->
+            <rect x="478" y="250" width="300" height="60" rx="8" fill="#fff5f3" stroke="#9b2335" stroke-width="1.5"/>
+            <text x="628" y="270" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">In a top-10 search, male-coded profiles</text>
+            <text x="628" y="287" fill="#555" font-size="11" text-anchor="middle">appear 4.8 positions higher on average</text>
+            <text x="628" y="304" fill="#555" font-size="11" text-anchor="middle">despite equivalent qualifications.</text>
+          </svg>
+          <figcaption>Fig. 4 — Embedding bias measurement dashboard. WEAT scores above 1.0 indicate severe bias. The retrieval parity gap shows that gender bias translates directly into search ranking disparities — male-coded profiles rank 4.8 positions higher on average for gender-neutral queries.</figcaption>
+        </figure>
+      </div>
+
+      <div class="article">
+
+        <div class="div">· · ·</div>
+
+        <!--  06 -->
+        <section id="production-impact">
+          <h2><span class="sec-num"> 06 — The Production Cascade</span>How Embedding Bias Shapes Real Outcomes</h2>
+
+          <p>Embedding bias does not remain confined to the geometric structure of the vector space. It cascades into every downstream system that uses those vectors — retrieval rankings, recommendation systems, RAG context selection, and ultimately the LLM responses that users see. Understanding this cascade is essential for appreciating both the urgency of the problem and the scope of what a fix must accomplish.</p>
+
+          <h3>The Retrieval Ranking Effect</h3>
+
+          <p>In semantic search, the ranking of results is determined by cosine similarity between the query vector and each document vector. If the query is "talented surgeon" and the embedding space has displaced "surgeon" toward the male end of the gender axis, then documents about male surgeons will have a slightly higher cosine similarity with the query vector than identical documents about female surgeons — even if the word "surgeon" appears identically in both documents. The difference might be 0.03 in cosine distance. That is enough to move a result from position 3 to position 7 in a ranked list. Multiplied across thousands of queries, this creates a systematic pattern: female surgeons are consistently retrieved lower, and over time, the perception that surgeons are male is reinforced.</p>
+
+          <h3>The RAG Context Contamination Effect</h3>
+
+          <p>In a RAG pipeline, the documents retrieved by the embedding system become the context that the LLM uses to generate its response. If the retrieved documents are biased — if they systematically represent one demographic perspective more than others — then the LLM's response will reflect and potentially amplify that perspective. This is not hallucination. The model is faithfully grounding its response in retrieved context. The problem is that the retrieval system has silently selected biased context.</p>
+
+          <p>A medical RAG assistant asked "what is the standard of care for a patient reporting chest pain?" will retrieve different sets of documents depending on whether the patient's demographic information is included in the query and what statistical associations the embedding model has learned between those demographics and clinical documentation patterns. Studies have shown that embedding models trained on clinical notes systematically associate pain underreporting with female patients and certain racial groups — a direct reflection of documented disparities in clinical practice — and these associations shape which clinical documents are retrieved as most relevant to a given patient presentation.</p>
+
+          <h3>The Feedback Loop Effect</h3>
+
+          <p>The most insidious production effect of embedding bias is the feedback loop it creates over time. If a hiring tool consistently surfaces male-coded candidates higher in search results, the humans reviewing those results will click on, advance, and ultimately hire male-coded candidates at higher rates. Those hiring decisions generate new data — new job postings, new internal documents, new success stories — that emphasize male-coded candidates. If that new data is used to fine-tune or update the embedding model, the bias is reinforced in the next model version. The system becomes more biased over time, not less, without any explicit decision to make it so.</p>
+
+          <div class="pq">
+            <p>"Every biased retrieval result is a data point that teaches the next version of the system that the bias is correct. Left unmanaged, embedding bias does not decay. It compounds."</p>
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- DIAGRAM 5: The Feedback Loop -->
+      <div class="wide">
+        <figure class="diagram">
+          <svg viewBox="0 0 960 380" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+            <defs>
+              <marker id="fl" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#9b2335"/></marker>
+            </defs>
+            <rect width="960" height="380" fill="#ffffff" rx="14"/>
+            <text x="480" y="30" fill="#1c1a18" font-size="15" font-weight="700" text-anchor="middle">THE BIAS FEEDBACK LOOP — HOW EMBEDDING BIAS COMPOUNDS OVER TIME</text>
+
+            <!-- Circular layout -->
+            <!-- Node 1: Biased Model -->
+            <ellipse cx="480" cy="175" rx="78" ry="45" fill="#fff5f3" stroke="#9b2335" stroke-width="2.5"/>
+            <text x="480" y="170" fill="#9b2335" font-size="12" text-anchor="middle" font-weight="700">BIASED</text>
+            <text x="480" y="188" fill="#9b2335" font-size="12" text-anchor="middle" font-weight="700">EMBEDDING</text>
+
+            <!-- Node 2: Search Results -->
+            <ellipse cx="760" cy="110" rx="90" ry="42" fill="#fff8f0" stroke="#7a4e00" stroke-width="2"/>
+            <text x="760" y="105" fill="#7a4e00" font-size="11" text-anchor="middle" font-weight="700">BIASED SEARCH</text>
+            <text x="760" y="123" fill="#7a4e00" font-size="11" text-anchor="middle" font-weight="700">RESULTS</text>
+
+            <!-- Node 3: User clicks -->
+            <ellipse cx="850" cy="240" rx="84" ry="42" fill="#f4f8ff" stroke="#1a5c8a" stroke-width="2"/>
+            <text x="850" y="235" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">SKEWED USER</text>
+            <text x="850" y="253" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">BEHAVIOUR</text>
+
+            <!-- Node 4: New data -->
+            <ellipse cx="620" cy="330" rx="90" ry="38" fill="#f0fff4" stroke="#1a6e4e" stroke-width="2"/>
+            <text x="620" y="325" fill="#1a6e4e" font-size="11" text-anchor="middle" font-weight="700">BIASED NEW</text>
+            <text x="620" y="343" fill="#1a6e4e" font-size="11" text-anchor="middle" font-weight="700">TRAINING DATA</text>
+
+            <!-- Node 5: Retrain -->
+            <ellipse cx="340" cy="330" rx="90" ry="38" fill="#f8f4ff" stroke="#5c2d7a" stroke-width="2"/>
+            <text x="340" y="325" fill="#5c2d7a" font-size="11" text-anchor="middle" font-weight="700">MODEL</text>
+            <text x="340" y="343" fill="#5c2d7a" font-size="11" text-anchor="middle" font-weight="700">RETRAINED</text>
+
+            <!-- Node 6: Amplified bias -->
+            <ellipse cx="190" cy="220" rx="88" ry="42" fill="#fff3f3" stroke="#9b2335" stroke-width="2.5"/>
+            <text x="190" y="215" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">AMPLIFIED</text>
+            <text x="190" y="233" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">BIAS</text>
+
+            <!-- Arrows around loop -->
+            <path d="M 555 155 Q 660 80 670 112" stroke="#9b2335" stroke-width="2" fill="none" marker-end="url(#fl)"/>
+            <text x="630" y="80" fill="#9b2335" font-size="10" text-anchor="middle">retrieval skew</text>
+
+            <path d="M 835 152 Q 880 175 860 198" stroke="#9b2335" stroke-width="2" fill="none" marker-end="url(#fl)"/>
+            <text x="890" y="175" fill="#9b2335" font-size="10" text-anchor="middle">clicks follow rank</text>
+
+            <path d="M 790 278 Q 760 315 710 330" stroke="#9b2335" stroke-width="2" fill="none" marker-end="url(#fl)"/>
+            <text x="778" y="315" fill="#9b2335" font-size="10" text-anchor="middle">becomes data</text>
+
+            <path d="M 530 335 Q 440 345 430 333" stroke="#9b2335" stroke-width="2" fill="none" marker-end="url(#fl)"/>
+            <text x="483" y="358" fill="#9b2335" font-size="10" text-anchor="middle">retraining on biased data</text>
+
+            <path d="M 252 318 Q 210 282 198 262" stroke="#9b2335" stroke-width="2" fill="none" marker-end="url(#fl)"/>
+            <text x="210" y="296" fill="#9b2335" font-size="10" text-anchor="middle">bias amplified</text>
+
+            <path d="M 192 178 Q 280 100 405 162" stroke="#9b2335" stroke-width="2" fill="none" marker-end="url(#fl)"/>
+            <text x="272" y="120" fill="#9b2335" font-size="10" text-anchor="middle">more biased next cycle</text>
+
+            <!-- Center label -->
+            <text x="480" y="56" fill="#9b2335" font-size="12" text-anchor="middle" font-weight="700">↑ EACH CYCLE, BIAS INTENSIFIES ↑</text>
+          </svg>
+          <figcaption>Fig. 5 — The bias feedback loop. Biased embeddings produce skewed search results, which shape user behaviour, which generates new biased training data, which produces a more biased model. Without explicit intervention, this loop runs indefinitely.</figcaption>
+        </figure>
+      </div>
+
+      <div class="article">
+
+        <div class="div">· · ·</div>
+
+        <!--  07 -->
+        <section id="debiasing">
+          <h2><span class="sec-num"> 07 — The Debiasing Toolkit</span>Four Strategies for Production Defense</h2>
+
+          <p>Debiasing embedding models is an active research area with no perfect solution. Every technique involves tradeoffs — between bias reduction and model performance, between computational cost and thoroughness, between addressing known biases and inadvertently introducing new ones. The goal of a production debiasing strategy is not perfection. It is <em>systematic reduction</em> of the most harmful biases combined with <em>continuous measurement</em> to detect what remains.</p>
+
+          <h3>Strategy 1: Hard Debiasing — Projection-Based Removal</h3>
+
+          <p>The original debiasing technique from Bolukbasi et al. proposes identifying the bias direction in the embedding space — for gender bias, the first principal component of the difference vectors between male and female word pairs — and projecting all word vectors onto the subspace orthogonal to this direction. This removes the bias direction from all vectors, forcing the model to represent concepts without reference to gender.</p>
+
+          <p>This works surprisingly well for simple, one-dimensional biases like the binary gender axis. It is less effective for intersectional biases, non-binary gender representation, or biases that are distributed across multiple dimensions of the embedding space rather than concentrated along a single linear direction. It also requires identifying the bias direction accurately — which requires representative word sets and careful validation.</p>
+
+          <pre>
+<span class="cm"># Hard debiasing: project out the gender direction</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> sklearn.decomposition <span class="kw">import</span> PCA
+
+<span class="kw">def</span> <span class="fn">identify_gender_direction</span>(
+    male_female_pairs: list[tuple[str, str]],
+    embedder
+) -> np.ndarray:
+    <span class="cm"># Compute difference vectors for each male–female pair</span>
+    diffs = []
+    <span class="kw">for</span> male_word, female_word <span class="kw">in</span> male_female_pairs:
+        v_m = embedder.<span class="fn">encode</span>(male_word)
+        v_f = embedder.<span class="fn">encode</span>(female_word)
+        diffs.<span class="fn">append</span>(v_m - v_f)
+
+    <span class="cm"># First principal component = the gender direction</span>
+    pca = <span class="cl">PCA</span>(n_components=<span class="nm">1</span>)
+    pca.<span class="fn">fit</span>(np.<span class="fn">array</span>(diffs))
+    <span class="kw">return</span> pca.components_[<span class="nm">0</span>]   <span class="cm"># the bias direction vector</span>
+
+<span class="kw">def</span> <span class="fn">debias_vector</span>(v: np.ndarray, bias_direction: np.ndarray) -> np.ndarray:
+    <span class="cm"># Project out the bias component: v' = v - (v·g)g</span>
+    projection = np.<span class="fn">dot</span>(v, bias_direction) * bias_direction
+    debiased    = v - projection
+    <span class="kw">return</span> debiased / np.<span class="fn">linalg.norm</span>(debiased)  <span class="cm"># re-normalize</span>
+
+<span class="cm"># Define gender-defining pairs</span>
+gender_pairs = [
+    (<span class="st">"he"</span>, <span class="st">"she"</span>), (<span class="st">"man"</span>, <span class="st">"woman"</span>),
+    (<span class="st">"king"</span>, <span class="st">"queen"</span>), (<span class="st">"boy"</span>, <span class="st">"girl"</span>),
+    (<span class="st">"brother"</span>, <span class="st">"sister"</span>), (<span class="st">"father"</span>, <span class="st">"mother"</span>)
+]
+gender_dir = <span class="fn">identify_gender_direction</span>(gender_pairs, embedder)
+
+<span class="cm"># At query time: debias the query vector before search</span>
+query_vec  = embedder.<span class="fn">encode</span>(<span class="st">"find me a talented doctor"</span>)
+debiased_q = <span class="fn">debias_vector</span>(query_vec, gender_dir)
+results    = vector_db.<span class="fn">search</span>(debiased_q, top_k=<span class="nm">10</span>)
+          </pre>
+
+          <h3>Strategy 2: Counterfactual Data Augmentation</h3>
+
+          <p>Rather than modifying the embedding space post-training, counterfactual data augmentation intervenes during the construction of the training or fine-tuning corpus. For every document in the training set that contains gendered language, a counterfactual version is generated with the gender swapped. The model is trained on both the original and the counterfactual, teaching it to represent the semantic content independently of its gender coding.</p>
+
+          <p>This is computationally more expensive than projection-based debiasing but produces more robust results. It works especially well for domain-specific fine-tuning where you have control over the training data.</p>
+
+          <pre>
+<span class="cm"># Counterfactual Data Augmentation (CDA)</span>
+GENDER_SWAPS = {
+    <span class="st">"he"</span>: <span class="st">"she"</span>, <span class="st">"she"</span>: <span class="st">"he"</span>,
+    <span class="st">"him"</span>: <span class="st">"her"</span>, <span class="st">"her"</span>: <span class="st">"him"</span>,
+    <span class="st">"his"</span>: <span class="st">"her"</span>, <span class="st">"man"</span>: <span class="st">"woman"</span>,
+    <span class="st">"woman"</span>: <span class="st">"man"</span>, <span class="st">"mr"</span>: <span class="st">"ms"</span>,
+    <span class="st">"ms"</span>: <span class="st">"mr"</span>, <span class="st">"mr."</span>: <span class="st">"ms."</span>,
+}
+
+<span class="kw">def</span> <span class="fn">generate_counterfactual</span>(text: str) -> str:
+    words = text.<span class="fn">split</span>()
+    swapped = [GENDER_SWAPS.<span class="fn">get</span>(w.lower(), w) <span class="kw">for</span> w <span class="kw">in</span> words]
+    <span class="kw">return</span> <span class="st">" "</span>.<span class="fn">join</span>(swapped)
+
+<span class="kw">def</span> <span class="fn">augment_dataset</span>(documents: list[str]) -> list[str]:
+    augmented = []
+    <span class="kw">for</span> doc <span class="kw">in</span> documents:
+        augmented.<span class="fn">append</span>(doc)
+        counterfactual = <span class="fn">generate_counterfactual</span>(doc)
+        <span class="kw">if</span> counterfactual != doc:   <span class="cm"># only add if something changed</span>
+            augmented.<span class="fn">append</span>(counterfactual)
+    <span class="kw">return</span> augmented
+          </pre>
+
+          <h3>Strategy 3: Fairness-Aware Re-ranking</h3>
+
+          <p>The third strategy operates at retrieval time rather than at the embedding level. After the initial kNN retrieval, a fairness-aware re-ranking step adjusts the final ranking to ensure demographic balance. This approach has the advantage of being model-agnostic — it works with any embedding model without requiring modification of the underlying vectors — and can be tuned separately from the semantic similarity objective.</p>
+
+          <p>The most common implementation uses the Maximal Marginal Relevance (MMR) framework extended with a fairness constraint: at each rank position, the algorithm selects the next document that maximizes relevance while maintaining a minimum representation threshold across protected demographic groups.</p>
+
+          <pre>
+<span class="cm"># Fairness-aware re-ranking with demographic balance</span>
+<span class="kw">from</span> typing <span class="kw">import</span> Callable
+
+<span class="kw">def</span> <span class="fn">fairness_rerank</span>(
+    candidates: list[dict],
+    relevance_scores: list[float],
+    group_fn: Callable[[dict], str],   <span class="cm"># returns demographic group label</span>
+    top_k: int = <span class="nm">10</span>,
+    min_group_fraction: float = <span class="nm">0.25</span>  <span class="cm"># each group gets ≥25% of slots</span>
+) -> list[dict]:
+    selected, group_counts = [], {}
+    remaining = list(<span class="fn">zip</span>(candidates, relevance_scores))
+
+    <span class="kw">while</span> len(selected) < top_k <span class="kw">and</span> remaining:
+        <span class="kw">for</span> doc, score <span class="kw">in</span> sorted(remaining, key=<span class="kw">lambda</span> x: -x[<span class="nm">1</span>]):
+            group = <span class="fn">group_fn</span>(doc)
+            current_fraction = (
+                group_counts.<span class="fn">get</span>(group, <span class="nm">0</span>) / max(len(selected), <span class="nm">1</span>)
+            )
+            <span class="cm"># Allow if: under target size OR group is underrepresented</span>
+            <span class="kw">if</span> current_fraction < min_group_fraction <span class="kw">or</span> len(selected) < top_k // <span class="nm">2</span>:
+                selected.<span class="fn">append</span>(doc)
+                group_counts[group] = group_counts.<span class="fn">get</span>(group, <span class="nm">0</span>) + <span class="nm">1</span>
+                remaining.<span class="fn">remove</span>((doc, score))
+                <span class="kw">break</span>
+        <span class="kw">else</span>:
+            <span class="cm"># Fairness constraints fully met; fill remaining by relevance</span>
+            doc, _ = sorted(remaining, key=<span class="kw">lambda</span> x: -x[<span class="nm">1</span>])[<span class="nm">0</span>]
+            selected.<span class="fn">append</span>(doc)
+            remaining.<span class="fn">pop</span>(<span class="nm">0</span>)
+
+    <span class="kw">return</span> selected
+          </pre>
+
+          <h3>Strategy 4: Bias-Aware Fine-tuning with Adversarial Training</h3>
+
+          <p>The most technically sophisticated debiasing approach uses adversarial training during the fine-tuning phase. The model is trained with two simultaneous objectives: a primary objective (produce good embeddings for semantic similarity) and an adversarial objective (confuse a discriminator that tries to predict demographic attributes from the embeddings). Minimizing both objectives together encourages the model to produce embeddings that are semantically rich but do not encode recoverable demographic signals.</p>
+
+          <pre>
+<span class="cm"># Adversarial debiasing training loop (conceptual)</span>
+<span class="kw">import</span> torch
+<span class="kw">import</span> torch.nn <span class="kw">as</span> nn
+
+<span class="kw">class</span> <span class="cl">AdversarialDebiasingLoss</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, embed_dim: int, n_groups: int, lambda_adv: float = <span class="nm">0.5</span>):
+        super().<span class="fn">__init__</span>()
+        <span class="cm"># Discriminator: tries to predict group from embedding</span>
+        self.discriminator = nn.<span class="cl">Sequential</span>(
+            nn.<span class="cl">Linear</span>(embed_dim, <span class="nm">128</span>),
+            nn.<span class="cl">ReLU</span>(),
+            nn.<span class="cl">Linear</span>(<span class="nm">128</span>, n_groups)
+        )
+        self.lambda_adv = lambda_adv  <span class="cm"># adversarial loss weight</span>
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, embeddings, group_labels, semantic_loss):
+        <span class="cm"># Discriminator predicts group from embedding</span>
+        group_logits = self.discriminator(embeddings)
+        disc_loss    = nn.<span class="fn">CrossEntropyLoss</span>()(group_logits, group_labels)
+
+        <span class="cm"># Adversarial: maximize discriminator confusion (minimize its accuracy)</span>
+        adv_loss = -disc_loss  <span class="cm"># gradient reversal trick</span>
+
+        <span class="cm"># Total loss: good semantics + confuse the discriminator</span>
+        total = semantic_loss + self.lambda_adv * adv_loss
+        <span class="kw">return</span> total, disc_loss
+          </pre>
+
+        </section>
+
+      </div>
+
+      <!-- DIAGRAM 6: Debiasing Strategies -->
+      <div class="wide">
+        <figure class="diagram">
+          <svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+            <rect width="960" height="400" fill="#ffffff" rx="14"/>
+            <text x="480" y="30" fill="#1c1a18" font-size="15" font-weight="700" text-anchor="middle">DEBIASING STRATEGIES — COMPARISON OF APPROACH, COST AND EFFECTIVENESS</text>
+
+            <!-- Strategy columns -->
+            <rect x="40" y="55" width="202" height="300" rx="12" fill="#fff5f3" stroke="#9b2335" stroke-width="2"/>
+            <rect x="40" y="55" width="202" height="38" rx="12" fill="#9b2335"/>
+            <text x="141" y="79" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">PROJECTION DEBIAS</text>
+            <text x="141" y="110" fill="#333" font-size="11" text-anchor="middle">Post-hoc geometric</text>
+            <text x="141" y="128" fill="#333" font-size="11" text-anchor="middle">projection to remove</text>
+            <text x="141" y="146" fill="#333" font-size="11" text-anchor="middle">the bias direction axis</text>
+            <text x="141" y="178" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">When to apply</text>
+            <text x="141" y="196" fill="#555" font-size="11" text-anchor="middle">Query-time or</text>
+            <text x="141" y="212" fill="#555" font-size="11" text-anchor="middle">index-time</text>
+            <text x="141" y="240" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">Effectiveness</text>
+            <text x="141" y="260" fill="#555" font-size="11" text-anchor="middle">Good for simple</text>
+            <text x="141" y="278" fill="#555" font-size="11" text-anchor="middle">1D biases</text>
+            <text x="141" y="306" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">Cost</text>
+            <text x="141" y="326" fill="#1a6e4e" font-size="12" text-anchor="middle">🟢 Low</text>
+
+            <rect x="258" y="55" width="202" height="300" rx="12" fill="#fff8f0" stroke="#7a4e00" stroke-width="2"/>
+            <rect x="258" y="55" width="202" height="38" rx="12" fill="#7a4e00"/>
+            <text x="359" y="79" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">COUNTERFACTUAL CDA</text>
+            <text x="359" y="110" fill="#333" font-size="11" text-anchor="middle">Training data augment:</text>
+            <text x="359" y="128" fill="#333" font-size="11" text-anchor="middle">swap demographic</text>
+            <text x="359" y="146" fill="#333" font-size="11" text-anchor="middle">attributes, re-train</text>
+            <text x="359" y="178" fill="#7a4e00" font-size="11" text-anchor="middle" font-weight="700">When to apply</text>
+            <text x="359" y="196" fill="#555" font-size="11" text-anchor="middle">Fine-tuning phase</text>
+            <text x="359" y="212" fill="#555" font-size="11" text-anchor="middle">with own data</text>
+            <text x="359" y="240" fill="#7a4e00" font-size="11" text-anchor="middle" font-weight="700">Effectiveness</text>
+            <text x="359" y="260" fill="#555" font-size="11" text-anchor="middle">Robust, works on</text>
+            <text x="359" y="278" fill="#555" font-size="11" text-anchor="middle">multi-attribute bias</text>
+            <text x="359" y="306" fill="#7a4e00" font-size="11" text-anchor="middle" font-weight="700">Cost</text>
+            <text x="359" y="326" fill="#7a4e00" font-size="12" text-anchor="middle">🟡 Medium</text>
+
+            <rect x="476" y="55" width="202" height="300" rx="12" fill="#f4f8ff" stroke="#1a5c8a" stroke-width="2"/>
+            <rect x="476" y="55" width="202" height="38" rx="12" fill="#1a5c8a"/>
+            <text x="577" y="79" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">FAIRNESS RE-RANKING</text>
+            <text x="577" y="110" fill="#333" font-size="11" text-anchor="middle">Post-retrieval step</text>
+            <text x="577" y="128" fill="#333" font-size="11" text-anchor="middle">enforces demographic</text>
+            <text x="577" y="146" fill="#333" font-size="11" text-anchor="middle">balance in final list</text>
+            <text x="577" y="178" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">When to apply</text>
+            <text x="577" y="196" fill="#555" font-size="11" text-anchor="middle">Any existing</text>
+            <text x="577" y="212" fill="#555" font-size="11" text-anchor="middle">retrieval pipeline</text>
+            <text x="577" y="240" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">Effectiveness</text>
+            <text x="577" y="260" fill="#555" font-size="11" text-anchor="middle">Output-level fix;</text>
+            <text x="577" y="278" fill="#555" font-size="11" text-anchor="middle">doesn't fix root</text>
+            <text x="577" y="306" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">Cost</text>
+            <text x="577" y="326" fill="#1a6e4e" font-size="12" text-anchor="middle">🟢 Low</text>
+
+            <rect x="694" y="55" width="220" height="300" rx="12" fill="#f8f4ff" stroke="#5c2d7a" stroke-width="2"/>
+            <rect x="694" y="55" width="220" height="38" rx="12" fill="#5c2d7a"/>
+            <text x="804" y="79" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">ADVERSARIAL TRAINING</text>
+            <text x="804" y="110" fill="#333" font-size="11" text-anchor="middle">Simultaneous objective:</text>
+            <text x="804" y="128" fill="#333" font-size="11" text-anchor="middle">maximize semantics,</text>
+            <text x="804" y="146" fill="#333" font-size="11" text-anchor="middle">minimize demographic signal</text>
+            <text x="804" y="178" fill="#5c2d7a" font-size="11" text-anchor="middle" font-weight="700">When to apply</text>
+            <text x="804" y="196" fill="#555" font-size="11" text-anchor="middle">Full model training</text>
+            <text x="804" y="212" fill="#555" font-size="11" text-anchor="middle">with labelled data</text>
+            <text x="804" y="240" fill="#5c2d7a" font-size="11" text-anchor="middle" font-weight="700">Effectiveness</text>
+            <text x="804" y="260" fill="#555" font-size="11" text-anchor="middle">Highest; multi-axis</text>
+            <text x="804" y="278" fill="#555" font-size="11" text-anchor="middle">intersectional bias</text>
+            <text x="804" y="306" fill="#5c2d7a" font-size="11" text-anchor="middle" font-weight="700">Cost</text>
+            <text x="804" y="326" fill="#9b2335" font-size="12" text-anchor="middle">🔴 High</text>
+
+            <!-- Bottom recommendation bar -->
+            <rect x="40" y="368" width="874" height="22" rx="8" fill="#fff5f3" stroke="#9b2335" stroke-width="1"/>
+            <text x="477" y="383" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">Recommendation: Layer all four — projection for quick wins, re-ranking for output control, CDA + adversarial for long-term systemic reduction.</text>
+          </svg>
+          <figcaption>Fig. 6 — Four debiasing strategies compared by mechanism, application point, effectiveness, and cost. No single strategy is sufficient alone. A layered approach is required for production robustness.</figcaption>
+        </figure>
+      </div>
+
+      <div class="article">
+
+        <div class="div">· · ·</div>
+
+        <!--  08 -->
+        <section id="monitoring">
+          <h2><span class="sec-num"> 08 — The Monitoring Imperative</span>Continuous Bias Detection in Production</h2>
+
+          <p>Debiasing is not a one-time fix. Embedding models drift as they are fine-tuned on new data. The data distribution of queries changes as your user base evolves. New forms of bias can emerge that were not present in your original evaluation suite. A production-grade bias management system requires continuous monitoring with structured alerts — not a launch-time audit and then silence.</p>
+
+          <h3>What to Monitor</h3>
+
+          <p>The five metrics that should be tracked continuously in a production embedding system are as follows. First, the <strong>WEAT score drift</strong> — run your WEAT test suite on a weekly schedule and alert if any score increases by more than 0.2 over a rolling 30-day window. This detects fine-tuning or distribution shifts that are introducing new bias. Second, the <strong>retrieval parity gap</strong> — measure mean rank position by demographic group for a fixed set of demographically neutral probe queries. Alert if the gap exceeds 2.0 rank positions. Third, the <strong>semantic differential differential</strong> — track the mean cosine similarity differential between matched demographic query pairs. Alert if any pair diverges by more than 0.05. Fourth, the <strong>demographic representation in top-k</strong> — for a random sample of production queries, log the demographic distribution of the top-5 retrieved documents. Alert if any group falls below 15 percent of expected representation. Fifth, the <strong>user feedback disparities</strong> — if your system collects thumbs up or thumbs down signals, segment those signals by the demographic characteristics of the query context. A systematic disparity in satisfaction rates across demographic groups is a high-signal indicator of bias in the retrieval results.</p>
+
+          <pre>
+<span class="cm"># Continuous bias monitoring system</span>
+<span class="kw">import</span> time
+<span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass
+
+@dataclass
+<span class="kw">class</span> <span class="cl">BiasMonitorReport</span>:
+    timestamp: float
+    weat_gender_career: float
+    weat_race_sentiment: float
+    retrieval_parity_gap: float
+    semantic_differential: float
+    alerts: list[str]
+
+<span class="kw">class</span> <span class="cl">BiasMonitor</span>:
+    THRESHOLDS = {
+        <span class="st">"weat_gender_career"</span>:   <span class="nm">1.0</span>,   <span class="cm"># alert if > 1.0</span>
+        <span class="st">"weat_race_sentiment"</span>:  <span class="nm">0.9</span>,
+        <span class="st">"retrieval_parity_gap"</span>: <span class="nm">2.0</span>,   <span class="cm"># rank positions</span>
+        <span class="st">"semantic_differential"</span>:<span class="nm">0.05</span>,  <span class="cm"># cosine sim delta</span>
+    }
+
+    <span class="kw">def</span> <span class="fn">run_daily_report</span>(self, embedder, vector_db) -> <span class="cl">BiasMonitorReport</span>:
+        alerts = []
+
+        wgc = self.<span class="fn">compute_weat_gender_career</span>(embedder)
+        wrs = self.<span class="fn">compute_weat_race_sentiment</span>(embedder)
+        rpg = self.<span class="fn">compute_retrieval_parity</span>(embedder, vector_db)
+        sdf = self.<span class="fn">compute_semantic_differential</span>(embedder)
+
+        <span class="kw">for</span> metric, value <span class="kw">in</span> [
+            (<span class="st">"weat_gender_career"</span>, wgc), (<span class="st">"weat_race_sentiment"</span>, wrs),
+            (<span class="st">"retrieval_parity_gap"</span>, rpg), (<span class="st">"semantic_differential"</span>, sdf)
+        ]:
+            <span class="kw">if</span> value > self.THRESHOLDS[metric]:
+                alerts.<span class="fn">append</span>(
+                    <span class="st">f"⚠ {metric} = {value:.3f} exceeds threshold {self.THRESHOLDS[metric]}"</span>
+                )
+
+        report = <span class="cl">BiasMonitorReport</span>(
+            timestamp=<span class="fn">time.time</span>(),
+            weat_gender_career=wgc,
+            weat_race_sentiment=wrs,
+            retrieval_parity_gap=rpg,
+            semantic_differential=sdf,
+            alerts=alerts
+        )
+        <span class="kw">if</span> alerts:
+            self.<span class="fn">fire_alert</span>(report)
+        <span class="kw">return</span> report
+          </pre>
+
+        </section>
+
+      </div>
+
+      <!-- DIAGRAM 7: Monitoring Pipeline -->
+      <div class="wide">
+        <figure class="diagram">
+          <svg viewBox="0 0 960 340" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+            <defs>
+              <marker id="m1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a5c8a"/></marker>
+              <marker id="m2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#9b2335"/></marker>
+            </defs>
+            <rect width="960" height="340" fill="#ffffff" rx="14"/>
+            <text x="480" y="30" fill="#1c1a18" font-size="15" font-weight="700" text-anchor="middle">CONTINUOUS BIAS MONITORING PIPELINE</text>
+
+            <!-- Schedule trigger -->
+            <rect x="30" y="65" width="130" height="60" rx="10" fill="#f4f8ff" stroke="#1a5c8a" stroke-width="2"/>
+            <text x="95" y="90" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">DAILY</text>
+            <text x="95" y="107" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">SCHEDULE</text>
+
+            <line x1="162" y1="95" x2="192" y2="95" stroke="#1a5c8a" stroke-width="2" marker-end="url(#m1)"/>
+
+            <!-- Probe suite -->
+            <rect x="194" y="55" width="155" height="80" rx="10" fill="#fff8f0" stroke="#7a4e00" stroke-width="2"/>
+            <text x="271" y="80" fill="#7a4e00" font-size="11" text-anchor="middle" font-weight="700">PROBE SUITE</text>
+            <text x="271" y="98" fill="#555" font-size="10" text-anchor="middle">WEAT word sets</text>
+            <text x="271" y="113" fill="#555" font-size="10" text-anchor="middle">Parity queries</text>
+            <text x="271" y="128" fill="#555" font-size="10" text-anchor="middle">Differential pairs</text>
+
+            <line x1="351" y1="95" x2="381" y2="95" stroke="#1a5c8a" stroke-width="2" marker-end="url(#m1)"/>
+
+            <!-- Scorer -->
+            <rect x="383" y="55" width="155" height="80" rx="10" fill="#f0fff4" stroke="#1a6e4e" stroke-width="2"/>
+            <text x="460" y="80" fill="#1a6e4e" font-size="11" text-anchor="middle" font-weight="700">BIAS SCORER</text>
+            <text x="460" y="98" fill="#555" font-size="10" text-anchor="middle">WEAT scores</text>
+            <text x="460" y="113" fill="#555" font-size="10" text-anchor="middle">Parity gaps</text>
+            <text x="460" y="128" fill="#555" font-size="10" text-anchor="middle">Differentials</text>
+
+            <line x1="540" y1="95" x2="570" y2="95" stroke="#1a5c8a" stroke-width="2" marker-end="url(#m1)"/>
+
+            <!-- Threshold check -->
+            <rect x="572" y="55" width="155" height="80" rx="10" fill="#fff5f3" stroke="#9b2335" stroke-width="2"/>
+            <text x="649" y="80" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">THRESHOLD</text>
+            <text x="649" y="97" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">CHECK</text>
+            <text x="649" y="118" fill="#555" font-size="10" text-anchor="middle">Compare vs limits</text>
+            <text x="649" y="133" fill="#555" font-size="10" text-anchor="middle">Flag breaches</text>
+
+            <!-- Pass path -->
+            <line x1="729" y1="95" x2="759" y2="95" stroke="#1a6e4e" stroke-width="2" marker-end="url(#m1)"/>
+            <rect x="761" y="65" width="150" height="60" rx="10" fill="#f0fff4" stroke="#1a6e4e" stroke-width="2"/>
+            <text x="836" y="90" fill="#1a6e4e" font-size="11" text-anchor="middle" font-weight="700">✅ LOG</text>
+            <text x="836" y="108" fill="#555" font-size="10" text-anchor="middle">Store to time-series</text>
+
+            <!-- Alert path -->
+            <line x1="649" y1="137" x2="649" y2="167" stroke="#9b2335" stroke-width="2" marker-end="url(#m2)"/>
+            <rect x="570" y="169" width="160" height="55" rx="10" fill="#fff5f3" stroke="#9b2335" stroke-width="2"/>
+            <text x="650" y="193" fill="#9b2335" font-size="11" text-anchor="middle" font-weight="700">⚠ ALERT FIRED</text>
+            <text x="650" y="211" fill="#555" font-size="10" text-anchor="middle">Slack / PagerDuty</text>
+
+            <!-- Remediation -->
+            <line x1="650" y1="226" x2="650" y2="256" stroke="#9b2335" stroke-width="2" marker-end="url(#m2)"/>
+            <rect x="490" y="258" width="320" height="55" rx="10" fill="#fff5f3" stroke="#9b2335" stroke-width="2"/>
+            <text x="650" y="280" fill="#9b2335" font-size="12" text-anchor="middle" font-weight="700">REMEDIATION WORKFLOW</text>
+            <text x="650" y="298" fill="#555" font-size="10" text-anchor="middle">Apply projection debias → re-rank config → flag for CDA retraining</text>
+
+            <!-- Drift arrow -->
+            <rect x="30" y="185" width="390" height="110" rx="10" fill="#f9f9f7" stroke="#d8d3c8" stroke-width="1.5"/>
+            <text x="225" y="208" fill="#1c1a18" font-size="12" font-weight="700" text-anchor="middle">WEEKLY DRIFT DETECTION</text>
+            <text x="225" y="228" fill="#555" font-size="11" text-anchor="middle">Compare this week's scores to 30-day rolling average.</text>
+            <text x="225" y="248" fill="#555" font-size="11" text-anchor="middle">WEAT drift &gt; 0.2 → schedule emergency CDA audit.</text>
+            <text x="225" y="268" fill="#555" font-size="11" text-anchor="middle">Parity gap trend ↑ → review new fine-tuning data source.</text>
+          </svg>
+          <figcaption>Fig. 7 — Continuous bias monitoring pipeline. Daily automated probe runs feed a scoring and threshold system. Breaches trigger an alert and remediation workflow. Weekly drift detection catches slow-moving bias amplification.</figcaption>
+        </figure>
+      </div>
+
+      <div class="article">
+
+        <div class="div">· · ·</div>
+
+        <!--  09 -->
+        <section id="intersectionality">
+          <h2><span class="sec-num"> 09 — The Hard Problem</span>Intersectionality and the Limits of Debiasing</h2>
+
+          <p>Everything covered in the previous sections assumes that bias can be addressed one dimension at a time: remove the gender direction, measure the race-sentiment association, balance representation across age groups. This assumption is dangerously incomplete. In reality, the most severe forms of bias in embedding spaces arise not from single axes but from the <em>intersections</em> between them.</p>
+
+          <p>A Black woman is not simply a woman who is also Black. Her lived experience, the language used to describe her, and the contexts in which she appears in training text are shaped by the simultaneous interaction of both gender and race in ways that are not reducible to the sum of gender bias and racial bias. An embedding model that has been debiased along the gender axis and the race axis independently may still encode deeply distorted representations of Black women — or of any other person whose identity sits at the intersection of multiple marginalized dimensions — because the bias lives in the interaction terms, not the main effects.</p>
+
+          <p>This is the core limitation of all current debiasing techniques: they are fundamentally linear. They identify a bias direction and project it out, or they swap one attribute at a time, or they enforce parity along one dimension. But the human experience that training text describes is irreducibly multidimensional, and the biases it encodes live in that multidimensional space in ways that resist one-dimensional remediation.</p>
+
+          <div class="pq">
+            <p>"Debiasing a single axis is like removing a single dye from a glass of water into which you have poured ten dyes. The water looks slightly clearer. It is still deeply colored."</p>
+          </div>
+
+          <p>What does this mean practically? It means that no production debiasing strategy can claim to have solved the bias problem. The most honest and responsible position is to apply every available mitigation, measure their effect rigorously, be transparent with users about the known limitations of the system, and invest continuously in better measurement and better remediation as the research evolves. A system that has been debiased along the gender and race axes and is continuously monitored for drift is meaningfully better than a system with no debiasing. But it is not a system without bias.</p>
+
+          <h3>The Documentation Requirement</h3>
+
+          <p>One of the most actionable responses to the incompleteness of debiasing is <strong>model documentation</strong>. Embedding models used in production systems should be accompanied by bias evaluation cards that honestly report WEAT scores, known limitations, the demographic composition of the training data, and the debiasing interventions that have and have not been applied. Users and operators of these systems deserve to know what they are working with.</p>
+
+          <p>The practice of publishing model cards — pioneered by Mitchell et al. (2019) — provides a framework for this documentation. A bias-specific section of a model card should include WEAT scores across all tested dimensions, the word sets used for each test, retrieval parity gap measurements across demographic groups, known failure modes and high-risk use cases, and a clear statement of what has not been tested.</p>
+
+        </section>
+
+      </div>
+
+      <!-- DIAGRAM 8: Intersectional Bias Space -->
+      <div class="wide">
+        <figure class="diagram">
+          <svg viewBox="0 0 960 400" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+            <rect width="960" height="400" fill="#ffffff" rx="14"/>
+            <text x="480" y="30" fill="#1c1a18" font-size="15" font-weight="700" text-anchor="middle">INTERSECTIONAL BIAS — WHY SINGLE-AXIS DEBIASING IS INCOMPLETE</text>
+
+            <!-- Left: single axis debiasing -->
+            <text x="230" y="62" fill="#1c1a18" font-size="13" font-weight="700" text-anchor="middle">SINGLE-AXIS DEBIASING (current approach)</text>
+
+            <!-- Gender axis remove -->
+            <rect x="50" y="80" width="365" height="260" rx="12" fill="#fafafa" stroke="#d8d3c8" stroke-width="1.5"/>
+
+            <!-- Gender direction line -->
+            <line x1="80" y1="200" x2="390" y2="200" stroke="#9b2335" stroke-width="2.5"/>
+            <text x="90" y="192" fill="#9b2335" font-size="11">← female</text>
+            <text x="340" y="192" fill="#9b2335" font-size="11">male →</text>
+            <text x="240" y="224" fill="#9b2335" font-size="10" text-anchor="middle">GENDER AXIS — projected out ✓</text>
+
+            <!-- Race axis line -->
+            <line x1="225" y1="100" x2="225" y2="328" stroke="#1a5c8a" stroke-width="2.5"/>
+            <text x="234" y="110" fill="#1a5c8a" font-size="11">white ↑</text>
+            <text x="234" y="325" fill="#1a5c8a" font-size="11">BIPOC ↓</text>
+            <text x="100" y="344" fill="#1a5c8a" font-size="10">RACE AXIS — parity enforced ✓</text>
+
+            <!-- Points in single axis space -->
+            <circle cx="310" cy="140" r="10" fill="#9b2335" opacity=".8"/>
+            <text x="330" y="138" fill="#333" font-size="10">White man ✓</text>
+            <circle cx="140" cy="140" r="10" fill="#1a5c8a" opacity=".8"/>
+            <text x="100" y="138" fill="#333" font-size="10">White woman ✓</text>
+            <circle cx="310" cy="270" r="10" fill="#7a4e00" opacity=".8"/>
+            <text x="330" y="268" fill="#333" font-size="10">Black man ✓</text>
+            <circle cx="140" cy="270" r="10" fill="#9b2335" opacity=".5"/>
+            <text x="60" y="275" fill="#9b2335" font-size="10" font-weight="700">Black woman ✗</text>
+
+            <!-- Red X on black woman -->
+            <text x="140" y="298" fill="#9b2335" font-size="18" text-anchor="middle">✗</text>
+            <text x="140" y="315" fill="#9b2335" font-size="10" text-anchor="middle">Intersection bias</text>
+            <text x="140" y="328" fill="#9b2335" font-size="10" text-anchor="middle">not captured</text>
+
+            <!-- Divider -->
+            <line x1="480" y1="60" x2="480" y2="380" stroke="#d8d3c8" stroke-width="2" stroke-dasharray="8 5"/>
+
+            <!-- Right: what's needed -->
+            <text x="720" y="62" fill="#1c1a18" font-size="13" font-weight="700" text-anchor="middle">WHAT'S NEEDED (intersectional approach)</text>
+
+            <rect x="500" y="80" width="420" height="260" rx="12" fill="#fafafa" stroke="#d8d3c8" stroke-width="1.5"/>
+
+            <!-- Multi-axis representation -->
+            <circle cx="720" cy="205" r="110" fill="none" stroke="#d8d3c8" stroke-width="1"/>
+
+            <!-- Four quadrant occupants -->
+            <circle cx="650" cy="148" r="26" fill="rgba(26,92,138,.15)" stroke="#1a5c8a" stroke-width="1.5"/>
+            <text x="650" y="145" fill="#1a5c8a" font-size="10" text-anchor="middle">White</text>
+            <text x="650" y="158" fill="#1a5c8a" font-size="10" text-anchor="middle">woman</text>
+
+            <circle cx="790" cy="148" r="26" fill="rgba(155,35,53,.15)" stroke="#9b2335" stroke-width="1.5"/>
+            <text x="790" y="145" fill="#9b2335" font-size="10" text-anchor="middle">White</text>
+            <text x="790" y="158" fill="#9b2335" font-size="10" text-anchor="middle">man</text>
+
+            <circle cx="650" cy="262" r="26" fill="rgba(122,78,0,.15)" stroke="#7a4e00" stroke-width="1.5"/>
+            <text x="650" y="259" fill="#7a4e00" font-size="10" text-anchor="middle">Black</text>
+            <text x="650" y="272" fill="#7a4e00" font-size="10" text-anchor="middle">man</text>
+
+            <circle cx="790" cy="262" r="30" fill="rgba(92,45,122,.25)" stroke="#5c2d7a" stroke-width="2.5"/>
+            <text x="790" y="254" fill="#5c2d7a" font-size="10" text-anchor="middle" font-weight="700">Black</text>
+            <text x="790" y="268" fill="#5c2d7a" font-size="10" text-anchor="middle" font-weight="700">woman</text>
+            <text x="790" y="284" fill="#5c2d7a" font-size="10" text-anchor="middle">own space</text>
+
+            <!-- Lines connecting centre -->
+            <line x1="720" y1="205" x2="668" y2="160" stroke="#888" stroke-width="1" stroke-dasharray="4 3"/>
+            <line x1="720" y1="205" x2="772" y2="160" stroke="#888" stroke-width="1" stroke-dasharray="4 3"/>
+            <line x1="720" y1="205" x2="668" y2="250" stroke="#888" stroke-width="1" stroke-dasharray="4 3"/>
+            <line x1="720" y1="205" x2="772" y2="250" stroke="#888" stroke-width="1" stroke-dasharray="4 3"/>
+
+            <text x="720" y="360" fill="#5c2d7a" font-size="11" text-anchor="middle" font-weight="700">Each intersection = unique position,</text>
+            <text x="720" y="375" fill="#5c2d7a" font-size="11" text-anchor="middle" font-weight="700">own bias profile, own remediation needed</text>
+          </svg>
+          <figcaption>Fig. 8 — Intersectional bias. Single-axis debiasing corrects for gender and race independently but leaves the intersection of Black womanhood — which carries its own unique, compounded bias profile — uncorrected. Each intersection requires its own measurement and remediation strategy.</figcaption>
+        </figure>
+      </div>
+
+      <div class="article">
+
+        <div class="div">· · ·</div>
+
+        <!--  10 -->
+        <section id="production-checklist">
+          <h2><span class="sec-num"> 10 — The Production Checklist</span>What to Implement Before You Ship</h2>
+
+          <p>Given everything covered in this article, what should a team actually do before shipping a system that uses embedding-based search? The following is an ordered sequence of the minimum responsible steps — not a complete solution, but the floor below which no production system that affects people's lives should fall.</p>
+
+          <p>The first step is to <strong>select and document your embedding model's known biases</strong>. Run the full WEAT test suite against your chosen model. Record the scores. Understand which dimensions show the strongest bias and whether those dimensions are relevant to your use case. A gender-biased embedding model is acceptable — with appropriate mitigations — for a recipe search application. It is not acceptable, unmitigated, for a hiring tool or a medical assistant.</p>
+
+          <p>The second step is to <strong>evaluate your specific corpus</strong>. The bias in your deployed system is the combination of the embedding model's bias and the bias in the documents you have indexed. Run demographic parity tests on your actual indexed corpus before deploying. Identify which queries return demographically skewed results.</p>
+
+          <p>The third step is to <strong>apply projection-based debiasing at query time</strong> for the bias dimensions most relevant to your use case. This is the lowest-cost intervention and should be applied by default to any system where demographic neutrality is a desirable property. The overhead is a single vector projection operation — microseconds per query.</p>
+
+          <p>The fourth step is to <strong>implement fairness re-ranking</strong> for any queries in your system that are demographic-neutral in intent but that produce demographically skewed results in testing. Configure the minimum group fraction based on the demographic composition of your user base and the demographic composition of your indexed corpus.</p>
+
+          <p>The fifth step is to <strong>set up the continuous monitoring pipeline</strong> described in Section 8. Run it on a daily schedule from day one. Do not wait for a user complaint to discover that your system's bias has drifted. By the time users are complaining, the bias has already affected thousands of queries.</p>
+
+          <p>The sixth and most important step is to <strong>be honest in your documentation</strong>. Publish a bias evaluation card for your system that honestly reports what you measured, what you mitigated, and what you did not measure or mitigate. The users and operators of your system deserve this transparency, and the field of AI development benefits from honest documentation of what current techniques can and cannot achieve.</p>
+
+          <div class="callout tip">
+            <div class="ico">✅</div>
+            <div class="body"><strong>The Minimum Viable Bias Defense:</strong> If you can do nothing else before shipping, do two things. First, run the WEAT gender-career test on your embedding model and document the score. Second, run a retrieval parity test on your top 20 most common query types. These two measurements alone will tell you whether you have a serious problem — and having measured it, you are responsible for it.</div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat"><span class="n">6</span><span class="l">Minimum responsible steps before shipping a bias-sensitive system</span></div>
+            <div class="stat"><span class="n">&lt;1ms</span><span class="l">Added latency from projection-based query debiasing</span></div>
+            <div class="stat"><span class="n">0.0</span><span class="l">Target WEAT score for an unbiased system — unreachable today but the correct goal</span></div>
+            <div class="stat"><span class="n">∞</span><span class="l">Number of queries affected if you ship without measuring</span></div>
+          </div>
+
+        </section>
+
+        <div class="div">· · ·</div>
+
+        <!--  11 -->
+        <section id="conclusion">
+          <h2><span class="sec-num"> 11 — The Cartographer's Responsibility</span>A Closing Argument</h2>
+
+          <p>Mercator is still with us. You can see his projection on most digital maps, in most classrooms, on most news channel backgrounds. Four hundred years after his technical decision in service of navigation, we are still living with a world that looks — subconsciously, to billions of people — like Greenland is the size of Africa. No lie was told. A choice was made. The choice had consequences that extended far beyond the original intent. And the choice was never seriously questioned for four centuries because the map worked perfectly well for the purpose it was designed for.</p>
+
+          <p>Your embedding model works perfectly well for semantic search. That is not in question. The question is what else it is doing — what distortions it is introducing into the geometry of meaning, whose concepts it is representing with high fidelity and whose with rough approximation, what associations it is encoding as geometric proximity that no thoughtful human would choose to encode, and what those distortions mean for the people whose queries, whose documents, and whose lives pass through your system every day.</p>
+
+          <p>The engineers who trained the Mercator projection did not have the tools to see what they were doing. You do. You have WEAT tests, parity measurements, semantic differential probes, projection-based debiasing, adversarial training techniques, and a growing body of research literature documenting exactly how bias enters embedding spaces and how it can be reduced.</p>
+
+          <p>Using those tools is not optional. It is not a nice-to-have. For any system that affects people's access to healthcare information, job opportunities, financial services, legal resources, or any other domain where the quality of search results shapes the quality of outcomes, measuring and mitigating embedding bias is a baseline responsibility — as fundamental as latency monitoring or uptime guarantees.</p>
+
+          <p>The map you are drawing will be used by people who trust it. Draw it honestly. Measure its distortions. Document them openly. Fix what you can. And never stop asking what the projection is hiding.</p>
+
+          <div class="pq">
+            <p>"The question is not whether your embedding model is biased. It is. The question is whether you know which biases it carries, how large they are, who they harm, and what you are doing about it."</p>
+          </div>
+
+        </section>
+
+        <div class="div">· · ·</div>
+
+        <section id="references">
+          <h2><span class="sec-num">References</span>Further Reading</h2>
+          <p>
+            Bolukbasi et al. (2016). <em>Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings.</em> NeurIPS 2016.<br>
+            Caliskan et al. (2017). <em>Semantics derived automatically from language corpora contain human-like biases.</em> Science 356(6334).<br>
+            Garg et al. (2018). <em>Word embeddings quantify 100 years of gender and ethnic stereotypes.</em> PNAS 115(16).<br>
+            Zhao et al. (2018). <em>Learning Gender-Neutral Word Embeddings.</em> EMNLP 2018.<br>
+            Sun et al. (2019). <em>Mitigating Gender Bias in Natural Language Processing: Literature Review.</em> ACL 2019.<br>
+            Mitchell et al. (2019). <em>Model Cards for Model Reporting.</em> FAccT 2019.<br>
+            Bender et al. (2021). <em>On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?</em> FAccT 2021.<br>
+            Blodgett et al. (2020). <em>Language (Technology) is Power: A Critical Survey of "Bias" in NLP.</em> ACL 2020.<br>
+            Mukherjee et al. (2023). <em>Multilingual Embedding Bias in RAG Systems.</em> EMNLP 2023.<br>
+            Crenshaw (1989). <em>Demarginalizing the Intersection of Race and Sex.</em> University of Chicago Legal Forum.
+          </p>
+        </section>
+
+        <div class="article-footer-note">
+          <div class="logo">Embedding Bias in Production AI Systems</div>
+          <p>A research article for engineers building responsible AI pipelines.</p>
+          <p>Written for Medium · All code samples MIT licensed · Diagrams original</p>
+        </div>
+
+      </div>
+    </div>
 
     <div class="article-cta">
       <h4>Continue Exploring</h4>

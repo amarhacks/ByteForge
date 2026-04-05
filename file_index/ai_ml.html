@@ -63,7 +63,7 @@
     <div class="topic-hero-right">
       <div class="topic-stat-stack">
         <div class="topic-stat">
-          <span class="ts-n count-up">6</span>
+          <span class="ts-n count-up">8</span>
           <span class="ts-l">Articles Published</span>
         </div>
         <div class="topic-stat">
@@ -106,25 +106,25 @@
   </div>
 
   <div class="concept-grid">
-    <a href="subtopics/ai_ml/rag.html" class="concept-card">
+    <a href="subtopics/ai_ml/retrieval_pipelines.html" class="concept-card">
       <span class="concept-icon">🧭</span>
       <div class="concept-name">Retrieval Pipelines</div>
-      <div class="concept-count">2 articles</div>
-      <p class="concept-desc">Chunking, retrieval, reranking, and the pipeline failures that only show up at scale.</p>
+      <div class="concept-count">3 articles</div>
+      <p class="concept-desc">Chunking, retrieval, reranking, and architecture choices that only show up once real users arrive.</p>
     </a>
-    <a href="subtopics/ai_ml/rag.html" class="concept-card">
+    <a href="subtopics/ai_ml/chunking_strategy.html" class="concept-card">
       <span class="concept-icon">✂️</span>
       <div class="concept-name">Chunking Strategy</div>
       <div class="concept-count">1 article</div>
       <p class="concept-desc">How naive splitting kills context, and the heuristics that actually preserve meaning.</p>
     </a>
-    <a href="subtopics/ai_ml/evaluation.html" class="concept-card">
+    <a href="subtopics/ai_ml/llm_calibration.html" class="concept-card">
       <span class="concept-icon">📏</span>
       <div class="concept-name">LLM Calibration</div>
       <div class="concept-count">1 article</div>
       <p class="concept-desc">Why probability outputs from LLMs are misleading, and how to measure reliability.</p>
     </a>
-    <a href="subtopics/ai_ml/embeddings.html" class="concept-card">
+    <a href="subtopics/ai_ml/embedding_bias.html" class="concept-card">
       <span class="concept-icon">🧬</span>
       <div class="concept-name">Embedding Bias</div>
       <div class="concept-count">1 article</div>
@@ -133,10 +133,10 @@
     <a href="subtopics/ai_ml/vector_search.html" class="concept-card">
       <span class="concept-icon">🧱</span>
       <div class="concept-name">Vector Search at Scale</div>
-      <div class="concept-count">1 article</div>
-      <p class="concept-desc">ANN tradeoffs, recall cliffs, and the costs you only see after 10M vectors.</p>
+      <div class="concept-count">2 articles</div>
+      <p class="concept-desc">ANN tradeoffs, semantic mismatch, and the retrieval costs you only see after real production traffic.</p>
     </a>
-    <a href="subtopics/ai_ml/production.html" class="concept-card">
+    <a href="subtopics/ai_ml/recency_gaps.html" class="concept-card">
       <span class="concept-icon">🕰️</span>
       <div class="concept-name">Recency Gaps</div>
       <div class="concept-count">1 article</div>
@@ -223,7 +223,7 @@
 
   <!-- SORT BAR -->
   <div class="sort-bar">
-    <div class="sort-left">Showing <strong>6 articles</strong> in AI / ML Engineering</div>
+    <div class="sort-left">Showing <strong>8 articles</strong> in AI / ML Engineering</div>
     <div class="sort-right">
       <span class="sort-label">Sort by</span>
       <button class="sort-btn active">Latest</button>
@@ -310,9 +310,32 @@
       </div>
     </a>
 
+    <a href="articles/wrong_search_returned.html" class="ac" style="--ac1:var(--accent2);--ac2:var(--accent5);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#eef7f5,#fff0ee);">
+        <span class="ac-visual-num">04</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Vector Search</span>
+          <span class="ac-visual-tag">Guardrails</span>
+          <span class="ac-visual-tag">Mismatch</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-ai">AI / ML</span>
+        <span class="ac-read">45 min read</span>
+      </div>
+      <h3 class="ac-title">You Searched for an Apple. The Database Returned a Carrot.</h3>
+      <p class="ac-excerpt">Why vector retrieval quietly returns semantically nearby but operationally wrong results, and the guardrails that keep AI systems honest.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="grid-2">
     <a href="articles/embeddings_biased.html" class="ac" style="--ac1:var(--accent4);--ac2:var(--accent);">
       <div class="ac-visual" style="background:linear-gradient(135deg,#ffeef4,#ffeeee);">
-        <span class="ac-visual-num">04</span>
+        <span class="ac-visual-num">05</span>
         <div class="ac-visual-tags">
           <span class="ac-visual-tag">Embeddings</span>
           <span class="ac-visual-tag">Bias</span>
@@ -330,12 +353,10 @@
         <span class="ac-arrow">→</span>
       </div>
     </a>
-  </div>
 
-  <div class="grid-2">
     <a href="articles/ai_answered_2023.html" class="ac" style="--ac1:var(--accent4);--ac2:var(--accent2);">
       <div class="ac-visual" style="background:linear-gradient(135deg,#ffeef4,#eef4ff);">
-        <span class="ac-visual-num">05</span>
+        <span class="ac-visual-num">06</span>
         <div class="ac-visual-tags">
           <span class="ac-visual-tag">Recency</span>
           <span class="ac-visual-tag">Safety</span>
@@ -353,10 +374,12 @@
         <span class="ac-arrow">→</span>
       </div>
     </a>
+  </div>
 
+  <div class="grid-2">
     <a href="articles/hidden_cost_vector_search.html" class="ac" style="--ac1:var(--accent5);--ac2:var(--accent2);">
       <div class="ac-visual" style="background:linear-gradient(135deg,#f0eeff,#eef4ff);">
-        <span class="ac-visual-num">06</span>
+        <span class="ac-visual-num">07</span>
         <div class="ac-visual-tags">
           <span class="ac-visual-tag">ANN</span>
           <span class="ac-visual-tag">HNSW</span>
@@ -369,6 +392,27 @@
       </div>
       <h3 class="ac-title">The Hidden Cost of Vector Search at Scale</h3>
       <p class="ac-excerpt">Why cosine similarity gets dangerously unreliable above 10M vectors, and the indexing choices that actually hold up.</p>
+      <div class="ac-footer">
+        <span class="ac-date">2025</span>
+        <span class="ac-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="articles/Vectorless_vs_Vector_RAG_Medium_Article.html" class="ac" style="--ac1:var(--accent3);--ac2:var(--accent2);">
+      <div class="ac-visual" style="background:linear-gradient(135deg,#eef8f7,#eef4ff);">
+        <span class="ac-visual-num">08</span>
+        <div class="ac-visual-tags">
+          <span class="ac-visual-tag">Vectorless</span>
+          <span class="ac-visual-tag">RAG</span>
+          <span class="ac-visual-tag">Architecture</span>
+        </div>
+      </div>
+      <div class="ac-meta">
+        <span class="ac-tag t-ai">AI / ML</span>
+        <span class="ac-read">12 min read</span>
+      </div>
+      <h3 class="ac-title">Vectorless RAG vs. Vector RAG</h3>
+      <p class="ac-excerpt">A technical comparison of embedding-driven retrieval and structure-aware routing, and when each architecture wins.</p>
       <div class="ac-footer">
         <span class="ac-date">2025</span>
         <span class="ac-arrow">→</span>

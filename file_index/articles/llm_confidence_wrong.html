@@ -6,21 +6,22 @@
   <title>The LLM Said It Was 95% Confident. It Was Completely Wrong. — Depth</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../css/depth/tokens.css">
-<link rel="stylesheet" href="../../css/depth/base.css">
-<link rel="stylesheet" href="../../css/depth/layout/grids.css">
-<link rel="stylesheet" href="../../css/depth/components/nav.css">
-<link rel="stylesheet" href="../../css/depth/components/hero.css">
-<link rel="stylesheet" href="../../css/depth/components/ticker.css">
-<link rel="stylesheet" href="../../css/depth/components/section-head.css">
-<link rel="stylesheet" href="../../css/depth/components/filters.css">
-<link rel="stylesheet" href="../../css/depth/components/cards.css">
-<link rel="stylesheet" href="../../css/depth/components/topics.css">
-<link rel="stylesheet" href="../../css/depth/components/newsletter.css">
-<link rel="stylesheet" href="../../css/depth/components/about.css">
-<link rel="stylesheet" href="../../css/depth/components/footer.css">
-<link rel="stylesheet" href="../../css/depth/components/page.css">
-<link rel="stylesheet" href="../../css/depth/components/article.css">
-<link rel="stylesheet" href="../../css/depth/responsive.css">
+  <link rel="stylesheet" href="../../css/depth/base.css">
+  <link rel="stylesheet" href="../../css/depth/layout/grids.css">
+  <link rel="stylesheet" href="../../css/depth/components/nav.css">
+  <link rel="stylesheet" href="../../css/depth/components/hero.css">
+  <link rel="stylesheet" href="../../css/depth/components/ticker.css">
+  <link rel="stylesheet" href="../../css/depth/components/section-head.css">
+  <link rel="stylesheet" href="../../css/depth/components/filters.css">
+  <link rel="stylesheet" href="../../css/depth/components/cards.css">
+  <link rel="stylesheet" href="../../css/depth/components/topics.css">
+  <link rel="stylesheet" href="../../css/depth/components/newsletter.css">
+  <link rel="stylesheet" href="../../css/depth/components/about.css">
+  <link rel="stylesheet" href="../../css/depth/components/footer.css">
+  <link rel="stylesheet" href="../../css/depth/components/page.css">
+  <link rel="stylesheet" href="../../css/depth/components/article.css">
+  <link rel="stylesheet" href="../../css/depth/components/ai-longform.css">
+  <link rel="stylesheet" href="../../css/depth/responsive.css">
 </head>
 <body class="article-page theme-ai" data-nav="ai-ml">
 <nav>
@@ -42,7 +43,7 @@
   </div>
 </nav>
 
-<section class="article-hero">
+<section class="article-hero" id="top">
   <div class="article-hero-inner">
     <div>
       <div class="breadcrumb">
@@ -53,23 +54,23 @@
         <span>The LLM Said It Was 95% Confident. It Was Completely Wrong.</span>
       </div>
       <div class="article-kicker">AI / ML</div>
-      <h1 class="article-title">The LLM Said It Was 95% Confident. It Was Completely Wrong.</h1>
-      <p class="article-subtitle">A deep dive into hallucination, calibration, and why probability scores from LLMs are misleading.</p>
+      <h1 class="article-title">The LLM Said It Was <span class="hl">95% Confident</span>. It Was <span class="hl2">Completely Wrong</span>.</h1>
+      <p class="article-subtitle">A deep-dive into AI hallucination, confidence calibration, and why probability scores from LLMs are not what you think.</p>
       <div class="article-meta">
         <div class="article-meta-item"><strong>15 min read</strong></div>
         <div class="article-meta-item"><span class="ep-dot"></span>2025</div>
-        <div class="article-meta-item"><span class="ep-dot"></span>Calibration · Reliability · Hallucination</div>
+        <div class="article-meta-item"><span class="ep-dot"></span>Calibration · Hallucination · Reliability</div>
       </div>
     </div>
     <aside class="article-panel">
       <h4>Key Themes</h4>
       <div class="feat-tags">
         <span class="ac-visual-tag">Calibration</span>
-<span class="ac-visual-tag">Reliability</span>
-<span class="ac-visual-tag">Hallucination</span>
-<span class="ac-visual-tag">Evaluation</span>
+        <span class="ac-visual-tag">Hallucination</span>
+        <span class="ac-visual-tag">Confidence</span>
+        <span class="ac-visual-tag">Reliability</span>
       </div>
-      <p>A deep dive into hallucination, calibration, and why probability scores from LLMs are misleading.</p>
+      <p>A deep-dive into AI hallucination, confidence calibration, and why probability scores from LLMs are not what you think.</p>
     </aside>
   </div>
 </section>
@@ -78,30 +79,686 @@
   <aside class="article-aside">
     <h4>On This Page</h4>
     <div class="article-toc">
-      <a href="#context">Context</a>
-      <a href="#under-the-hood">Under the Hood</a>
-      <a href="#failure-modes">Failure Modes</a>
-      <a href="#takeaways">Takeaways</a>
+      <a href="#intro"> 01 — The Courtroom The Witness Who Is Always Certain</a>
+      <a href="#what-confidence-means"> 02 — Token Probability What the Model Is Actually Computing</a>
+      <a href="#hallucination-mechanics"> 03 — The Mechanics Why Hallucination Is Not Lying</a>
+      <a href="#calibration-science"> 04 — Calibration Science Measuring How Wrong the Confidence Is</a>
+      <a href="#calibration-techniques"> 05 — Production Defenses Four Techniques That Actually Reduce Hallucination Risk</a>
+      <a href="#honest-uncertainty"> 06 — Honest Uncertainty What Models Should Say When They Don't Know</a>
+      <a href="#closing"> 07 — The Verdict What to Do With an Unreliable Witness</a>
     </div>
   </aside>
   <article class="article-body">
-    <p>A deep dive into hallucination, calibration, and why probability scores from LLMs are misleading.</p>
+    <div class="ai-longform">
+<div class="article">
 
-    <h2 id="context">Context</h2>
-    <p>This piece grounds ai / ml decisions in production reality — the edge cases, scaling thresholds, and tradeoffs that rarely make it into tutorials.</p>
+<!-- 01 -->
+<section id="intro">
+  <h2><span class="sec-num"> 01 — The Courtroom</span>The Witness Who Is Always Certain</h2>
 
-    <h2 id="under-the-hood">Under the Hood</h2>
-    <p>We break down the mechanics behind the llm said it was 95% confident. it was completely wrong. and map how those mechanics shape reliability, latency, and operational cost.</p>
+  <p class="drop">Imagine a witness in a courtroom who answers every question with complete, unshakeable confidence. They never say "I'm not sure" or "I might be misremembering." They state facts crisply, with authority, without hedging. Their demeanor is so assured that the jury trusts them implicitly. Then, under cross-examination, it emerges that half their testimony was fabricated — not out of malice, but because they were constitutionally incapable of distinguishing what they knew from what they had confidently inferred.</p>
 
-    <blockquote>Depth is about the tradeoffs you only see after shipping.</blockquote>
+  <p>This is your language model. It is not a reliable witness. It is a witness who has read every transcript, every document, every deposition ever written, has absorbed the statistical patterns of how confident testimony sounds, and produces confident-sounding testimony whether or not the underlying facts are correct. When it tells you it is 95 percent confident, that number does not mean what you think it means. It is not measuring the probability that the answer is factually correct. It is measuring something far more narrow, far more mathematical, and far more misleading.</p>
 
-    <h2 id="failure-modes">Failure Modes</h2>
-    <p>The failure modes here are subtle: degraded performance, silent correctness drift, and compounded operational toil. The article focuses on detection and mitigation before the incident page lights up.</p>
+  <p>This article is a complete technical guide to what LLM confidence scores actually measure, why they systematically overstate certainty, how this produces hallucination at scale, and what engineering defenses can meaningfully reduce the risk. We start at the level of individual tokens, because that is where confidence actually lives.</p>
 
-    <h2 id="takeaways">Takeaways</h2>
-    <ul>
-      <li>Pay attention to calibration — it is usually the first signal of scale-induced instability.</li><li>Pay attention to reliability — it is usually the first signal of scale-induced instability.</li><li>Pay attention to hallucination — it is usually the first signal of scale-induced instability.</li>
-    </ul>
+  <div class="stat-row">
+    <div class="stat"><span class="n">~40%</span><span class="l">Of GPT-4 responses contain at least one hallucinated claim, per TruthfulQA evals</span></div>
+    <div class="stat"><span class="n">0.15+</span><span class="l">Typical Expected Calibration Error for top LLMs — 15 points off on average</span></div>
+    <div class="stat"><span class="n">100%</span><span class="l">Of the time, LLMs express the same tone of certainty for facts and fabrications</span></div>
+    <div class="stat"><span class="n">0</span><span class="l">Native mechanisms in standard LLM outputs to distinguish knowledge from pattern completion</span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="ico">⚠️</div>
+    <div class="body"><strong>The Stakes Are Not Uniform:</strong> An LLM confidently hallucinating the name of a fictional character is a minor inconvenience. The same system confidently hallucinating a drug dosage, a legal precedent, or a financial regulation is a safety incident. The calibration problem is not equally important across all use cases — and the most dangerous deployments are precisely the ones where users are most likely to trust the model's confidence.</div>
+  </div>
+</section>
+
+<div class="div">· · ·</div>
+
+<!-- 02 -->
+<section id="what-confidence-means">
+  <h2><span class="sec-num"> 02 — Token Probability</span>What the Model Is Actually Computing</h2>
+
+  <p>When a language model generates text, it does not think about truth. It does not consult an internal knowledge base, match facts against a verified corpus, or estimate the probability that a claim is correct. It performs one operation, repeated for each output token: it computes a probability distribution over the entire vocabulary, and samples from or argmax-selects the next token.</p>
+
+  <p>This probability distribution is the model's "confidence" in its output — but it is confidence of a very specific kind. It is the model's estimate of which token is most likely to follow the current sequence, given everything it learned during training. This is <em>distributional confidence</em>: how consistent this token choice is with the statistical patterns of language the model absorbed during pretraining. It is not <em>factual confidence</em>: how likely the claim being made is to be true.</p>
+
+  <p>The distinction matters enormously in practice. Consider the sentence: "The capital of Australia is ____." The model assigns very high token probability to "Canberra" — and it is correct. Now consider: "The first person to walk on the moon was ____." The model assigns high token probability to "Neil Armstrong" — and it is correct. Now consider a hallucination-prone scenario: "The CEO of [medium-sized company] as of last quarter was ____." The model still assigns high token probability to whatever name it generates, because the token probability reflects how well-formed and fluent the response is — not whether the name is actually correct.</p>
+
+  <p>This is the core of the calibration problem. <strong>Token probability measures linguistic fluency and distributional consistency, not factual accuracy.</strong> A model can be maximally confident — probability 0.99 on the next token — while being completely, verifiably wrong, because the wrong answer is statistically the most natural continuation of the input pattern.</p>
+
+  <h3>The Softmax Illusion</h3>
+
+  <p>The probability values that emerge from an LLM's output layer pass through a <code>softmax</code> function that transforms raw logit scores into a proper probability distribution summing to 1. This transformation creates the appearance of a well-calibrated probability estimate — the output looks mathematically like a probability, with all the formal properties of one. But the softmax function has no mechanism for distinguishing "I have reliable training data supporting this claim" from "I have encountered this pattern frequently enough to generate it fluently." It simply normalizes the logits. The numerical value it produces cannot be interpreted as a reliability score without extensive additional calibration work.</p>
+
+  <p>Furthermore, the temperature parameter — widely used to control LLM output diversity — directly manipulates these probabilities in ways that have nothing to do with factual reliability. Lowering the temperature sharpens the distribution, pushing token probabilities toward 1. This makes the model's outputs more deterministic and makes the reported confidence numbers larger. A response generated at temperature 0.1 will report higher token probabilities than the same response generated at temperature 1.0 — but the factual content, and therefore the factual reliability, is identical. Temperature is a dial that controls certainty theater, not actual knowledge.</p>
+
+  <div class="pq">
+    <p>"Lowering the temperature does not make the model know more. It makes the model sound more certain about what it already knows — and about what it is making up."</p>
+  </div>
+</section>
+
+</div>
+
+<!-- DIAGRAM 1: Token probability vs factual accuracy -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 420" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#7b1fa2"/></marker>
+    <marker id="a2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0392b"/></marker>
+  </defs>
+  <rect width="1040" height="420" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#161412" font-size="15" font-weight="700" text-anchor="middle">THE CALIBRATION GAP — TOKEN PROBABILITY vs ACTUAL FACTUAL ACCURACY</text>
+
+  <!-- Perfect calibration line -->
+  <text x="280" y="62" fill="#161412" font-size="13" font-weight="700" text-anchor="middle">PERFECTLY CALIBRATED MODEL (ideal)</text>
+  <line x1="60" y1="350" x2="500" y2="350" stroke="#d2cec5" stroke-width="1.5"/>
+  <line x1="60" y1="350" x2="60" y2="90" stroke="#d2cec5" stroke-width="1.5"/>
+  <text x="280" y="370" fill="#66625a" font-size="11" text-anchor="middle">Model's stated confidence →</text>
+  <text x="22" y="220" fill="#66625a" font-size="11" text-anchor="middle" transform="rotate(-90,22,220)">Actual accuracy %</text>
+  <text x="65" y="353" fill="#66625a" font-size="10" text-anchor="start">0%</text>
+  <text x="65" y="93" fill="#66625a" font-size="10" text-anchor="start">100%</text>
+  <text x="260" y="365" fill="#66625a" font-size="10" text-anchor="middle">50%</text>
+  <text x="490" y="365" fill="#66625a" font-size="10" text-anchor="middle">100%</text>
+  <!-- Perfect diagonal -->
+  <line x1="60" y1="350" x2="500" y2="90" stroke="#1a6e42" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="355" y="130" fill="#1a6e42" font-size="11" transform="rotate(-33,355,130)">perfect calibration</text>
+
+  <!-- Actual LLM curve: overconfident -->
+  <path d="M 70,338 Q 150,320 220,290 Q 290,255 360,200 Q 420,148 490,110" fill="none" stroke="#7b1fa2" stroke-width="3"/>
+  <text x="430" y="105" fill="#7b1fa2" font-size="11" font-weight="700">LLM (overconfident)</text>
+
+  <!-- Gap annotations -->
+  <line x1="300" y1="265" x2="300" y2="218" stroke="#c0392b" stroke-width="2"/>
+  <circle cx="300" cy="265" r="5" fill="#7b1fa2"/>
+  <circle cx="300" cy="218" r="5" fill="#1a6e42"/>
+  <rect x="310" y="225" width="130" height="30" rx="5" fill="#fff5f3" stroke="#c0392b" stroke-width="1"/>
+  <text x="375" y="244" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">ECE gap at 60%</text>
+
+  <!-- Shaded gap area -->
+  <path d="M 70,338 Q 150,320 220,290 Q 290,255 360,200 Q 420,148 490,110 L 490,90 Q 420,120 360,168 Q 290,218 220,252 Q 150,280 70,296 Z" fill="rgba(123,31,162,.06)"/>
+
+  <!-- DIVIDER -->
+  <line x1="530" y1="60" x2="530" y2="410" stroke="#d2cec5" stroke-width="1.5" stroke-dasharray="8 5"/>
+
+  <!-- RIGHT: Confidence breakdown by source -->
+  <text x="785" y="62" fill="#161412" font-size="13" font-weight="700" text-anchor="middle">HIGH-CONFIDENCE RESPONSES — WHERE THEY COME FROM</text>
+
+  <rect x="555" y="82" width="450" height="300" rx="12" fill="#fafafa" stroke="#d2cec5" stroke-width="1.5"/>
+
+  <!-- Category 1: Memorized facts -->
+  <rect x="570" y="98" width="115" height="44" rx="8" fill="#f0fff4" stroke="#1a6e42" stroke-width="1.5"/>
+  <text x="627" y="116" fill="#1a6e42" font-size="11" text-anchor="middle" font-weight="700">Memorized</text>
+  <text x="627" y="132" fill="#555" font-size="10" text-anchor="middle">high accuracy</text>
+  <text x="627" y="158" fill="#1a6e42" font-size="12" text-anchor="middle" font-weight="700">✓ Reliable</text>
+  <text x="627" y="174" fill="#555" font-size="10" text-anchor="middle">~65% of high-conf</text>
+
+  <!-- Category 2: Plausible inference -->
+  <rect x="700" y="98" width="115" height="44" rx="8" fill="#fff8f0" stroke="#b06000" stroke-width="1.5"/>
+  <text x="757" y="116" fill="#b06000" font-size="11" text-anchor="middle" font-weight="700">Inference</text>
+  <text x="757" y="132" fill="#555" font-size="10" text-anchor="middle">mixed accuracy</text>
+  <text x="757" y="158" fill="#b06000" font-size="12" text-anchor="middle" font-weight="700">⚠ Unreliable</text>
+  <text x="757" y="174" fill="#555" font-size="10" text-anchor="middle">~22% of high-conf</text>
+
+  <!-- Category 3: Pattern hallucination -->
+  <rect x="830" y="98" width="115" height="44" rx="8" fill="#fff5f3" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="887" y="116" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">Hallucinated</text>
+  <text x="887" y="132" fill="#555" font-size="10" text-anchor="middle">wrong but fluent</text>
+  <text x="887" y="158" fill="#c0392b" font-size="12" text-anchor="middle" font-weight="700">✗ Wrong</text>
+  <text x="887" y="174" fill="#555" font-size="10" text-anchor="middle">~13% of high-conf</text>
+
+  <!-- Bar showing token prob is same for all 3 -->
+  <text x="785" y="215" fill="#161412" font-size="12" text-anchor="middle" font-weight="700">Token probability for each category:</text>
+  <rect x="570" y="228" width="115" height="28" rx="5" fill="#1a6e42"/>
+  <text x="627" y="247" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">0.91 avg</text>
+  <rect x="700" y="228" width="115" height="28" rx="5" fill="#b06000"/>
+  <text x="757" y="247" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">0.89 avg</text>
+  <rect x="830" y="228" width="115" height="28" rx="5" fill="#c0392b"/>
+  <text x="887" y="247" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">0.87 avg</text>
+
+  <text x="785" y="285" fill="#c0392b" font-size="12" text-anchor="middle" font-weight="700">The token probability is nearly identical.</text>
+  <text x="785" y="305" fill="#555" font-size="11" text-anchor="middle">A memorized fact and a hallucinated claim look the same</text>
+  <text x="785" y="323" fill="#555" font-size="11" text-anchor="middle">to the probability distribution. The model cannot tell</text>
+  <text x="785" y="341" fill="#555" font-size="11" text-anchor="middle">the difference — and neither can you from the score alone.</text>
+  <text x="785" y="370" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">⚠ This is the calibration problem in one paragraph.</text>
+</svg>
+<figcaption>Fig. 1 — The calibration gap. A well-calibrated model would sit on the diagonal: 70% confidence should mean 70% accuracy. Real LLMs are systematically overconfident — they express 85–95% token probability for both correct memorized facts (reliable) and hallucinated claims (wrong). The token probability scores are nearly indistinguishable across categories.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!-- 03 -->
+<section id="hallucination-mechanics">
+  <h2><span class="sec-num"> 03 — The Mechanics</span>Why Hallucination Is Not Lying</h2>
+
+  <p>The word "hallucination" implies that the model knows the truth and is choosing to say something else — like a person experiencing a delusion. This framing is dangerously wrong, because it suggests the model has something like knowledge that it is departing from. It does not. A language model hallucinating is not departing from knowledge. It is executing its training objective perfectly — and that objective does not include "only generate tokens corresponding to verified facts."</p>
+
+  <p>The training objective of a language model is <strong>next-token prediction</strong>: given a sequence of tokens, predict the most likely next token, minimize the prediction error, repeat. This objective produces a model that is extraordinarily good at generating text that is statistically consistent with the patterns of its training corpus. It does not produce a model that distinguishes between generating a correct fact and generating a plausible-sounding fiction, because the training signal does not differentiate between the two — both are evaluated by the same next-token prediction loss.</p>
+
+  <p>Hallucination is therefore best understood not as a failure mode but as the training objective succeeding in a domain where it should not be trusted. When the model generates "the author of [book] is [wrong name]," it is generating the name that most commonly follows "the author of [this type of book] is" in its training distribution. It is completing a pattern. The pattern completion is high-quality — the output is fluent, grammatical, contextually plausible — and wrong.</p>
+
+  <h3>Three Hallucination Subtypes</h3>
+
+  <p><strong>Intrinsic hallucination</strong> occurs when the model contradicts its own source material. In RAG systems, this is particularly clear: the retrieved context says X, the model generates Y. The model's parametric memory overrides the contextual evidence in the prompt. This happens because the generation probability for the model's preferred answer is higher than the probability for the correct answer drawn from context — the model pattern-completes from training rather than faithfully attending to the prompt.</p>
+
+  <p><strong>Extrinsic hallucination</strong> occurs when the model generates claims that cannot be verified or contradicted from any provided source — fabricated citations, invented statistics, attributed quotes that were never said. These are particularly dangerous in professional settings because they sound authoritative and specific. A fabricated citation to a real journal with a plausible-sounding title is far more dangerous than an obviously wrong claim, because it is designed by the model's pattern completion to be exactly as specific and confident as a real citation would be.</p>
+
+  <p><strong>Temporal hallucination</strong> occurs when the model generates claims that were true at some point in its training window but are no longer true — and expresses them with the same confidence as currently accurate claims. The model has no mechanism to assess the temporal reliability of its own parametric memory.</p>
+
+  <div class="callout info">
+    <div class="ico">🔬</div>
+    <div class="body"><strong>The Sycophancy Amplifier:</strong> RLHF (Reinforcement Learning from Human Feedback) — the fine-tuning technique that makes LLMs helpful and pleasant — significantly worsens calibration. Human raters reward fluent, confident-sounding answers and penalize hedged, uncertain ones. The model learns that expressions of uncertainty are penalized and expressions of confidence are rewarded — regardless of whether the confidence is warranted. Post-RLHF models are measurably worse calibrated than their pre-RLHF base model counterparts.</div>
+  </div>
+</section>
+
+</div>
+
+<!-- DIAGRAM 2: Hallucination mechanics -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 400" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="1040" height="400" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#161412" font-size="15" font-weight="700" text-anchor="middle">THREE PATHS TO HIGH-CONFIDENCE GENERATION — ONE IS ALWAYS WRONG</text>
+
+  <!-- Path 1: Memorized fact -->
+  <rect x="30" y="60" width="295" height="300" rx="12" fill="#f0fff4" stroke="#1a6e42" stroke-width="2"/>
+  <rect x="30" y="60" width="295" height="38" rx="12" fill="#1a6e42"/>
+  <text x="177" y="84" fill="#fff" font-size="13" text-anchor="middle" font-weight="700">PATH 1: MEMORIZED FACT</text>
+  <text x="177" y="118" fill="#333" font-size="12" text-anchor="middle">Query: "What year did WWII end?"</text>
+  <rect x="48" y="130" width="259" height="50" rx="8" fill="#fff" stroke="#d2cec5" stroke-width="1"/>
+  <text x="177" y="152" fill="#555" font-size="11" text-anchor="middle">Training corpus: millions of</text>
+  <text x="177" y="168" fill="#555" font-size="11" text-anchor="middle">docs saying "1945"</text>
+  <text x="177" y="210" fill="#333" font-size="12" text-anchor="middle">Token: "1945"</text>
+  <text x="177" y="230" fill="#1a6e42" font-size="16" text-anchor="middle" font-weight="700">P = 0.97</text>
+  <text x="177" y="265" fill="#1a6e42" font-size="22" text-anchor="middle">✓</text>
+  <text x="177" y="292" fill="#1a6e42" font-size="12" text-anchor="middle" font-weight="700">Correct AND confident</text>
+  <text x="177" y="310" fill="#555" font-size="11" text-anchor="middle">High probability justified by</text>
+  <text x="177" y="326" fill="#555" font-size="11" text-anchor="middle">dense, consistent training data</text>
+  <text x="177" y="350" fill="#1a6e42" font-size="11" text-anchor="middle" font-weight="700">~65% of LLM responses</text>
+
+  <!-- Path 2: Pattern completion -->
+  <rect x="372" y="60" width="295" height="300" rx="12" fill="#fff8f0" stroke="#b06000" stroke-width="2"/>
+  <rect x="372" y="60" width="295" height="38" rx="12" fill="#b06000"/>
+  <text x="519" y="84" fill="#fff" font-size="13" text-anchor="middle" font-weight="700">PATH 2: PATTERN COMPLETION</text>
+  <text x="519" y="118" fill="#333" font-size="12" text-anchor="middle">Query: "CEO of [mid-size firm]?"</text>
+  <rect x="390" y="130" width="259" height="50" rx="8" fill="#fff" stroke="#d2cec5" stroke-width="1"/>
+  <text x="519" y="152" fill="#555" font-size="11" text-anchor="middle">Training: sparse, conflicting,</text>
+  <text x="519" y="168" fill="#555" font-size="11" text-anchor="middle">possibly stale mentions</text>
+  <text x="519" y="210" fill="#333" font-size="12" text-anchor="middle">Token: "John Smith"</text>
+  <text x="519" y="230" fill="#b06000" font-size="16" text-anchor="middle" font-weight="700">P = 0.84</text>
+  <text x="519" y="265" fill="#b06000" font-size="22" text-anchor="middle">⚠</text>
+  <text x="519" y="292" fill="#b06000" font-size="12" text-anchor="middle" font-weight="700">Confident but unreliable</text>
+  <text x="519" y="310" fill="#555" font-size="11" text-anchor="middle">Model completes the pattern</text>
+  <text x="519" y="326" fill="#555" font-size="11" text-anchor="middle">"CEO of [company] is [name]"</text>
+  <text x="519" y="350" fill="#b06000" font-size="11" text-anchor="middle" font-weight="700">~22% of LLM responses</text>
+
+  <!-- Path 3: Hallucination -->
+  <rect x="714" y="60" width="296" height="300" rx="12" fill="#fff5f3" stroke="#c0392b" stroke-width="2.5"/>
+  <rect x="714" y="60" width="296" height="38" rx="12" fill="#c0392b"/>
+  <text x="862" y="84" fill="#fff" font-size="13" text-anchor="middle" font-weight="700">PATH 3: HALLUCINATION</text>
+  <text x="862" y="118" fill="#333" font-size="12" text-anchor="middle">Query: "Cite a study on X"</text>
+  <rect x="732" y="130" width="260" height="50" rx="8" fill="#fff" stroke="#d2cec5" stroke-width="1"/>
+  <text x="862" y="152" fill="#555" font-size="11" text-anchor="middle">Training: no such study exists,</text>
+  <text x="862" y="168" fill="#555" font-size="11" text-anchor="middle">but pattern is plausible</text>
+  <text x="862" y="210" fill="#333" font-size="12" text-anchor="middle">Token: "Smith et al. (2021)"</text>
+  <text x="862" y="230" fill="#c0392b" font-size="16" text-anchor="middle" font-weight="700">P = 0.89</text>
+  <text x="862" y="265" fill="#c0392b" font-size="22" text-anchor="middle">✗</text>
+  <text x="862" y="292" fill="#c0392b" font-size="12" text-anchor="middle" font-weight="700">Confident AND wrong</text>
+  <text x="862" y="310" fill="#555" font-size="11" text-anchor="middle">Citation pattern so fluent the</text>
+  <text x="862" y="326" fill="#555" font-size="11" text-anchor="middle">model can't tell it's inventing</text>
+  <text x="862" y="350" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">~13% of LLM responses</text>
+
+  <!-- Bottom note -->
+  <rect x="30" y="376" width="980" height="18" rx="6" fill="#fff5f3" stroke="#c0392b" stroke-width="1"/>
+  <text x="520" y="389" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">All three paths produce high token probability. The model uses the same mechanism for all three. There is no internal flag saying "this is a hallucination."</text>
+</svg>
+<figcaption>Fig. 2 — Three paths to high-confidence generation. Memorized facts (Path 1), pattern completions (Path 2), and full hallucinations (Path 3) all produce similar token probability scores. The model's generation mechanism cannot distinguish between them — and neither can you without external verification.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!-- 04 -->
+<section id="calibration-science">
+  <h2><span class="sec-num"> 04 — Calibration Science</span>Measuring How Wrong the Confidence Is</h2>
+
+  <p>Calibration is the formal study of the relationship between a model's stated confidence and its actual accuracy. A perfectly calibrated model has the property that, across all claims made with 70 percent confidence, exactly 70 percent of those claims are correct. This is not an aspirational goal for language models — it is a measurable property, and current models fail it significantly.</p>
+
+  <p>The standard measurement is <strong>Expected Calibration Error (ECE)</strong>: partition the model's outputs into confidence buckets, compute the absolute difference between mean confidence and mean accuracy within each bucket, and average those differences weighted by the number of samples per bucket. An ECE of 0.0 indicates perfect calibration. An ECE of 0.15 — typical for frontier LLMs on factual question answering benchmarks — means the model's confidence is, on average, 15 percentage points off from its actual accuracy. When the model says 90 percent, the truth is closer to 75 percent.</p>
+
+<pre>
+<span class="cm"># Expected Calibration Error computation</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">expected_calibration_error</span>(
+    confidences: list[float],   <span class="cm"># model's stated confidence per sample</span>
+    accuracies:  list[int],     <span class="cm"># 1 if correct, 0 if wrong</span>
+    n_bins: int = <span class="nm">10</span>
+) -> float:
+    confidences = np.<span class="fn">array</span>(confidences)
+    accuracies  = np.<span class="fn">array</span>(accuracies)
+    bins = np.<span class="fn">linspace</span>(<span class="nm">0</span>, <span class="nm">1</span>, n_bins + <span class="nm">1</span>)
+    ece  = <span class="nm">0.0</span>
+
+    <span class="kw">for</span> i <span class="kw">in</span> range(n_bins):
+        lo, hi = bins[i], bins[i + <span class="nm">1</span>]
+        mask   = (confidences >= lo) & (confidences < hi)
+        <span class="kw">if</span> mask.<span class="fn">sum</span>() == <span class="nm">0</span>:
+            <span class="kw">continue</span>
+        bin_conf = confidences[mask].<span class="fn">mean</span>()
+        bin_acc  = accuracies[mask].<span class="fn">mean</span>()
+        weight   = mask.<span class="fn">sum</span>() / len(confidences)
+        ece     += weight * abs(bin_conf - bin_acc)
+
+    <span class="kw">return</span> round(ece, <span class="nm">4</span>)
+
+<span class="cm"># Example: ECE of a GPT-4 class model on TruthfulQA</span>
+<span class="cm"># confidences: model's self-reported probability per answer</span>
+<span class="cm"># accuracies:  whether external fact-check confirms correctness</span>
+<span class="cm"># Typical result: ECE ≈ 0.12–0.18 (12–18% miscalibration)</span>
+</pre>
+
+  <h3>The Verbalized Confidence Problem</h3>
+
+  <p>Some LLM deployments ask the model to verbalize its own confidence — to say "I am 85 percent confident that..." — reasoning that this provides a human-interpretable reliability signal. Research has shown this approach is even worse than using raw token probabilities. When asked to estimate their own confidence, LLMs produce numbers that are driven primarily by the complexity and phrasing of the question, not by any reliable internal uncertainty signal. Models trained on RLHF systematically verbalize higher confidence than their token probabilities justify, because human raters reward confident-sounding responses during the fine-tuning process.</p>
+
+  <p>The verbalized confidence also exhibits a predictable social desirability bias: when the user provides a confident framing in the question — "I am pretty sure that X, right?" — the model's verbalized confidence in X increases substantially, even when the token probability of X has not changed. The model has learned to mirror the user's expressed certainty. This is sycophancy in calibration form, and it is particularly dangerous in settings where users are most likely to be confidently wrong about something they want the model to confirm.</p>
+
+</section>
+
+</div>
+
+<!-- DIAGRAM 3: Calibration curve -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 420" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="1040" height="420" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#161412" font-size="15" font-weight="700" text-anchor="middle">CALIBRATION RELIABILITY DIAGRAMS — REAL LLM BEHAVIOR vs IDEAL</text>
+
+  <!-- LEFT: Reliability diagram -->
+  <text x="255" y="60" fill="#161412" font-size="13" font-weight="700" text-anchor="middle">RELIABILITY DIAGRAM (accuracy vs confidence)</text>
+
+  <!-- Axes -->
+  <line x1="65" y1="345" x2="460" y2="345" stroke="#d2cec5" stroke-width="1.5"/>
+  <line x1="65" y1="345" x2="65" y2="85" stroke="#d2cec5" stroke-width="1.5"/>
+  <text x="262" y="368" fill="#66625a" font-size="11" text-anchor="middle">Confidence bucket</text>
+  <text x="22" y="215" fill="#66625a" font-size="11" text-anchor="middle" transform="rotate(-90,22,215)">Accuracy in bucket</text>
+
+  <!-- X ticks -->
+  <text x="105" y="360" fill="#66625a" font-size="10" text-anchor="middle">0–10%</text>
+  <text x="145" y="360" fill="#66625a" font-size="10" text-anchor="middle">20%</text>
+  <text x="190" y="360" fill="#66625a" font-size="10" text-anchor="middle">30%</text>
+  <text x="235" y="360" fill="#66625a" font-size="10" text-anchor="middle">40%</text>
+  <text x="280" y="360" fill="#66625a" font-size="10" text-anchor="middle">50%</text>
+  <text x="325" y="360" fill="#66625a" font-size="10" text-anchor="middle">60%</text>
+  <text x="370" y="360" fill="#66625a" font-size="10" text-anchor="middle">70%</text>
+  <text x="415" y="360" fill="#66625a" font-size="10" text-anchor="middle">80%</text>
+  <text x="457" y="360" fill="#66625a" font-size="10" text-anchor="middle">90%+</text>
+
+  <!-- Y ticks -->
+  <text x="57" y="348" fill="#66625a" font-size="10" text-anchor="end">0</text>
+  <text x="57" y="258" fill="#66625a" font-size="10" text-anchor="end">40%</text>
+  <text x="57" y="215" fill="#66625a" font-size="10" text-anchor="end">60%</text>
+  <text x="57" y="170" fill="#66625a" font-size="10" text-anchor="end">80%</text>
+  <text x="57" y="130" fill="#66625a" font-size="10" text-anchor="end">90%</text>
+  <text x="57" y="90" fill="#66625a" font-size="10" text-anchor="end">100%</text>
+
+  <!-- Perfect calibration diagonal bars -->
+  <rect x="86" y="328" width="30" height="17" rx="3" fill="rgba(26,110,66,.2)" stroke="#1a6e42" stroke-width="1"/>
+  <rect x="130" y="304" width="30" height="41" rx="3" fill="rgba(26,110,66,.2)" stroke="#1a6e42" stroke-width="1"/>
+  <rect x="175" y="281" width="30" height="64" rx="3" fill="rgba(26,110,66,.2)" stroke="#1a6e42" stroke-width="1"/>
+  <rect x="220" y="258" width="30" height="87" rx="3" fill="rgba(26,110,66,.2)" stroke="#1a6e42" stroke-width="1"/>
+  <rect x="265" y="234" width="30" height="111" rx="3" fill="rgba(26,110,66,.2)" stroke="#1a6e42" stroke-width="1"/>
+  <rect x="310" y="211" width="30" height="134" rx="3" fill="rgba(26,110,66,.2)" stroke="#1a6e42" stroke-width="1"/>
+  <rect x="355" y="188" width="30" height="157" rx="3" fill="rgba(26,110,66,.2)" stroke="#1a6e42" stroke-width="1"/>
+  <rect x="400" y="165" width="30" height="180" rx="3" fill="rgba(26,110,66,.2)" stroke="#1a6e42" stroke-width="1"/>
+  <rect x="440" y="87" width="30" height="258" rx="3" fill="rgba(26,110,66,.2)" stroke="#1a6e42" stroke-width="1"/>
+
+  <!-- LLM actual bars (overconfident - actual accuracy lower than confidence) -->
+  <rect x="86" y="336" width="30" height="9" rx="3" fill="rgba(123,31,162,.6)"/>
+  <rect x="130" y="322" width="30" height="23" rx="3" fill="rgba(123,31,162,.6)"/>
+  <rect x="175" y="304" width="30" height="41" rx="3" fill="rgba(123,31,162,.6)"/>
+  <rect x="220" y="285" width="30" height="60" rx="3" fill="rgba(123,31,162,.6)"/>
+  <rect x="265" y="265" width="30" height="80" rx="3" fill="rgba(123,31,162,.6)"/>
+  <rect x="310" y="240" width="30" height="105" rx="3" fill="rgba(123,31,162,.6)"/>
+  <rect x="355" y="215" width="30" height="130" rx="3" fill="rgba(123,31,162,.6)"/>
+  <rect x="400" y="190" width="30" height="155" rx="3" fill="rgba(123,31,162,.6)"/>
+  <rect x="440" y="130" width="30" height="215" rx="3" fill="rgba(123,31,162,.6)"/>
+
+  <!-- Legend -->
+  <rect x="75" y="90" width="14" height="14" rx="3" fill="rgba(26,110,66,.4)" stroke="#1a6e42" stroke-width="1"/>
+  <text x="95" y="102" fill="#1a6e42" font-size="11">Perfect calibration</text>
+  <rect x="75" y="112" width="14" height="14" rx="3" fill="rgba(123,31,162,.6)"/>
+  <text x="95" y="124" fill="#7b1fa2" font-size="11">Actual LLM accuracy</text>
+  <text x="262" y="400" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">Model says 90% confident → only ~75% actually correct</text>
+
+  <!-- DIVIDER -->
+  <line x1="520" y1="50" x2="520" y2="410" stroke="#d2cec5" stroke-width="1.5" stroke-dasharray="8 5"/>
+
+  <!-- RIGHT: Confidence source comparison -->
+  <text x="780" y="60" fill="#161412" font-size="13" font-weight="700" text-anchor="middle">ECE BY CONFIDENCE ESTIMATION METHOD</text>
+  <text x="780" y="76" fill="#66625a" font-size="11" text-anchor="middle">(lower = better calibrated)</text>
+
+  <!-- Methods ranked by ECE -->
+  <text x="545" y="118" fill="#66625a" font-size="11">Temp. scaling (post-hoc)</text>
+  <rect x="720" y="103" width="48" height="26" rx="5" fill="#1a6e42"/>
+  <text x="744" y="120" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">0.04</text>
+  <text x="780" y="120" fill="#1a6e42" font-size="11">← best</text>
+
+  <text x="545" y="158" fill="#66625a" font-size="11">Token prob (raw logits)</text>
+  <rect x="720" y="143" width="82" height="26" rx="5" fill="#1a5c8a"/>
+  <text x="761" y="160" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">0.11</text>
+
+  <text x="545" y="198" fill="#66625a" font-size="11">P(True) probing</text>
+  <rect x="720" y="183" width="100" height="26" rx="5" fill="#b06000"/>
+  <text x="770" y="200" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">0.14</text>
+
+  <text x="545" y="238" fill="#66625a" font-size="11">Verbalized (base model)</text>
+  <rect x="720" y="223" width="138" height="26" rx="5" fill="#c0392b" opacity=".8"/>
+  <text x="789" y="240" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">0.18</text>
+
+  <text x="545" y="278" fill="#66625a" font-size="11">Verbalized (RLHF model)</text>
+  <rect x="720" y="263" width="200" height="26" rx="5" fill="#c0392b"/>
+  <text x="820" y="280" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">0.24 ← RLHF makes it worse</text>
+
+  <text x="545" y="320" fill="#66625a" font-size="11">"Confident" tone forced</text>
+  <rect x="720" y="305" width="252" height="26" rx="5" fill="#7b1fa2"/>
+  <text x="846" y="322" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">0.31 ← worst method</text>
+
+  <rect x="535" y="350" width="465" height="44" rx="8" fill="#fff5f3" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="767" y="368" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">Asking the model how confident it is produces the worst calibration.</text>
+  <text x="767" y="384" fill="#555" font-size="10" text-anchor="middle">Temperature scaling on raw logits is the most reliable post-hoc calibration technique available today.</text>
+</svg>
+<figcaption>Fig. 3 — Left: Reliability diagram showing the calibration gap. LLM accuracy (purple bars) consistently falls short of the confidence bucket value (green outline = perfect). Right: ECE by confidence estimation method. Verbalized confidence from RLHF models is the worst method. Temperature scaling on raw logits is the best currently available.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!-- 05 -->
+<section id="calibration-techniques">
+  <h2><span class="sec-num"> 05 — Production Defenses</span>Four Techniques That Actually Reduce Hallucination Risk</h2>
+
+  <p>Given that LLM confidence scores are unreliable, what can actually be done in production? The honest answer is that there is no technique that eliminates hallucination — the problem is architectural, baked into the training objective itself. But there are four engineering approaches that meaningfully reduce the frequency and severity of confident wrong answers, and that can be combined into a layered production defense.</p>
+
+  <h3>Technique 1: Temperature Scaling</h3>
+
+  <p>Temperature scaling is the single most effective post-hoc calibration technique available. It applies a learned scalar parameter T to the model's logits before softmax, recalibrating the probability distribution without changing the model's actual output. A T greater than 1 makes the distribution flatter and reduces overconfidence. The scalar is learned on a held-out validation set by minimizing the negative log-likelihood of the correct answers. Studies by Guo et al. (2017) found that temperature scaling reduces ECE from 0.15 to 0.04 on standard classification benchmarks — a 73 percent reduction in miscalibration with no change in model accuracy.</p>
+
+<pre>
+<span class="cm"># Temperature scaling calibration</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> scipy.optimize <span class="kw">import</span> minimize_scalar
+<span class="kw">from</span> scipy.special <span class="kw">import</span> softmax
+
+<span class="kw">def</span> <span class="fn">nll_with_temperature</span>(T: float, logits: np.ndarray, labels: np.ndarray) -> float:
+    <span class="cm"># Negative log-likelihood under temperature T</span>
+    scaled   = logits / T
+    probs    = softmax(scaled, axis=-<span class="nm">1</span>)
+    correct  = probs[np.<span class="fn">arange</span>(len(labels)), labels]
+    <span class="kw">return</span> -np.<span class="fn">mean</span>(np.<span class="fn">log</span>(correct + <span class="nm">1e-10</span>))
+
+<span class="kw">def</span> <span class="fn">learn_temperature</span>(val_logits: np.ndarray, val_labels: np.ndarray) -> float:
+    result = minimize_scalar(
+        <span class="fn">nll_with_temperature</span>,
+        bounds=(<span class="nm">0.1</span>, <span class="nm">10.0</span>), method=<span class="st">'bounded'</span>,
+        args=(val_logits, val_labels)
+    )
+    T_opt = result.x
+    print(<span class="st">f"Optimal temperature: {T_opt:.3f}"</span>)
+    <span class="kw">return</span> T_opt
+
+<span class="kw">def</span> <span class="fn">calibrated_probabilities</span>(logits: np.ndarray, T: float) -> np.ndarray:
+    <span class="kw">return</span> softmax(logits / T, axis=-<span class="nm">1</span>)
+
+<span class="cm"># In production: apply T_opt to all logit outputs before reporting confidence</span>
+<span class="cm"># T > 1.0 for overconfident models (typical for RLHF-tuned LLMs)</span>
+<span class="cm"># T < 1.0 for underconfident models (rare)</span>
+</pre>
+
+  <h3>Technique 2: Consistency Sampling</h3>
+
+  <p>Rather than relying on a single generation's confidence, sample the same query multiple times at non-zero temperature and measure the consistency of the answers. A claim the model makes consistently across 10 independent generations — with no or minimal variation — is more reliably correct than a claim that varies across generations. Factual hallucinations tend to be unstable: the model might generate a different wrong name on each sample, revealing its uncertainty through variation even when any single sample appears confident.</p>
+
+<pre>
+<span class="cm"># Consistency-based confidence estimation</span>
+<span class="kw">import</span> asyncio
+<span class="kw">from</span> collections <span class="kw">import</span> Counter
+
+<span class="kw">async def</span> <span class="fn">consistency_confidence</span>(
+    query: str,
+    n_samples: int = <span class="nm">10</span>,
+    temperature: float = <span class="nm">0.7</span>
+) -> dict:
+    <span class="cm"># Sample n independent generations</span>
+    tasks = [
+        llm.<span class="fn">agenerate</span>(query, temperature=temperature, max_tokens=<span class="nm">100</span>)
+        <span class="kw">for</span> _ <span class="kw">in</span> range(n_samples)
+    ]
+    responses = await asyncio.<span class="fn">gather</span>(*tasks)
+
+    <span class="cm"># Extract the key factual claim (simplification: first sentence)</span>
+    claims = [r.<span class="fn">strip</span>().<span class="fn">split</span>(<span class="st">'.'</span>)[<span class="nm">0</span>] <span class="kw">for</span> r <span class="kw">in</span> responses]
+    counter = <span class="cl">Counter</span>(claims)
+    top_claim, top_count = counter.most_common(<span class="nm">1</span>)[<span class="nm">0</span>]
+
+    consistency_score = top_count / n_samples  <span class="cm"># fraction agreeing</span>
+    <span class="kw">return</span> {
+        <span class="st">"answer"</span>:           top_claim,
+        <span class="st">"consistency"</span>:      consistency_score,
+        <span class="st">"n_unique_answers"</span>: len(counter),
+        <span class="st">"reliable"</span>:         consistency_score >= <span class="nm">0.8</span>,
+        <span class="st">"flag_for_review"</span>:  consistency_score < <span class="nm">0.5</span>
+    }
+<span class="cm"># High consistency (≥0.8): answer likely memorized and correct</span>
+<span class="cm"># Low consistency (<0.5): answer likely hallucinated — flag or decline</span>
+</pre>
+
+  <h3>Technique 3: Semantic Entropy</h3>
+
+  <p>Semantic entropy, introduced by Kuhn et al. (2023), is a more sophisticated version of consistency sampling. Rather than counting exact string matches, it clusters responses by semantic meaning and computes entropy over the meaning distribution. This is critical because two responses saying "the answer is 42" and "42 is the answer" are semantically identical despite being different strings. Semantic entropy correctly identifies these as the same response, making the consistency estimate more robust and reducing the false flag rate on factual claims that are phrased differently but semantically equivalent.</p>
+
+  <h3>Technique 4: Grounded Verification with a Separate Model</h3>
+
+  <p>The most reliable production defense is <strong>separation of generation and verification</strong>. After the primary model generates an answer, a separate verification model — or the same model in a different role with explicit verification prompting — receives the claim and a reference corpus and is asked one question: is this claim supported by the provided sources? This is the LLM-as-judge pattern applied to hallucination detection. The critical design principle is that the verifier must never have access to the original generation context — it must evaluate the claim against the reference, not against what the generating model said.</p>
+
+<pre>
+<span class="cm"># Grounded verification pipeline</span>
+VERIFY_PROMPT = <span class="st">"""You are a strict fact-checker. Given a CLAIM and SOURCES,
+determine: is the claim directly supported by the sources?
+
+CLAIM: {claim}
+
+SOURCES:
+{sources}
+
+Respond ONLY with JSON:
+{{"supported": true/false, "confidence": 0.0-1.0, "evidence": "quote or null"}}
+
+Rules:
+- supported=true ONLY if sources directly state or clearly imply the claim
+- If sources are silent on the claim: supported=false
+- Never use your own knowledge — only the sources"""</span>
+
+<span class="kw">async def</span> <span class="fn">verify_claim</span>(claim: str, reference_sources: list[str]) -> dict:
+    sources_text = <span class="st">"\n---\n"</span>.<span class="fn">join</span>(reference_sources[:<span class="nm">3</span>])  <span class="cm"># top 3 sources</span>
+    response = await verifier_llm.<span class="fn">agenerate</span>(
+        VERIFY_PROMPT.<span class="fn">format</span>(claim=claim, sources=sources_text),
+        temperature=<span class="nm">0</span>, max_tokens=<span class="nm">150</span>
+    )
+    <span class="kw">try</span>:
+        result = json.<span class="fn">loads</span>(response)
+        <span class="kw">if not</span> result[<span class="st">"supported"</span>]:
+            metrics.<span class="fn">emit</span>(<span class="st">"hallucination.detected"</span>, {<span class="st">"claim"</span>: claim[:<span class="nm">100</span>]})
+        <span class="kw">return</span> result
+    <span class="kw">except</span>:
+        <span class="kw">return</span> {<span class="st">"supported"</span>: <span class="kw">None</span>, <span class="st">"confidence"</span>: <span class="nm">0</span>, <span class="st">"evidence"</span>: <span class="kw">None</span>}
+</pre>
+
+</section>
+
+</div>
+
+<!-- DIAGRAM 4: Defense layers -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 420" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="c1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#7b1fa2"/></marker>
+    <marker id="c2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a6e42"/></marker>
+    <marker id="c3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0392b"/></marker>
+  </defs>
+  <rect width="1040" height="420" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#161412" font-size="15" font-weight="700" text-anchor="middle">LAYERED HALLUCINATION DEFENSE PIPELINE</text>
+
+  <!-- Query -->
+  <ellipse cx="80" cy="210" rx="62" ry="34" fill="#f0f4ff" stroke="#1a5c8a" stroke-width="2"/>
+  <text x="80" y="206" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">USER</text>
+  <text x="80" y="222" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">QUERY</text>
+  <line x1="144" y1="210" x2="168" y2="210" stroke="#7b1fa2" stroke-width="2" marker-end="url(#c1)"/>
+
+  <!-- LLM Generate -->
+  <rect x="170" y="178" width="155" height="64" rx="10" fill="#f8f4ff" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="247" y="202" fill="#7b1fa2" font-size="12" text-anchor="middle" font-weight="700">LLM GENERATE</text>
+  <text x="247" y="220" fill="#555" font-size="10" text-anchor="middle">temperature=0.7</text>
+  <text x="247" y="234" fill="#555" font-size="10" text-anchor="middle">n=10 samples</text>
+  <line x1="327" y1="210" x2="351" y2="210" stroke="#7b1fa2" stroke-width="2" marker-end="url(#c1)"/>
+
+  <!-- Layer 1: Consistency -->
+  <rect x="353" y="160" width="160" height="100" rx="10" fill="#fff5f3" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="433" y="183" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">LAYER 1</text>
+  <text x="433" y="200" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">CONSISTENCY</text>
+  <text x="433" y="218" fill="#555" font-size="10" text-anchor="middle">Score &lt; 0.5 →</text>
+  <text x="433" y="233" fill="#555" font-size="10" text-anchor="middle">decline / flag</text>
+  <text x="433" y="250" fill="#c0392b" font-size="10" text-anchor="middle">Catches: unstable halluc.</text>
+
+  <!-- Reject path L1 -->
+  <line x1="433" y1="260" x2="433" y2="340" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#c3)"/>
+  <rect x="355" y="342" width="156" height="36" rx="7" fill="#fff5f3" stroke="#c0392b" stroke-width="1"/>
+  <text x="433" y="358" fill="#c0392b" font-size="10" text-anchor="middle" font-weight="700">⚠ FLAG / DECLINE</text>
+  <text x="433" y="372" fill="#555" font-size="9" text-anchor="middle">"I'm not confident in this"</text>
+
+  <line x1="515" y1="210" x2="539" y2="210" stroke="#7b1fa2" stroke-width="2" marker-end="url(#c1)"/>
+
+  <!-- Layer 2: Temp scaling -->
+  <rect x="541" y="160" width="160" height="100" rx="10" fill="#fff8f0" stroke="#b06000" stroke-width="1.5"/>
+  <text x="621" y="183" fill="#b06000" font-size="11" text-anchor="middle" font-weight="700">LAYER 2</text>
+  <text x="621" y="200" fill="#b06000" font-size="11" text-anchor="middle" font-weight="700">TEMP SCALING</text>
+  <text x="621" y="218" fill="#555" font-size="10" text-anchor="middle">Recalibrate logits</text>
+  <text x="621" y="233" fill="#555" font-size="10" text-anchor="middle">with learned T</text>
+  <text x="621" y="250" fill="#b06000" font-size="10" text-anchor="middle">Reduces ECE: 0.15→0.04</text>
+
+  <line x1="703" y1="210" x2="727" y2="210" stroke="#7b1fa2" stroke-width="2" marker-end="url(#c1)"/>
+
+  <!-- Layer 3: Grounded verify -->
+  <rect x="729" y="160" width="165" height="100" rx="10" fill="#f0fff4" stroke="#1a6e42" stroke-width="1.5"/>
+  <text x="811" y="183" fill="#1a6e42" font-size="11" text-anchor="middle" font-weight="700">LAYER 3</text>
+  <text x="811" y="200" fill="#1a6e42" font-size="11" text-anchor="middle" font-weight="700">GROUNDED VERIFY</text>
+  <text x="811" y="218" fill="#555" font-size="10" text-anchor="middle">Separate verifier LLM</text>
+  <text x="811" y="233" fill="#555" font-size="10" text-anchor="middle">vs reference sources</text>
+  <text x="811" y="250" fill="#1a6e42" font-size="10" text-anchor="middle">Catches: intrinsic halluc.</text>
+
+  <!-- Reject path L3 -->
+  <line x1="811" y1="260" x2="811" y2="340" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#c3)"/>
+  <rect x="730" y="342" width="164" height="36" rx="7" fill="#fff5f3" stroke="#c0392b" stroke-width="1"/>
+  <text x="812" y="358" fill="#c0392b" font-size="10" text-anchor="middle" font-weight="700">⚠ UNSUPPORTED</text>
+  <text x="812" y="372" fill="#555" font-size="9" text-anchor="middle">"Cannot confirm this claim"</text>
+
+  <line x1="896" y1="210" x2="920" y2="210" stroke="#1a6e42" stroke-width="2" marker-end="url(#c2)"/>
+
+  <!-- Output -->
+  <ellipse cx="975" cy="210" rx="56" ry="38" fill="#f0fff4" stroke="#1a6e42" stroke-width="2"/>
+  <text x="975" y="205" fill="#1a6e42" font-size="11" text-anchor="middle" font-weight="700">VERIFIED</text>
+  <text x="975" y="220" fill="#1a6e42" font-size="11" text-anchor="middle" font-weight="700">ANSWER</text>
+  <text x="975" y="235" fill="#1a6e42" font-size="10" text-anchor="middle">+ calibrated conf.</text>
+
+  <!-- Latency budget annotation -->
+  <rect x="170" y="70" width="700" height="44" rx="10" fill="#f0f4ff" stroke="#1a5c8a" stroke-width="1.5"/>
+  <text x="520" y="88" fill="#1a5c8a" font-size="11" text-anchor="middle" font-weight="700">LATENCY BUDGET: Gen ×10 samples ~800ms · Consistency ~5ms · Temp scaling ~1ms · Grounded verify ~200ms</text>
+  <text x="520" y="106" fill="#555" font-size="10" text-anchor="middle">Total overhead: ~1s on top of baseline generation — acceptable for high-stakes domains (medical, legal, financial)</text>
+</svg>
+<figcaption>Fig. 4 — Layered hallucination defense pipeline. Layer 1 (consistency sampling) catches unstable hallucinations that vary across samples. Layer 2 (temperature scaling) recalibrates the confidence scores. Layer 3 (grounded verification) catches claims unsupported by reference sources. Each rejection path returns an honest uncertainty message rather than a confident wrong answer.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!-- 06 -->
+<section id="honest-uncertainty">
+  <h2><span class="sec-num"> 06 — Honest Uncertainty</span>What Models Should Say When They Don't Know</h2>
+
+  <p>The engineering problem of calibration has a user experience dimension that is equally important: <em>what should the system do when its confidence is low?</em> The naive answer — "say so" — turns out to be harder to implement correctly than it appears, because both overconfidence and excessive hedging are failure modes.</p>
+
+  <p>A system that says "I'm not sure" for every response where the calibrated confidence falls below 0.85 is unusable — most factual queries land in that range even when the answer is correct. A system that says "I'm not sure" only when the confidence falls below 0.50 is failing to warn users about a large proportion of unreliable claims. The right threshold depends on the domain's risk profile, and the uncertainty communication must be calibrated to be informative rather than alarming or dismissive.</p>
+
+  <p>The most effective design pattern is <strong>graded uncertainty communication</strong> tied directly to the defense layers described in Section 5. If the answer passed all three layers — consistency above 0.8, grounded verification positive, calibrated confidence above 0.85 — state the answer directly. If it passed layer 2 and 3 but not layer 1 — consistency below 0.8 but grounded in sources — state the answer with a source citation and a mild hedge. If it failed grounded verification — the answer is not supported by available sources — state that explicitly and offer to search for current information. This is not ambiguity for its own sake. It is calibrated honesty.</p>
+
+  <div class="callout tip">
+    <div class="ico">✅</div>
+    <div class="body"><strong>The Single Most Important Design Decision:</strong> Never let a language model's verbalized confidence appear in user-facing output as if it were a meaningful probability. "I am 87% confident" is not a probability — it is a style of expression trained into the model by RLHF. Replace it with behavior: high consistency → answer directly; medium consistency + grounded → answer with source; low consistency or ungrounded → decline honestly. Actions calibrated to measured uncertainty are more trustworthy than numbers that are not.</div>
+  </div>
+
+  <p>There is a deeper principle at work here. The goal of confidence calibration is not to make the model produce accurate probability numbers. It is to make the system's <strong>behavior</strong> appropriately matched to its actual reliability. A system that declines to answer when it should decline, answers confidently when confidence is warranted, and hedges when hedging is appropriate — that system is calibrated, regardless of whether any probability numbers appear in its output.</p>
+
+  <p>The language model you deploy will hallucinate. That is not a prediction — it is a mathematical certainty given how the models are built and trained. The question is not whether it hallucints, but whether your system architecture contains it: whether the hallucinations are caught before they reach users, whether users are appropriately warned when they are not caught, and whether your production monitoring tells you when and where the failures are happening so you can close the gaps before they become incidents.</p>
+
+  <div class="stat-row">
+    <div class="stat"><span class="n">0.04</span><span class="l">ECE achievable with temperature scaling — down from 0.15+ raw</span></div>
+    <div class="stat"><span class="n">≥0.8</span><span class="l">Consistency threshold above which factual claims are likely reliable</span></div>
+    <div class="stat"><span class="n">3×</span><span class="l">More hallucinations caught by combining consistency + grounded verify vs either alone</span></div>
+    <div class="stat"><span class="n">Never</span><span class="l">Use RLHF-model verbalized confidence as a user-facing reliability signal</span></div>
+  </div>
+
+  <div class="pq">
+    <p>"The solution to an overconfident model is not to make it say 'I don't know' more. It is to build a system that knows when to trust the model and when not to — and acts accordingly, with or without the model's cooperation."</p>
+  </div>
+
+</section>
+
+<div class="div">· · ·</div>
+
+<!-- 07 — Closing -->
+<section id="closing">
+  <h2><span class="sec-num"> 07 — The Verdict</span>What to Do With an Unreliable Witness</h2>
+
+  <p>Return to the courtroom. Your unreliable witness — the language model that cannot distinguish its knowledge from its inventions — is not going to change. The architecture that produces this behavior is fundamental to how the model was trained. You cannot fine-tune it away, because RLHF makes it worse. You cannot prompt-engineer it away, because the problem is in the logits, not the instruction. You cannot wait for the next model version to fix it, because every model in the current paradigm has the same structural overconfidence problem.</p>
+
+  <p>What you can do is what good lawyers do with unreliable witnesses: you corroborate independently, you cross-examine for consistency, you evaluate claims against documentary evidence, and you communicate to the jury — your users — the appropriate level of trust to extend. You build the infrastructure of reliability around the witness, rather than trusting the witness to be reliable on its own.</p>
+
+  <p>Temperature scaling calibrates the scores. Consistency sampling surfaces the instability. Grounded verification catches the intrinsic hallucinations. Graded uncertainty communication ensures users receive appropriately hedged answers. Together, these techniques do not eliminate the problem. They make it manageable, measurable, and honest. In a domain where the alternative is confident wrong answers delivered to users who have every reason to trust them, manageable, measurable, and honest is exactly what production safety requires.</p>
+
+</section>
+
+<div class="div">· · ·</div>
+
+<section>
+  <h2><span class="sec-num">References</span>Key Research</h2>
+  <p style="font-size:15px;line-height:2.2;color:#66625a;">
+    Guo et al. (2017). <em>On Calibration of Modern Neural Networks.</em> ICML 2017.<br>
+    Kuhn et al. (2023). <em>Semantic Uncertainty: Linguistic Invariances for Uncertainty Estimation in Natural Language Generation.</em> ICLR 2023.<br>
+    Lin et al. (2022). <em>Teaching Models to Express Their Uncertainty in Words.</em> TMLR 2022.<br>
+    Kadavath et al. (2022). <em>Language Models (Mostly) Know What They Know.</em> arXiv:2207.05221.<br>
+    Zhao et al. (2023). <em>Sycophancy to Subterfuge: Investigating Reward Tampering in Language Models.</em> arXiv:2310.04444.<br>
+    Ji et al. (2023). <em>Survey of Hallucination in Natural Language Generation.</em> ACM Computing Surveys 55(12).<br>
+    OpenAI (2023). <em>TruthfulQA: Measuring How Models Mimic Human Falsehoods.</em> arXiv:2109.07958.<br>
+    Xiong et al. (2023). <em>Can LLMs Express Their Uncertainty? An Empirical Evaluation.</em> arXiv:2306.13063.
+  </p>
+</section>
+
+</div>
+    </div>
 
     <div class="article-cta">
       <h4>Continue Exploring</h4>

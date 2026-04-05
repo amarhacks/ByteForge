@@ -6,21 +6,22 @@
   <title>Why Your RAG Pipeline Works in Testing and Fails in Production — Depth</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../css/depth/tokens.css">
-<link rel="stylesheet" href="../../css/depth/base.css">
-<link rel="stylesheet" href="../../css/depth/layout/grids.css">
-<link rel="stylesheet" href="../../css/depth/components/nav.css">
-<link rel="stylesheet" href="../../css/depth/components/hero.css">
-<link rel="stylesheet" href="../../css/depth/components/ticker.css">
-<link rel="stylesheet" href="../../css/depth/components/section-head.css">
-<link rel="stylesheet" href="../../css/depth/components/filters.css">
-<link rel="stylesheet" href="../../css/depth/components/cards.css">
-<link rel="stylesheet" href="../../css/depth/components/topics.css">
-<link rel="stylesheet" href="../../css/depth/components/newsletter.css">
-<link rel="stylesheet" href="../../css/depth/components/about.css">
-<link rel="stylesheet" href="../../css/depth/components/footer.css">
-<link rel="stylesheet" href="../../css/depth/components/page.css">
-<link rel="stylesheet" href="../../css/depth/components/article.css">
-<link rel="stylesheet" href="../../css/depth/responsive.css">
+  <link rel="stylesheet" href="../../css/depth/base.css">
+  <link rel="stylesheet" href="../../css/depth/layout/grids.css">
+  <link rel="stylesheet" href="../../css/depth/components/nav.css">
+  <link rel="stylesheet" href="../../css/depth/components/hero.css">
+  <link rel="stylesheet" href="../../css/depth/components/ticker.css">
+  <link rel="stylesheet" href="../../css/depth/components/section-head.css">
+  <link rel="stylesheet" href="../../css/depth/components/filters.css">
+  <link rel="stylesheet" href="../../css/depth/components/cards.css">
+  <link rel="stylesheet" href="../../css/depth/components/topics.css">
+  <link rel="stylesheet" href="../../css/depth/components/newsletter.css">
+  <link rel="stylesheet" href="../../css/depth/components/about.css">
+  <link rel="stylesheet" href="../../css/depth/components/footer.css">
+  <link rel="stylesheet" href="../../css/depth/components/page.css">
+  <link rel="stylesheet" href="../../css/depth/components/article.css">
+  <link rel="stylesheet" href="../../css/depth/components/ai-longform.css">
+  <link rel="stylesheet" href="../../css/depth/responsive.css">
 </head>
 <body class="article-page theme-ai" data-nav="ai-ml">
 <nav>
@@ -42,7 +43,7 @@
   </div>
 </nav>
 
-<section class="article-hero">
+<section class="article-hero" id="top">
   <div class="article-hero-inner">
     <div>
       <div class="breadcrumb">
@@ -53,23 +54,23 @@
         <span>Why Your RAG Pipeline Works in Testing and Fails in Production</span>
       </div>
       <div class="article-kicker">AI / ML</div>
-      <h1 class="article-title">Why Your RAG Pipeline Works in Testing and Fails in Production</h1>
-      <p class="article-subtitle">The seven gaps between demo and deployment — chunking, embedding drift, latency budgets, and eval blind spots.</p>
+      <h1 class="article-title">Why Your RAG Pipeline <span class="hl">Works in Testing</span> and <span class="hl2">Fails in Production</span></h1>
+      <p class="article-subtitle">The 7 gaps between demo and deployment — chunking strategies, embedding drift, latency budgets, and more.</p>
       <div class="article-meta">
         <div class="article-meta-item"><strong>15 min read</strong></div>
         <div class="article-meta-item"><span class="ep-dot"></span>2025</div>
-        <div class="article-meta-item"><span class="ep-dot"></span>RAG · Retrieval · Production</div>
+        <div class="article-meta-item"><span class="ep-dot"></span>RAG · Production · Gaps</div>
       </div>
     </div>
     <aside class="article-panel">
       <h4>Key Themes</h4>
       <div class="feat-tags">
         <span class="ac-visual-tag">RAG</span>
-<span class="ac-visual-tag">Retrieval</span>
-<span class="ac-visual-tag">Production</span>
-<span class="ac-visual-tag">Drift</span>
+        <span class="ac-visual-tag">Production</span>
+        <span class="ac-visual-tag">Latency</span>
+        <span class="ac-visual-tag">Evaluation</span>
       </div>
-      <p>The seven gaps between demo and deployment — chunking, embedding drift, latency budgets, and eval blind spots.</p>
+      <p>The 7 gaps between demo and deployment — chunking strategies, embedding drift, latency budgets, and more.</p>
     </aside>
   </div>
 </section>
@@ -78,30 +79,837 @@
   <aside class="article-aside">
     <h4>On This Page</h4>
     <div class="article-toc">
-      <a href="#context">Context</a>
-      <a href="#under-the-hood">Under the Hood</a>
-      <a href="#failure-modes">Failure Modes</a>
-      <a href="#takeaways">Takeaways</a>
+      <a href="#intro"> 01 — The Demo Illusion Why the Gap Exists at All</a>
+      <a href="#gap1">Gap 1 — Chunking Your Chunks Work for Your Test Queries. Not for Theirs.</a>
+      <a href="#gap2">Gap 2 — Embedding Drift The Index You Built Yesterday Is Not the Index You Have Today.</a>
+      <a href="#gap3">Gap 3 — Latency Budget The 400ms You Never Budgeted For</a>
+      <a href="#gap4">Gap 4 — Query Distribution Real Users Ask Questions You Did Not Prepare For.</a>
+      <a href="#gap5">Gap 5 — Context Window Stuffing the Prompt Is Not a Retrieval Strategy.</a>
+      <a href="#gap6">Gap 6 — Evaluation Blindness Your Metrics Are Not Measuring What Users Experience.</a>
+      <a href="#gap7">Gap 7 — The Feedback Trap How Bad Retrievals Teach Your System to Get Worse.</a>
+      <a href="#synthesis"> 09 — The Synthesis Building for Production from Day One</a>
     </div>
   </aside>
   <article class="article-body">
-    <p>The seven gaps between demo and deployment — chunking, embedding drift, latency budgets, and eval blind spots.</p>
+    <div class="ai-longform">
+<div class="article">
 
-    <h2 id="context">Context</h2>
-    <p>This piece grounds ai / ml decisions in production reality — the edge cases, scaling thresholds, and tradeoffs that rarely make it into tutorials.</p>
+<!--  01 -->
+<section id="intro">
+  <h2><span class="sec-num"> 01 — The Demo Illusion</span>Why the Gap Exists at All</h2>
 
-    <h2 id="under-the-hood">Under the Hood</h2>
-    <p>We break down the mechanics behind why your rag pipeline works in testing and fails in production and map how those mechanics shape reliability, latency, and operational cost.</p>
+  <p class="drop">Every RAG system ever built has worked brilliantly in the demo. You carefully select twenty representative documents. You craft five representative queries. You run them against the pipeline and the results are astonishing — precise, contextually rich, impressively grounded. You ship with confidence. Then real users arrive with their real questions, and the beautiful thing you built starts returning irrelevant context, hallucinating confidently, and taking four seconds to respond to a question the demo answered in under one.</p>
 
-    <blockquote>Depth is about the tradeoffs you only see after shipping.</blockquote>
+  <p>This is not bad luck. It is a predictable consequence of seven specific architectural gaps between how RAG systems are built in development and how they must perform in production. Each gap is individually manageable. Together, they compound into a system that looks production-ready and is not. This article names each gap precisely, explains the failure mechanism, and provides concrete code and architecture for closing it.</p>
 
-    <h2 id="failure-modes">Failure Modes</h2>
-    <p>The failure modes here are subtle: degraded performance, silent correctness drift, and compounded operational toil. The article focuses on detection and mitigation before the incident page lights up.</p>
+  <div class="stat-row">
+    <div class="stat"><span class="n">72%</span><span class="l">Of RAG failures trace to retrieval quality, not LLM generation</span></div>
+    <div class="stat"><span class="n">7</span><span class="l">Distinct gap categories between test performance and production reality</span></div>
+    <div class="stat"><span class="n">~3×</span><span class="l">Typical latency increase from demo to production under real load</span></div>
+    <div class="stat"><span class="n">0</span><span class="l">Of these gaps surface in standard unit tests or demo evaluations</span></div>
+  </div>
 
-    <h2 id="takeaways">Takeaways</h2>
-    <ul>
-      <li>Pay attention to rag — it is usually the first signal of scale-induced instability.</li><li>Pay attention to retrieval — it is usually the first signal of scale-induced instability.</li><li>Pay attention to production — it is usually the first signal of scale-induced instability.</li>
-    </ul>
+  <div class="callout warn">
+    <div class="ico">⚠️</div>
+    <div class="body"><strong>The Fundamental Mismatch:</strong> A RAG demo is an existence proof — it shows the system can work. It is not a reliability proof — it says nothing about whether the system will work on the queries it has never seen, at the scale it has never served, with the documents it has never indexed. Those are different questions entirely, and they require different tests.</div>
+  </div>
+</section>
+
+<div class="div">· · ·</div>
+
+<!--  02 — GAP 1 -->
+<section id="gap1">
+  <h2><span class="sec-num">Gap 1 — Chunking</span>Your Chunks Work for Your Test Queries. Not for Theirs.</h2>
+
+  <p>Chunking is the most consequential decision in RAG system design, and it is almost always made once, during prototyping, and never revisited. The standard approach — split every document into fixed-size chunks of 512 tokens with 50 tokens of overlap — is a reasonable default for demonstrating that the pipeline works. It is a poor fit for the unpredictable diversity of real user queries.</p>
+
+  <p>Fixed-size chunking has three failure modes in production. First, it splits semantic units at arbitrary boundaries. A paragraph that contains the answer to a user's question may be split exactly at the critical sentence, with the first half in chunk N and the second half in chunk N+1. The query retrieves chunk N, the LLM reads it, and the answer is incomplete. Second, it creates chunks that are too coarse for specific queries and too granular for broad ones — the same chunk size cannot serve both "what is the exact boiling point of ethanol" and "explain the general principles of organic chemistry." Third, it ignores document structure entirely. A legal document with numbered sections, a technical specification with code blocks, and a narrative article have profoundly different semantic structures, all flattened by identical fixed-size splitting.</p>
+
+  <p>The production solution is <strong>hierarchical chunking with structure-aware splitting</strong>. Parse document structure first — headers, sections, paragraphs, code blocks — and use those boundaries as primary split points. Index two granularities simultaneously: a fine-grained chunk index for specific factual queries and a coarse paragraph or section index for broad conceptual queries. At query time, classify the query's specificity and route to the appropriate granularity. For hybrid queries, retrieve from both and merge.</p>
+
+<pre>
+<span class="cm"># Structure-aware hierarchical chunking</span>
+<span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass
+<span class="kw">from</span> typing <span class="kw">import</span> Literal
+<span class="kw">import</span> re
+
+@dataclass
+<span class="kw">class</span> <span class="cl">Chunk</span>:
+    text: str
+    level: Literal[<span class="st">"sentence"</span>, <span class="st">"paragraph"</span>, <span class="st">"section"</span>]
+    doc_id: str
+    section_header: str | <span class="kw">None</span>
+    token_count: int
+
+<span class="kw">def</span> <span class="fn">hierarchical_chunk</span>(doc_text: str, doc_id: str) -> list[<span class="cl">Chunk</span>]:
+    chunks = []
+    <span class="cm"># Split on markdown/structured headers first</span>
+    sections = re.<span class="fn">split</span>(<span class="st">r'(?=^#{1,3}\s)'</span>, doc_text, flags=re.MULTILINE)
+    <span class="kw">for</span> section <span class="kw">in</span> sections:
+        header_match = re.<span class="fn">match</span>(<span class="st">r'^(#{1,3})\s+(.*)'</span>, section)
+        header = header_match.<span class="fn">group</span>(<span class="nm">2</span>) <span class="kw">if</span> header_match <span class="kw">else</span> <span class="kw">None</span>
+
+        <span class="cm"># Coarse chunk: full section</span>
+        chunks.<span class="fn">append</span>(<span class="cl">Chunk</span>(
+            text=section.<span class="fn">strip</span>(), level=<span class="st">"section"</span>,
+            doc_id=doc_id, section_header=header,
+            token_count=len(section.<span class="fn">split</span>())
+        ))
+        <span class="cm"># Fine chunks: paragraphs within section</span>
+        <span class="kw">for</span> para <span class="kw">in</span> section.<span class="fn">split</span>(<span class="st">'\n\n'</span>):
+            para = para.<span class="fn">strip</span>()
+            <span class="kw">if</span> len(para.<span class="fn">split</span>()) > <span class="nm">20</span>:   <span class="cm"># skip trivially short chunks</span>
+                chunks.<span class="fn">append</span>(<span class="cl">Chunk</span>(
+                    text=para, level=<span class="st">"paragraph"</span>,
+                    doc_id=doc_id, section_header=header,
+                    token_count=len(para.<span class="fn">split</span>())
+                ))
+    <span class="kw">return</span> chunks
+</pre>
+
+</section>
+
+<div class="div">· · ·</div>
+
+<!--  03 — GAP 2 -->
+<section id="gap2">
+  <h2><span class="sec-num">Gap 2 — Embedding Drift</span>The Index You Built Yesterday Is Not the Index You Have Today.</h2>
+
+  <p>Embedding drift is one of the most insidious production failure modes in RAG because it is invisible until it is catastrophic. It happens when the embedding model used to encode queries at runtime is not the same as the model used to encode the documents in the index — not because anyone made a mistake, but because someone upgraded the embedding model, or switched providers, or the provider updated their model without changing its name.</p>
+
+  <p>The consequence is geometric incoherence. Query vectors and document vectors live in different spaces. A query for "machine learning" produces a vector in the new model's space, which is then compared against document vectors in the old model's space. The cosine similarities are meaningless — structurally similar to trying to navigate by a map drawn on a different coordinate system. Recall collapses, often to below 0.40, without any error being raised anywhere in the system.</p>
+
+  <p>The fix has two components. First, <strong>version-stamp every vector at index time</strong> with the embedding model name and version. Before serving any query, assert that the query embedding model matches the index embedding model. If they differ, trigger an immediate re-indexing job. Second, enforce a <strong>blue-green re-indexing protocol</strong>: never update the live index in place. Build the new index in a shadow environment, run a recall benchmark comparing old and new, and swap traffic atomically only when the new index passes validation.</p>
+
+<pre>
+<span class="cm"># Embedding model version guard</span>
+<span class="kw">import</span> hashlib, json, time
+
+<span class="kw">class</span> <span class="cl">EmbeddingVersionGuard</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, model_name: str, model_version: str):
+        self.model_id = <span class="st">f"{model_name}@{model_version}"</span>
+        self.fingerprint = self.<span class="fn">_compute_fingerprint</span>()
+
+    <span class="kw">def</span> <span class="fn">_compute_fingerprint</span>(self) -> str:
+        <span class="cm"># Embed a fixed probe sentence; hash the output</span>
+        probe = <span class="st">"The quick brown fox jumps over the lazy dog."</span>
+        vec = embedder.<span class="fn">encode</span>(probe)
+        <span class="kw">return</span> hashlib.<span class="fn">md5</span>(vec.<span class="fn">tobytes</span>()).<span class="fn">hexdigest</span>()[:16]
+
+    <span class="kw">def</span> <span class="fn">assert_index_compatible</span>(self, index_metadata: dict):
+        stored_fp = index_metadata.<span class="fn">get</span>(<span class="st">"embedding_fingerprint"</span>)
+        <span class="kw">if</span> stored_fp <span class="kw">and</span> stored_fp != self.fingerprint:
+            <span class="kw">raise</span> <span class="cl">RuntimeError</span>(
+                <span class="st">f"Embedding model mismatch! "</span>
+                <span class="st">f"Index built with fingerprint {stored_fp}, "</span>
+                <span class="st">f"runtime fingerprint is {self.fingerprint}. "</span>
+                <span class="st">"Re-index required before serving queries."</span>
+            )
+</pre>
+
+</section>
+
+</div>
+
+<!-- DIAGRAM 1: The 7 Gaps Overview -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 480" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b8360a"/></marker>
+    <marker id="a2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a5c3a"/></marker>
+  </defs>
+  <rect width="1040" height="480" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#17150f" font-size="15" font-weight="700" text-anchor="middle">THE 7 GAPS — WHERE RAG PIPELINES BREAK BETWEEN DEMO AND PRODUCTION</text>
+
+  <!-- Demo (left) -->
+  <rect x="30" y="55" width="155" height="390" rx="12" fill="#f0fff4" stroke="#1a5c3a" stroke-width="2"/>
+  <rect x="30" y="55" width="155" height="38" rx="12" fill="#1a5c3a"/>
+  <text x="107" y="79" fill="#fff" font-size="13" text-anchor="middle" font-weight="700">DEMO / TEST</text>
+  <text x="107" y="115" fill="#555" font-size="11" text-anchor="middle">20 curated docs</text>
+  <text x="107" y="135" fill="#555" font-size="11" text-anchor="middle">5 known queries</text>
+  <text x="107" y="155" fill="#555" font-size="11" text-anchor="middle">Fixed chunk size</text>
+  <text x="107" y="175" fill="#555" font-size="11" text-anchor="middle">One model version</text>
+  <text x="107" y="195" fill="#555" font-size="11" text-anchor="middle">No real load</text>
+  <text x="107" y="215" fill="#555" font-size="11" text-anchor="middle">Manual eval</text>
+  <text x="107" y="235" fill="#555" font-size="11" text-anchor="middle">No feedback loop</text>
+  <text x="107" y="280" fill="#1a5c3a" font-size="20" text-anchor="middle">✅</text>
+  <text x="107" y="305" fill="#1a5c3a" font-size="12" text-anchor="middle" font-weight="700">Looks great.</text>
+  <text x="107" y="323" fill="#1a5c3a" font-size="11" text-anchor="middle">Every test passes.</text>
+  <text x="107" y="341" fill="#1a5c3a" font-size="11" text-anchor="middle">Recall looks 0.95+</text>
+  <text x="107" y="420" fill="#1a5c3a" font-size="11" text-anchor="middle">Ship it →</text>
+
+  <!-- 7 gap rows -->
+  <line x1="187" y1="240" x2="850" y2="240" stroke="#d6d1c8" stroke-width="1"/>
+
+  <!-- Gap labels (centre column) -->
+  <rect x="365" y="58" width="310" height="38" rx="8" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="520" y="82" fill="#b8360a" font-size="12" text-anchor="middle" font-weight="700">GAP 1 · Chunking Strategy</text>
+
+  <rect x="365" y="104" width="310" height="38" rx="8" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="520" y="128" fill="#b8360a" font-size="12" text-anchor="middle" font-weight="700">GAP 2 · Embedding Drift</text>
+
+  <rect x="365" y="150" width="310" height="38" rx="8" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="520" y="174" fill="#b8360a" font-size="12" text-anchor="middle" font-weight="700">GAP 3 · Latency Budget</text>
+
+  <rect x="365" y="196" width="310" height="38" rx="8" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="520" y="220" fill="#b8360a" font-size="12" text-anchor="middle" font-weight="700">GAP 4 · Query Distribution</text>
+
+  <rect x="365" y="242" width="310" height="38" rx="8" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="520" y="266" fill="#b8360a" font-size="12" text-anchor="middle" font-weight="700">GAP 5 · Context Window Misuse</text>
+
+  <rect x="365" y="288" width="310" height="38" rx="8" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="520" y="312" fill="#b8360a" font-size="12" text-anchor="middle" font-weight="700">GAP 6 · Evaluation Blindness</text>
+
+  <rect x="365" y="334" width="310" height="38" rx="8" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="520" y="358" fill="#b8360a" font-size="12" text-anchor="middle" font-weight="700">GAP 7 · The Feedback Trap</text>
+
+  <!-- Production (right) -->
+  <rect x="855" y="55" width="155" height="390" rx="12" fill="#fff5f0" stroke="#b8360a" stroke-width="2"/>
+  <rect x="855" y="55" width="155" height="38" rx="12" fill="#b8360a"/>
+  <text x="932" y="79" fill="#fff" font-size="13" text-anchor="middle" font-weight="700">PRODUCTION</text>
+  <text x="932" y="115" fill="#555" font-size="11" text-anchor="middle">10M+ real docs</text>
+  <text x="932" y="135" fill="#555" font-size="11" text-anchor="middle">Unknown queries</text>
+  <text x="932" y="155" fill="#555" font-size="11" text-anchor="middle">Mixed doc structures</text>
+  <text x="932" y="175" fill="#555" font-size="11" text-anchor="middle">Model upgrades happen</text>
+  <text x="932" y="195" fill="#555" font-size="11" text-anchor="middle">1000 QPS peaks</text>
+  <text x="932" y="215" fill="#555" font-size="11" text-anchor="middle">No ground truth</text>
+  <text x="932" y="235" fill="#555" font-size="11" text-anchor="middle">Users leave silently</text>
+  <text x="932" y="280" fill="#b8360a" font-size="20" text-anchor="middle">⚠</text>
+  <text x="932" y="305" fill="#b8360a" font-size="12" text-anchor="middle" font-weight="700">Reality hits.</text>
+  <text x="932" y="323" fill="#b8360a" font-size="11" text-anchor="middle">Recall drops to 0.62.</text>
+  <text x="932" y="341" fill="#b8360a" font-size="11" text-anchor="middle">Latency: 4 seconds.</text>
+  <text x="932" y="420" fill="#b8360a" font-size="11" text-anchor="middle">← each gap</text>
+
+  <!-- Arrows from demo to gaps and gaps to production -->
+  <line x1="187" y1="77" x2="363" y2="77" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="677" y1="77" x2="853" y2="77" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="187" y1="123" x2="363" y2="123" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="677" y1="123" x2="853" y2="123" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="187" y1="169" x2="363" y2="169" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="677" y1="169" x2="853" y2="169" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="187" y1="215" x2="363" y2="215" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="677" y1="215" x2="853" y2="215" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="187" y1="261" x2="363" y2="261" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="677" y1="261" x2="853" y2="261" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="187" y1="307" x2="363" y2="307" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="677" y1="307" x2="853" y2="307" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="187" y1="353" x2="363" y2="353" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <line x1="677" y1="353" x2="853" y2="353" stroke="#b8360a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+
+  <!-- Bottom note -->
+  <rect x="30" y="460" width="980" height="14" rx="4" fill="none"/>
+  <text x="520" y="472" fill="#68635a" font-size="11" text-anchor="middle">Each gap is individually manageable. All seven together compound into a system that silently fails its users without raising a single exception.</text>
+</svg>
+<figcaption>Fig. 1 — The 7 gaps between a passing demo and a failing production RAG system. Each gap corresponds to a specific architectural decision made during development that does not scale to real-world conditions.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!--  04 — GAP 3 -->
+<section id="gap3">
+  <h2><span class="sec-num">Gap 3 — Latency Budget</span>The 400ms You Never Budgeted For</h2>
+
+  <p>A RAG pipeline in a demo runs one query, waits, and returns a result. The developer sees 800ms end-to-end and considers this acceptable. In production, the same pipeline running under real load — multiple concurrent requests, database connection pool saturation, embedding model cold starts, LLM token-per-second throughput constraints — degrades to 3 to 5 seconds per query. Users abandon requests after 2 seconds. The system appears to work; users quietly leave.</p>
+
+  <p>The latency problem in RAG is a <strong>compounding problem</strong>. Each stage of the pipeline contributes latency, and unlike a single-stage system where optimization is straightforward, RAG has five or more sequential stages — query embedding, ANN retrieval, re-ranking, context assembly, and LLM generation — each with its own latency distribution, each blocking the next. A p95 latency of 200ms at each stage compounds to over 1 second before the LLM has even started generating.</p>
+
+  <p>The solution is a per-stage latency budget enforced with hard timeouts, combined with a graceful degradation strategy that skips expensive optional stages when the budget is exhausted. The re-ranker, for example, is the single most expensive optional stage — it adds 80 to 200ms and meaningfully improves recall but is not required for correct operation. Under load, skip it. Also implement <strong>speculative prefetching</strong>: begin embedding the query and initiating the ANN search concurrently with the LLM system prompt construction, eliminating the cold-start latency on the first network round-trip.</p>
+
+<pre>
+<span class="cm"># Latency-budgeted RAG pipeline with graceful degradation</span>
+<span class="kw">import</span> asyncio, time
+<span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass, field
+
+@dataclass
+<span class="kw">class</span> <span class="cl">LatencyBudget</span>:
+    total_ms:    int = <span class="nm">1800</span>   <span class="cm"># hard ceiling before LLM starts</span>
+    embed_ms:    int = <span class="nm">80</span>
+    retrieve_ms: int = <span class="nm">120</span>
+    rerank_ms:   int = <span class="nm">200</span>   <span class="cm"># optional — skip if over budget</span>
+    assemble_ms: int = <span class="nm">30</span>
+    spent: float = field(default=<span class="nm">0.0</span>, init=<span class="kw">False</span>)
+
+    <span class="kw">def</span> <span class="fn">remaining</span>(self) -> float:
+        <span class="kw">return</span> self.total_ms - self.spent
+
+<span class="kw">async def</span> <span class="fn">guarded_stage</span>(coro, budget_ms: int, fallback=<span class="kw">None</span>):
+    <span class="kw">try</span>:
+        <span class="kw">return</span> await asyncio.<span class="fn">wait_for</span>(coro, timeout=budget_ms / <span class="nm">1000</span>)
+    <span class="kw">except</span> asyncio.TimeoutError:
+        <span class="kw">return</span> fallback
+
+<span class="kw">async def</span> <span class="fn">rag_with_budget</span>(query: str, budget: <span class="cl">LatencyBudget</span>):
+    t0 = time.<span class="fn">monotonic</span>()
+
+    <span class="cm"># Stage 1: Embed query (mandatory)</span>
+    q_vec = await <span class="fn">guarded_stage</span>(
+        embedder.<span class="fn">aencode</span>(query), budget.embed_ms
+    )
+    budget.spent += (time.<span class="fn">monotonic</span>() - t0) * <span class="nm">1000</span>
+
+    <span class="cm"># Stage 2: ANN retrieval (mandatory)</span>
+    candidates = await <span class="fn">guarded_stage</span>(
+        vector_db.<span class="fn">asearch</span>(q_vec, k=<span class="nm">50</span>), budget.retrieve_ms, fallback=[]
+    )
+
+    <span class="cm"># Stage 3: Re-rank (optional — skip if budget is tight)</span>
+    <span class="kw">if</span> budget.<span class="fn">remaining</span>() > budget.rerank_ms + <span class="nm">100</span>:
+        candidates = await <span class="fn">guarded_stage</span>(
+            reranker.<span class="fn">arerank</span>(query, candidates[:<span class="nm">20</span>]),
+            budget.rerank_ms,
+            fallback=candidates[:<span class="nm">5</span>]   <span class="cm"># fall back to ANN order</span>
+        )
+
+    context = <span class="fn">assemble_context</span>(candidates[:<span class="nm">5</span>])
+    <span class="kw">return</span> context
+</pre>
+
+</section>
+
+<div class="div">· · ·</div>
+
+<!--  05 — GAP 4 -->
+<section id="gap4">
+  <h2><span class="sec-num">Gap 4 — Query Distribution</span>Real Users Ask Questions You Did Not Prepare For.</h2>
+
+  <p>A RAG demo uses test queries that were written by the same team that built the system, about the same documents the team used to build it. These queries are clear, specific, and phrased in the same vocabulary as the indexed documents. Real user queries are none of these things.</p>
+
+  <p>Production query distributions are characterized by four failure patterns that never appear in test sets. <strong>Vocabulary mismatch</strong>: users phrase questions using different terminology than the indexed documents — "heart attack" instead of "myocardial infarction," "layoffs" instead of "workforce reduction." The embedding model may bridge some of this gap, but at the tails of the distribution it fails. <strong>Out-of-scope queries</strong>: users ask questions the system has no documents to answer, and the retriever returns the least-wrong documents with falsely high confidence. <strong>Multi-intent queries</strong>: users combine multiple questions in a single query — "how does X work and what are its limitations and what should I use instead" — which a single embedding cannot represent well enough to retrieve relevant context for all three sub-queries. <strong>Adversarial and ambiguous queries</strong>: users ask leading questions, underspecified questions, or questions designed to probe the system's limits.</p>
+
+  <p>The solution is a <strong>query rewriting and decomposition layer</strong> that runs before the embedding step. A lightweight LLM call rewrites ambiguous queries into clear, vocabulary-normalized form, and decomposes multi-intent queries into separate sub-queries that are each retrieved independently. The retrieved contexts are then merged before the final generation step.</p>
+
+<pre>
+<span class="cm"># Query rewriting + decomposition pre-processor</span>
+<span class="kw">import</span> json
+
+REWRITE_PROMPT = <span class="st">"""Given a user query, do two things:
+1. Rewrite it in clear, formal vocabulary that matches technical documents.
+2. If it contains multiple distinct questions, decompose into sub-queries.
+
+Respond ONLY with JSON: {"rewritten": "...", "sub_queries": ["...", "..."]}
+If single-intent, sub_queries = [rewritten].
+
+Query: {query}"""</span>
+
+<span class="kw">async def</span> <span class="fn">preprocess_query</span>(query: str) -> dict:
+    response = await llm.<span class="fn">agenerate</span>(
+        REWRITE_PROMPT.<span class="fn">format</span>(query=query),
+        max_tokens=<span class="nm">200</span>, temperature=<span class="nm">0</span>
+    )
+    <span class="kw">try</span>:
+        parsed = json.<span class="fn">loads</span>(response)
+        <span class="kw">return</span> parsed
+    <span class="kw">except</span> json.JSONDecodeError:
+        <span class="kw">return</span> {<span class="st">"rewritten"</span>: query, <span class="st">"sub_queries"</span>: [query]}
+
+<span class="kw">async def</span> <span class="fn">multi_query_retrieve</span>(query: str, k_per_query: int = <span class="nm">10</span>) -> list:
+    preprocessed = await <span class="fn">preprocess_query</span>(query)
+    sub_queries   = preprocessed[<span class="st">"sub_queries"</span>]
+
+    <span class="cm"># Retrieve for each sub-query in parallel</span>
+    retrieve_tasks = [
+        vector_db.<span class="fn">asearch</span>(
+            embedder.<span class="fn">encode</span>(sq), k=k_per_query
+        )
+        <span class="kw">for</span> sq <span class="kw">in</span> sub_queries
+    ]
+    all_results = await asyncio.<span class="fn">gather</span>(*retrieve_tasks)
+
+    <span class="cm"># Deduplicate and merge by doc_id</span>
+    seen, merged = set(), []
+    <span class="kw">for</span> result_set <span class="kw">in</span> all_results:
+        <span class="kw">for</span> doc <span class="kw">in</span> result_set:
+            <span class="kw">if</span> doc[<span class="st">"id"</span>] <span class="kw">not in</span> seen:
+                merged.<span class="fn">append</span>(doc)
+                seen.<span class="fn">add</span>(doc[<span class="st">"id"</span>])
+    <span class="kw">return</span> merged
+</pre>
+
+</section>
+
+</div>
+
+<!-- DIAGRAM 2: Latency Compounding -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 360" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="b1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b8360a"/></marker>
+    <marker id="b2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a5c3a"/></marker>
+  </defs>
+  <rect width="1040" height="360" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#17150f" font-size="15" font-weight="700" text-anchor="middle">LATENCY COMPOUNDING — DEMO vs PRODUCTION UNDER LOAD</text>
+
+  <!-- Demo row -->
+  <text x="55" y="80" fill="#1a5c3a" font-size="13" font-weight="700">DEMO</text>
+  <text x="55" y="96" fill="#68635a" font-size="10">(single request)</text>
+
+  <rect x="140" y="65" width="80" height="38" rx="6" fill="#f0fff4" stroke="#1a5c3a" stroke-width="1.5"/>
+  <text x="180" y="85" fill="#1a5c3a" font-size="11" text-anchor="middle" font-weight="700">Embed</text>
+  <text x="180" y="98" fill="#555" font-size="10" text-anchor="middle">45ms</text>
+
+  <rect x="240" y="65" width="90" height="38" rx="6" fill="#f0fff4" stroke="#1a5c3a" stroke-width="1.5"/>
+  <text x="285" y="85" fill="#1a5c3a" font-size="11" text-anchor="middle" font-weight="700">Retrieve</text>
+  <text x="285" y="98" fill="#555" font-size="10" text-anchor="middle">60ms</text>
+
+  <rect x="350" y="65" width="90" height="38" rx="6" fill="#f0fff4" stroke="#1a5c3a" stroke-width="1.5"/>
+  <text x="395" y="85" fill="#1a5c3a" font-size="11" text-anchor="middle" font-weight="700">Re-rank</text>
+  <text x="395" y="98" fill="#555" font-size="10" text-anchor="middle">80ms</text>
+
+  <rect x="460" y="65" width="90" height="38" rx="6" fill="#f0fff4" stroke="#1a5c3a" stroke-width="1.5"/>
+  <text x="505" y="85" fill="#1a5c3a" font-size="11" text-anchor="middle" font-weight="700">Assemble</text>
+  <text x="505" y="98" fill="#555" font-size="10" text-anchor="middle">20ms</text>
+
+  <rect x="570" y="65" width="100" height="38" rx="6" fill="#f0fff4" stroke="#1a5c3a" stroke-width="1.5"/>
+  <text x="620" y="85" fill="#1a5c3a" font-size="11" text-anchor="middle" font-weight="700">LLM Gen</text>
+  <text x="620" y="98" fill="#555" font-size="10" text-anchor="middle">600ms</text>
+
+  <rect x="690" y="60" width="130" height="48" rx="8" fill="#f0fff4" stroke="#1a5c3a" stroke-width="2"/>
+  <text x="755" y="81" fill="#1a5c3a" font-size="13" text-anchor="middle" font-weight="700">Total: 805ms</text>
+  <text x="755" y="98" fill="#1a5c3a" font-size="11" text-anchor="middle">✓ "Fast enough"</text>
+
+  <!-- Arrow connectors demo -->
+  <line x1="222" y1="84" x2="238" y2="84" stroke="#1a5c3a" stroke-width="1.5" marker-end="url(#b2)"/>
+  <line x1="332" y1="84" x2="348" y2="84" stroke="#1a5c3a" stroke-width="1.5" marker-end="url(#b2)"/>
+  <line x1="442" y1="84" x2="458" y2="84" stroke="#1a5c3a" stroke-width="1.5" marker-end="url(#b2)"/>
+  <line x1="552" y1="84" x2="568" y2="84" stroke="#1a5c3a" stroke-width="1.5" marker-end="url(#b2)"/>
+  <line x1="672" y1="84" x2="688" y2="84" stroke="#1a5c3a" stroke-width="1.5" marker-end="url(#b2)"/>
+
+  <!-- Production row -->
+  <text x="55" y="180" fill="#b8360a" font-size="13" font-weight="700">PRODUCTION</text>
+  <text x="55" y="196" fill="#68635a" font-size="10">(100 QPS, p95)</text>
+
+  <rect x="140" y="165" width="80" height="38" rx="6" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="180" y="185" fill="#b8360a" font-size="11" text-anchor="middle" font-weight="700">Embed</text>
+  <text x="180" y="198" fill="#b8360a" font-size="10" text-anchor="middle">180ms ⚠</text>
+
+  <rect x="240" y="165" width="90" height="38" rx="6" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="285" y="185" fill="#b8360a" font-size="11" text-anchor="middle" font-weight="700">Retrieve</text>
+  <text x="285" y="198" fill="#b8360a" font-size="10" text-anchor="middle">320ms ⚠</text>
+
+  <rect x="350" y="165" width="90" height="38" rx="6" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="395" y="185" fill="#b8360a" font-size="11" text-anchor="middle" font-weight="700">Re-rank</text>
+  <text x="395" y="198" fill="#b8360a" font-size="10" text-anchor="middle">420ms ⚠</text>
+
+  <rect x="460" y="165" width="90" height="38" rx="6" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="505" y="185" fill="#b8360a" font-size="11" text-anchor="middle" font-weight="700">Assemble</text>
+  <text x="505" y="198" fill="#b8360a" font-size="10" text-anchor="middle">55ms</text>
+
+  <rect x="570" y="165" width="100" height="38" rx="6" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="620" y="185" fill="#b8360a" font-size="11" text-anchor="middle" font-weight="700">LLM Gen</text>
+  <text x="620" y="198" fill="#b8360a" font-size="10" text-anchor="middle">2800ms ⚠</text>
+
+  <rect x="690" y="160" width="130" height="48" rx="8" fill="#fff5f0" stroke="#b8360a" stroke-width="2"/>
+  <text x="755" y="181" fill="#b8360a" font-size="13" text-anchor="middle" font-weight="700">Total: 3,775ms</text>
+  <text x="755" y="198" fill="#b8360a" font-size="11" text-anchor="middle">✗ Users abandon at 2s</text>
+
+  <!-- Arrow connectors prod -->
+  <line x1="222" y1="184" x2="238" y2="184" stroke="#b8360a" stroke-width="1.5" marker-end="url(#b1)"/>
+  <line x1="332" y1="184" x2="348" y2="184" stroke="#b8360a" stroke-width="1.5" marker-end="url(#b1)"/>
+  <line x1="442" y1="184" x2="458" y2="184" stroke="#b8360a" stroke-width="1.5" marker-end="url(#b1)"/>
+  <line x1="552" y1="184" x2="568" y2="184" stroke="#b8360a" stroke-width="1.5" marker-end="url(#b1)"/>
+  <line x1="672" y1="184" x2="688" y2="184" stroke="#b8360a" stroke-width="1.5" marker-end="url(#b1)"/>
+
+  <!-- With graceful degradation row -->
+  <text x="55" y="280" fill="#1a4a7a" font-size="13" font-weight="700">WITH BUDGET</text>
+  <text x="55" y="296" fill="#68635a" font-size="10">(graceful degrade)</text>
+
+  <rect x="140" y="265" width="80" height="38" rx="6" fill="#f0f4ff" stroke="#1a4a7a" stroke-width="1.5"/>
+  <text x="180" y="285" fill="#1a4a7a" font-size="11" text-anchor="middle" font-weight="700">Embed</text>
+  <text x="180" y="298" fill="#555" font-size="10" text-anchor="middle">80ms</text>
+
+  <rect x="240" y="265" width="90" height="38" rx="6" fill="#f0f4ff" stroke="#1a4a7a" stroke-width="1.5"/>
+  <text x="285" y="285" fill="#1a4a7a" font-size="11" text-anchor="middle" font-weight="700">Retrieve</text>
+  <text x="285" y="298" fill="#555" font-size="10" text-anchor="middle">120ms</text>
+
+  <rect x="350" y="265" width="90" height="38" rx="6" fill="#edebe4" stroke="#68635a" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="395" y="285" fill="#68635a" font-size="11" text-anchor="middle" font-weight="700">Re-rank</text>
+  <text x="395" y="298" fill="#68635a" font-size="10" text-anchor="middle">SKIPPED</text>
+
+  <rect x="460" y="265" width="90" height="38" rx="6" fill="#f0f4ff" stroke="#1a4a7a" stroke-width="1.5"/>
+  <text x="505" y="285" fill="#1a4a7a" font-size="11" text-anchor="middle" font-weight="700">Assemble</text>
+  <text x="505" y="298" fill="#555" font-size="10" text-anchor="middle">30ms</text>
+
+  <rect x="570" y="265" width="100" height="38" rx="6" fill="#f0f4ff" stroke="#1a4a7a" stroke-width="1.5"/>
+  <text x="620" y="285" fill="#1a4a7a" font-size="11" text-anchor="middle" font-weight="700">LLM Gen</text>
+  <text x="620" y="298" fill="#555" font-size="10" text-anchor="middle">1200ms</text>
+
+  <rect x="690" y="260" width="130" height="48" rx="8" fill="#f0f4ff" stroke="#1a4a7a" stroke-width="2"/>
+  <text x="755" y="281" fill="#1a4a7a" font-size="13" text-anchor="middle" font-weight="700">Total: ~1,430ms</text>
+  <text x="755" y="298" fill="#1a4a7a" font-size="11" text-anchor="middle">✓ Under 2s threshold</text>
+
+  <line x1="222" y1="284" x2="238" y2="284" stroke="#1a4a7a" stroke-width="1.5" marker-end="url(#b2)"/>
+  <line x1="332" y1="284" x2="348" y2="284" stroke="#68635a" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <line x1="442" y1="284" x2="458" y2="284" stroke="#1a4a7a" stroke-width="1.5" marker-end="url(#b2)"/>
+  <line x1="552" y1="284" x2="568" y2="284" stroke="#1a4a7a" stroke-width="1.5" marker-end="url(#b2)"/>
+  <line x1="672" y1="284" x2="688" y2="284" stroke="#1a4a7a" stroke-width="1.5" marker-end="url(#b2)"/>
+
+  <!-- Explanation -->
+  <text x="520" y="342" fill="#b8360a" font-size="11" text-anchor="middle" font-weight="700">Under load: connection pool saturation, batching queues, and token throughput limits multiply every stage latency 2–5×.</text>
+  <text x="520" y="358" fill="#68635a" font-size="11" text-anchor="middle">Graceful degradation skips the re-ranker when budget is tight — preserving 0.91 recall instead of 0.96, but serving in time instead of abandoning.</text>
+</svg>
+<figcaption>Fig. 2 — Latency compounding. Demo latency of 805ms becomes 3,775ms under production load due to multiplier effects at each stage. A latency-budgeted pipeline with graceful degradation (skipping the re-ranker under load) brings end-to-end time back under 1,500ms.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!--  06 — GAP 5 -->
+<section id="gap5">
+  <h2><span class="sec-num">Gap 5 — Context Window</span>Stuffing the Prompt Is Not a Retrieval Strategy.</h2>
+
+  <p>In development, the context window feels like free real estate. You retrieve ten chunks, paste all of them into the prompt, and the LLM produces an excellent answer. The temptation is to retrieve more context to be safe — surely more information means better answers? In production, this intuition is catastrophically wrong in two independent ways.</p>
+
+  <p>The first failure is <strong>the lost-in-the-middle problem</strong>, documented empirically by Liu et al. (2023). LLMs reliably attend to information at the beginning and end of their context window but systematically underweight information in the middle. A chunk containing the critical answer, placed fourth in a ten-chunk context, is frequently ignored. More retrieved context does not mean better answers — it means more diluted attention and more noise for the model to reason through.</p>
+
+  <p>The second failure is <strong>cost and latency</strong>. Token cost for LLM API calls scales linearly with input length. A context window filled with ten chunks at 400 tokens each adds 4,000 tokens to every API call. At production scale — 10,000 queries per day — this is 40 million extra tokens daily. At current API pricing, this is thousands of dollars per month in preventable cost. And each extra token adds to generation latency.</p>
+
+  <p>The correct approach is <strong>context budget management</strong>: allocate a fixed token budget to retrieved context, rank chunks by composite relevance score (similarity × freshness × query alignment), and fill the budget greedily from highest-ranked chunks. Place the highest-scoring chunk first and last in the context (exploiting the primacy-recency effect) and lower-scored chunks in the middle.</p>
+
+<pre>
+<span class="cm"># Context budget manager with primacy-recency ordering</span>
+<span class="kw">def</span> <span class="fn">build_context_with_budget</span>(
+    ranked_chunks: list[dict],
+    token_budget: int = <span class="nm">2000</span>,
+    tokenizer = <span class="kw">None</span>
+) -> str:
+    selected, used_tokens = [], <span class="nm">0</span>
+
+    <span class="kw">for</span> chunk <span class="kw">in</span> ranked_chunks:
+        chunk_tokens = len(chunk[<span class="st">"text"</span>].<span class="fn">split</span>()) * <span class="nm">1</span>.<span class="nm">3</span>  <span class="cm"># rough estimate</span>
+        <span class="kw">if</span> used_tokens + chunk_tokens > token_budget:
+            <span class="kw">break</span>
+        selected.<span class="fn">append</span>(chunk)
+        used_tokens += chunk_tokens
+
+    <span class="kw">if not</span> selected:
+        <span class="kw">return</span> <span class="st">""</span>
+
+    <span class="cm"># Primacy-recency: best chunk first AND last, rest in middle</span>
+    <span class="kw">if</span> len(selected) > <span class="nm">2</span>:
+        best = selected[<span class="nm">0</span>]
+        ordered = [best] + selected[<span class="nm">1</span>:] + [best]
+    <span class="kw">else</span>:
+        ordered = selected
+
+    <span class="kw">return</span> <span class="st">"\n\n---\n\n"</span>.<span class="fn">join</span>([
+        <span class="st">f"[Source: {c.get('source','?')} | Score: {c['score']:.2f}]\n{c['text']}"</span>
+        <span class="kw">for</span> c <span class="kw">in</span> ordered
+    ])
+</pre>
+
+</section>
+
+<div class="div">· · ·</div>
+
+<!--  07 — GAP 6 -->
+<section id="gap6">
+  <h2><span class="sec-num">Gap 6 — Evaluation Blindness</span>Your Metrics Are Not Measuring What Users Experience.</h2>
+
+  <p>RAG evaluation in development typically involves running a curated test set through the pipeline and manually checking whether the answers are correct. Some teams add automated metrics: BLEU score, ROUGE-L, or cosine similarity between the generated answer and a reference answer. All of these metrics share a common flaw: they measure whether the output matches a predetermined reference, not whether it answers the user's actual question correctly and completely.</p>
+
+  <p>The production evaluation problem is fundamentally harder. There are no reference answers — real users ask novel questions that nobody has pre-answered. There is no ground truth retrieval set — nobody has labeled which of 10 million documents is the correct context for each query. And the most important signal — whether the user found the answer useful — is implicit in behavioral data: did they ask a follow-up, copy the answer, or leave? Traditional offline metrics cannot capture any of this.</p>
+
+  <p>A production-grade evaluation system requires three layers. The first is an <strong>LLM-as-judge faithfulness and relevance scorer</strong> that evaluates each retrieved context against each query on two dimensions: is the context actually relevant (retrieval quality), and does the generated answer faithfully reflect the context (hallucination detection)? The second is a <strong>retrieval telemetry pipeline</strong> that logs the similarity scores, ranks, and chunk IDs for every production query, enabling post-hoc analysis of retrieval patterns. The third is <strong>implicit user feedback signals</strong> — session abandonment, follow-up query rate, answer copy events — that provide a continuous, unbiased measure of system quality.</p>
+
+<pre>
+<span class="cm"># LLM-as-judge evaluation: faithfulness + relevance</span>
+EVAL_PROMPT = <span class="st">"""Evaluate this RAG response on two dimensions.
+Answer ONLY with JSON.
+
+QUERY: {query}
+CONTEXT: {context}
+ANSWER: {answer}
+
+Respond: {{"relevance": 0-3, "faithfulness": 0-3, "reason": "..."}}
+relevance: 0=context unrelated, 3=context perfectly matches query
+faithfulness: 0=answer contradicts context, 3=answer fully grounded in context"""</span>
+
+<span class="kw">async def</span> <span class="fn">evaluate_response</span>(query, context, answer) -> dict:
+    response = await llm.<span class="fn">agenerate</span>(
+        EVAL_PROMPT.<span class="fn">format</span>(query=query, context=context[:<span class="nm">800</span>], answer=answer),
+        max_tokens=<span class="nm">120</span>, temperature=<span class="nm">0</span>
+    )
+    <span class="kw">try</span>:
+        scores = json.<span class="fn">loads</span>(response)
+        <span class="cm"># Log to observability stack for trend analysis</span>
+        metrics.<span class="fn">emit</span>(<span class="st">"rag.eval"</span>, {
+            <span class="st">"query_hash"</span>:    <span class="fn">hash</span>(query),
+            <span class="st">"relevance"</span>:     scores[<span class="st">"relevance"</span>],
+            <span class="st">"faithfulness"</span>:  scores[<span class="st">"faithfulness"</span>],
+            <span class="st">"flagged"</span>:       scores[<span class="st">"faithfulness"</span>] < <span class="nm">2</span>
+        })
+        <span class="kw">return</span> scores
+    <span class="kw">except</span>:
+        <span class="kw">return</span> {<span class="st">"relevance"</span>: -<span class="nm">1</span>, <span class="st">"faithfulness"</span>: -<span class="nm">1</span>, <span class="st">"reason"</span>: <span class="st">"parse error"</span>}
+</pre>
+
+  <div class="pq">
+    <p>"You cannot improve what you cannot measure. And you cannot measure RAG quality in production using the same tools you used to build it. Production evaluation requires production instrumentation — built in from day one, not retrofitted after users complain."</p>
+  </div>
+
+</section>
+
+</div>
+
+<!-- DIAGRAM 3: Query Distribution Shock -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 380" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="1040" height="380" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#17150f" font-size="15" font-weight="700" text-anchor="middle">QUERY DISTRIBUTION SHOCK — TEST QUERIES vs REAL USER QUERIES</text>
+
+  <!-- LEFT: test distribution -->
+  <text x="240" y="58" fill="#17150f" font-size="13" font-weight="700" text-anchor="middle">TEST QUERY DISTRIBUTION</text>
+  <text x="240" y="74" fill="#68635a" font-size="11" text-anchor="middle">5–50 hand-crafted queries from the dev team</text>
+
+  <!-- Axes left -->
+  <line x1="60" y1="310" x2="430" y2="310" stroke="#d6d1c8" stroke-width="1.5"/>
+  <line x1="60" y1="100" x2="60" y2="310" stroke="#d6d1c8" stroke-width="1.5"/>
+  <text x="245" y="332" fill="#68635a" font-size="11" text-anchor="middle">Query complexity →</text>
+  <text x="30" y="210" fill="#68635a" font-size="11" text-anchor="middle" transform="rotate(-90,30,210)">Frequency</text>
+
+  <!-- Bell curve: narrow, centered, neat -->
+  <path d="M 80,308 Q 120,308 160,200 Q 200,90 240,82 Q 280,90 320,200 Q 360,308 400,308" fill="rgba(26,92,58,.15)" stroke="#1a5c3a" stroke-width="2.5"/>
+  <text x="240" y="150" fill="#1a5c3a" font-size="12" text-anchor="middle" font-weight="700">Neat bell curve</text>
+  <text x="240" y="168" fill="#1a5c3a" font-size="11" text-anchor="middle">Specific, well-formed</text>
+  <text x="240" y="186" fill="#1a5c3a" font-size="11" text-anchor="middle">Same vocabulary as docs</text>
+  <text x="240" y="204" fill="#1a5c3a" font-size="11" text-anchor="middle">No ambiguity</text>
+
+  <!-- Examples left -->
+  <rect x="65" y="250" width="358" height="50" rx="8" fill="#f0fff4" stroke="#1a5c3a" stroke-width="1"/>
+  <text x="244" y="268" fill="#1a5c3a" font-size="10" text-anchor="middle">"What is the maximum payload of the API?"</text>
+  <text x="244" y="284" fill="#1a5c3a" font-size="10" text-anchor="middle">"How do I reset my password?"</text>
+
+  <!-- Divider -->
+  <line x1="520" y1="50" x2="520" y2="370" stroke="#d6d1c8" stroke-width="1.5" stroke-dasharray="8 5"/>
+
+  <!-- RIGHT: production distribution -->
+  <text x="780" y="58" fill="#17150f" font-size="13" font-weight="700" text-anchor="middle">PRODUCTION QUERY DISTRIBUTION</text>
+  <text x="780" y="74" fill="#68635a" font-size="11" text-anchor="middle">Thousands of real users with unpredictable needs</text>
+
+  <!-- Axes right -->
+  <line x1="560" y1="310" x2="990" y2="310" stroke="#d6d1c8" stroke-width="1.5"/>
+  <line x1="560" y1="100" x2="560" y2="310" stroke="#d6d1c8" stroke-width="1.5"/>
+  <text x="775" y="332" fill="#68635a" font-size="11" text-anchor="middle">Query complexity →</text>
+
+  <!-- Irregular multi-modal distribution -->
+  <path d="M 570,308 Q 590,308 610,260 Q 630,200 650,220 Q 670,250 695,180 Q 720,110 750,130 Q 780,150 810,200 Q 840,250 870,220 Q 890,190 910,240 Q 930,290 960,308 Q 975,308 985,308" fill="rgba(184,54,10,.12)" stroke="#b8360a" stroke-width="2.5"/>
+
+  <!-- Annotations on peaks -->
+  <line x1="650" y1="175" x2="650" y2="155" stroke="#b8360a" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="650" y="145" fill="#b8360a" font-size="10" text-anchor="middle">Out-of-scope</text>
+
+  <line x1="750" y1="125" x2="750" y2="105" stroke="#b8360a" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="750" y="96" fill="#b8360a" font-size="10" text-anchor="middle">Vocab mismatch</text>
+
+  <line x1="870" y1="215" x2="870" y2="195" stroke="#b8360a" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="870" y="186" fill="#b8360a" font-size="10" text-anchor="middle">Multi-intent</text>
+
+  <!-- Examples right -->
+  <rect x="565" y="240" width="415" height="60" rx="8" fill="#fff5f0" stroke="#b8360a" stroke-width="1"/>
+  <text x="773" y="258" fill="#b8360a" font-size="10" text-anchor="middle">"heart attack symptoms vs angina difference and when ER"</text>
+  <text x="773" y="274" fill="#b8360a" font-size="10" text-anchor="middle">"does this still work after the update last week???"</text>
+  <text x="773" y="290" fill="#b8360a" font-size="10" text-anchor="middle">"why is everything broken give me a workaround"</text>
+</svg>
+<figcaption>Fig. 3 — Query distribution shock. Test queries form a neat, predictable bell curve. Production queries form a chaotic, multi-modal distribution with out-of-scope peaks, vocabulary mismatch peaks, and multi-intent clusters — none of which appear in the test set.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!--  08 — GAP 7 -->
+<section id="gap7">
+  <h2><span class="sec-num">Gap 7 — The Feedback Trap</span>How Bad Retrievals Teach Your System to Get Worse.</h2>
+
+  <p>The final and most dangerous gap is the one that converts a static failure into a compounding one. When a RAG system retrieves poor context and generates a poor answer, that interaction generates data. If that data is used — directly or indirectly — to improve the system, the improvement objective is corrupted by the very failures the system is producing.</p>
+
+  <p>This feedback trap manifests in three ways. First, if user click data is used to train or fine-tune the embedding model, and users click on poor results because they are the only results returned, the model learns that those poor results are relevant. Second, if the evaluation LLM is the same as the generation LLM, and that LLM has been instructed to be helpful and positive, it will rate its own poor outputs highly, creating a self-reinforcing evaluation loop. Third, if re-indexing decisions are driven by retrieval frequency rather than retrieval quality, frequently-retrieved-but-wrong documents get promoted to hotter tiers, while rarely-retrieved-but-correct documents are demoted to cold storage.</p>
+
+  <p>Breaking the feedback trap requires <strong>separating the evaluation signal from the generation pipeline</strong>. Use a different, explicitly critical evaluation model — or human annotators — to score system outputs. Log poor retrievals explicitly and use them as negative training examples rather than ignoring them. Run regular <strong>adversarial evaluation sweeps</strong>: deliberately inject queries you know are out-of-scope or ambiguous and measure how often the system incorrectly returns high-confidence answers for them.</p>
+
+<pre>
+<span class="cm"># Adversarial evaluation: out-of-scope detection test</span>
+<span class="kw">import</span> asyncio
+
+OUT_OF_SCOPE_QUERIES = [
+    <span class="st">"What is the capital of France?"</span>,       <span class="cm"># geography — not in corpus</span>
+    <span class="st">"Who won the Super Bowl last year?"</span>,     <span class="cm"># sports — not in corpus</span>
+    <span class="st">"Write me a poem about the ocean."</span>,      <span class="cm"># creative — not in corpus</span>
+]
+
+<span class="kw">async def</span> <span class="fn">adversarial_eval</span>(rag_pipeline) -> dict:
+    results = []
+    <span class="kw">for</span> query <span class="kw">in</span> OUT_OF_SCOPE_QUERIES:
+        output = await rag_pipeline.<span class="fn">run</span>(query)
+        top_score = output[<span class="st">"retrieval_scores"</span>][<span class="nm">0</span>] <span class="kw">if</span> output[<span class="st">"retrieval_scores"</span>] <span class="kw">else</span> <span class="nm">0</span>
+        results.<span class="fn">append</span>({
+            <span class="st">"query"</span>:           query,
+            <span class="st">"top_score"</span>:       top_score,
+            <span class="st">"correctly_declined"</span>: top_score < <span class="nm">0.72</span>,  <span class="cm"># should decline</span>
+            <span class="st">"answer_given"</span>:    output[<span class="st">"answer"</span>]
+        })
+    false_confidence_rate = <span class="nm">1</span> - (
+        <span class="fn">sum</span>(<span class="nm">1</span> <span class="kw">for</span> r <span class="kw">in</span> results <span class="kw">if</span> r[<span class="st">"correctly_declined"</span>]) / len(results)
+    )
+    <span class="kw">return</span> {
+        <span class="st">"results"</span>: results,
+        <span class="st">"false_confidence_rate"</span>: false_confidence_rate,
+        <span class="st">"alert"</span>: false_confidence_rate > <span class="nm">0.30</span>  <span class="cm"># >30% false confidence → alert</span>
+    }
+</pre>
+
+</section>
+
+</div>
+
+<!-- DIAGRAM 4: Full Production RAG Architecture -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 1040 500" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="d1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a4a7a"/></marker>
+    <marker id="d2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b8360a"/></marker>
+    <marker id="d3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a5c3a"/></marker>
+  </defs>
+  <rect width="1040" height="500" fill="#ffffff" rx="14"/>
+  <text x="520" y="28" fill="#17150f" font-size="15" font-weight="700" text-anchor="middle">PRODUCTION-GRADE RAG PIPELINE — ALL 7 GAPS ADDRESSED</text>
+
+  <!-- Query in -->
+  <ellipse cx="80" cy="240" rx="62" ry="34" fill="#f0f4ff" stroke="#1a4a7a" stroke-width="2"/>
+  <text x="80" y="236" fill="#1a4a7a" font-size="11" text-anchor="middle" font-weight="700">USER</text>
+  <text x="80" y="252" fill="#1a4a7a" font-size="11" text-anchor="middle" font-weight="700">QUERY</text>
+  <line x1="144" y1="240" x2="168" y2="240" stroke="#1a4a7a" stroke-width="2" marker-end="url(#d1)"/>
+
+  <!-- Gap 4: Query preprocess -->
+  <rect x="170" y="208" width="140" height="64" rx="10" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="240" y="232" fill="#b8360a" font-size="11" text-anchor="middle" font-weight="700">GAP 4 FIX</text>
+  <text x="240" y="249" fill="#333" font-size="10" text-anchor="middle">Query rewrite</text>
+  <text x="240" y="263" fill="#333" font-size="10" text-anchor="middle">+ decompose</text>
+  <line x1="312" y1="240" x2="336" y2="240" stroke="#1a4a7a" stroke-width="2" marker-end="url(#d1)"/>
+
+  <!-- Gap 2: Version guard -->
+  <rect x="338" y="208" width="140" height="64" rx="10" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="408" y="232" fill="#b8360a" font-size="11" text-anchor="middle" font-weight="700">GAP 2 FIX</text>
+  <text x="408" y="249" fill="#333" font-size="10" text-anchor="middle">Embedding model</text>
+  <text x="408" y="263" fill="#333" font-size="10" text-anchor="middle">version guard</text>
+  <line x1="480" y1="240" x2="504" y2="240" stroke="#1a4a7a" stroke-width="2" marker-end="url(#d1)"/>
+
+  <!-- Gap 1: Hierarchical index -->
+  <rect x="506" y="190" width="140" height="100" rx="10" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="576" y="214" fill="#b8360a" font-size="11" text-anchor="middle" font-weight="700">GAP 1 FIX</text>
+  <text x="576" y="231" fill="#333" font-size="10" text-anchor="middle">Hierarchical</text>
+  <text x="576" y="247" fill="#333" font-size="10" text-anchor="middle">chunk index</text>
+  <text x="576" y="263" fill="#555" font-size="10" text-anchor="middle">fine + coarse</text>
+  <text x="576" y="278" fill="#555" font-size="10" text-anchor="middle">granularity</text>
+
+  <!-- Gap 3: Budget pipeline -->
+  <rect x="506" y="308" width="140" height="64" rx="10" fill="#f0f4ff" stroke="#1a4a7a" stroke-width="1.5"/>
+  <text x="576" y="332" fill="#1a4a7a" font-size="11" text-anchor="middle" font-weight="700">GAP 3 FIX</text>
+  <text x="576" y="349" fill="#333" font-size="10" text-anchor="middle">Latency budget</text>
+  <text x="576" y="363" fill="#333" font-size="10" text-anchor="middle">+ graceful degrade</text>
+
+  <!-- Arrows to both gap1 and gap3 -->
+  <line x1="504" y1="228" x2="504" y2="240" stroke="#1a4a7a" stroke-width="1.5"/>
+  <line x1="504" y1="240" x2="504" y2="252" stroke="#1a4a7a" stroke-width="1.5"/>
+  <line x1="504" y1="240" x2="504" y2="308" stroke="#1a4a7a" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <circle cx="504" cy="240" r="4" fill="#1a4a7a"/>
+
+  <!-- Gap 5: Context budget -->
+  <rect x="680" y="208" width="140" height="64" rx="10" fill="#fff5f0" stroke="#b8360a" stroke-width="1.5"/>
+  <text x="750" y="232" fill="#b8360a" font-size="11" text-anchor="middle" font-weight="700">GAP 5 FIX</text>
+  <text x="750" y="249" fill="#333" font-size="10" text-anchor="middle">Context budget</text>
+  <text x="750" y="263" fill="#333" font-size="10" text-anchor="middle">primacy-recency</text>
+
+  <line x1="648" y1="240" x2="678" y2="240" stroke="#1a4a7a" stroke-width="2" marker-end="url(#d1)"/>
+  <line x1="822" y1="240" x2="846" y2="240" stroke="#1a4a7a" stroke-width="2" marker-end="url(#d1)"/>
+
+  <!-- LLM -->
+  <rect x="848" y="208" width="100" height="64" rx="10" fill="#f4f0ff" stroke="#6b2080" stroke-width="1.5"/>
+  <text x="898" y="232" fill="#6b2080" font-size="11" text-anchor="middle" font-weight="700">LLM</text>
+  <text x="898" y="249" fill="#333" font-size="10" text-anchor="middle">generation</text>
+  <text x="898" y="263" fill="#333" font-size="10" text-anchor="middle">+ temporal prompt</text>
+
+  <!-- Answer out -->
+  <line x1="950" y1="240" x2="974" y2="240" stroke="#1a5c3a" stroke-width="2" marker-end="url(#d3)"/>
+  <ellipse cx="1005" cy="240" rx="46" ry="34" fill="#f0fff4" stroke="#1a5c3a" stroke-width="2"/>
+  <text x="1005" y="236" fill="#1a5c3a" font-size="11" text-anchor="middle" font-weight="700">ANSWER</text>
+  <text x="1005" y="252" fill="#1a5c3a" font-size="10" text-anchor="middle">grounded</text>
+
+  <!-- Gap 6: Eval layer (below) -->
+  <rect x="680" y="310" width="260" height="60" rx="10" fill="#f0fff4" stroke="#1a5c3a" stroke-width="1.5"/>
+  <text x="810" y="335" fill="#1a5c3a" font-size="11" text-anchor="middle" font-weight="700">GAP 6 FIX — LLM-AS-JUDGE EVAL</text>
+  <text x="810" y="353" fill="#555" font-size="10" text-anchor="middle">relevance + faithfulness scoring on every response</text>
+
+  <line x1="898" y1="274" x2="898" y2="308" stroke="#1a5c3a" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#d3)"/>
+
+  <!-- Gap 7: Feedback monitor (bottom) -->
+  <rect x="170" y="400" width="620" height="60" rx="10" fill="#f0f4ff" stroke="#1a4a7a" stroke-width="1.5"/>
+  <text x="480" y="425" fill="#1a4a7a" font-size="11" text-anchor="middle" font-weight="700">GAP 7 FIX — CLEAN FEEDBACK LOOP</text>
+  <text x="480" y="443" fill="#555" font-size="10" text-anchor="middle">Separate eval model · adversarial sweep · negative example logging · no self-reinforcing signal</text>
+
+  <line x1="810" y1="372" x2="810" y2="398" stroke="#1a4a7a" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#d1)"/>
+  <line x1="576" y1="400" x2="576" y2="292" stroke="#1a4a7a" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#d1)"/>
+</svg>
+<figcaption>Fig. 4 — Production-grade RAG pipeline with all 7 gaps addressed. Each stage maps to a specific gap fix: query preprocessing (Gap 4), embedding version guard (Gap 2), hierarchical index (Gap 1), latency budget (Gap 3), context budget manager (Gap 5), LLM-as-judge evaluation (Gap 6), and a clean feedback loop (Gap 7).</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!--  09 — Synthesis -->
+<section id="synthesis">
+  <h2><span class="sec-num"> 09 — The Synthesis</span>Building for Production from Day One</h2>
+
+  <p>Each of the seven gaps is individually fixable. The difficulty is that most teams encounter them sequentially — fixing one while the next is still hidden — rather than addressing them systematically at architecture time. The right mental model is not "we will fix these when we encounter them" but "we will design against all seven before we ship."</p>
+
+  <p>The three gaps that are cheapest to fix at design time and most expensive to fix after deployment are embedding drift (Gap 2), evaluation blindness (Gap 6), and the feedback trap (Gap 7). Adding embedding version fingerprinting costs thirty lines of code at build time; it requires re-indexing your entire corpus if added after deployment. Setting up the LLM-as-judge evaluation pipeline costs a few API calls per query; building a retroactive ground truth dataset to evaluate a degraded system costs weeks of labeling work. Designing the feedback loop correctly from the start costs an afternoon of architecture review; unwinding a self-reinforcing bias in a deployed system can require replacing the model entirely.</p>
+
+  <p>The three gaps most commonly underestimated in impact are chunking strategy (Gap 1), query distribution (Gap 4), and context window misuse (Gap 5). Teams routinely spend weeks optimizing the LLM prompt while their chunking strategy is splitting semantic units at arbitrary boundaries, their query rewriter is absent, and their context assembly is stuffing 8,000 tokens into a window the model cannot effectively attend to. These three gaps collectively account for more than half of the recall failures observed in production RAG systems — and they sit entirely upstream of the LLM generation stage that receives the most engineering attention.</p>
+
+  <div class="callout tip">
+    <div class="ico">✅</div>
+    <div class="body"><strong>The Production Readiness Checklist — Before You Ship:</strong> Structure-aware chunking with at least two granularity levels. Embedding model version fingerprinting on every indexed document. Per-stage latency budgets with graceful degradation. Query rewriting and multi-intent decomposition. Context token budget with primacy-recency ordering. LLM-as-judge evaluation pipeline logging every production query. Adversarial evaluation sweep with known out-of-scope queries. Separate evaluation model from generation model. If any of these eight items is missing, your RAG system is not production-ready — it is a demo waiting to fail.</div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><span class="n">Gap 1–3</span><span class="l">Fix in architecture — chunking, drift guard, latency budget</span></div>
+    <div class="stat"><span class="n">Gap 4–5</span><span class="l">Fix in retrieval layer — query rewriting, context budget</span></div>
+    <div class="stat"><span class="n">Gap 6–7</span><span class="l">Fix in evaluation layer — LLM judge, clean feedback loop</span></div>
+    <div class="stat"><span class="n">Day 1</span><span class="l">The only time these gaps are cheap to close</span></div>
+  </div>
+
+  <p>The demo worked because you built a system that solved the problem you could see. Production requires a system that solves the problem your users actually have — with queries you did not write, documents you did not curate, at a scale you did not test, over time you did not plan for. The seven gaps are the distance between those two systems. Close them before you ship, and what you ship will hold.</p>
+
+</section>
+
+<div class="div">· · ·</div>
+
+<section>
+  <h2><span class="sec-num">References</span>Key Research</h2>
+  <p style="font-size:15px;line-height:2.2;color:#68635a;">
+    Lewis et al. (2020). <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.</em> NeurIPS 2020.<br>
+    Liu et al. (2023). <em>Lost in the Middle: How Language Models Use Long Contexts.</em> arXiv:2307.03172.<br>
+    Es et al. (2023). <em>RAGAS: Automated Evaluation of Retrieval Augmented Generation.</em> arXiv:2309.15217.<br>
+    Gao et al. (2023). <em>Retrieval-Augmented Generation for Large Language Models: A Survey.</em> arXiv:2312.10997.<br>
+    Nogueira &amp; Cho (2019). <em>Passage Re-ranking with BERT.</em> arXiv:1901.04085.<br>
+    Shi et al. (2023). <em>Large Language Models Can Be Easily Distracted by Irrelevant Context.</em> ICML 2023.<br>
+    Wang et al. (2023). <em>Query2Doc: Query Expansion with Large Language Models.</em> arXiv:2303.07678.
+  </p>
+</section>
+
+</div>
+    </div>
 
     <div class="article-cta">
       <h4>Continue Exploring</h4>

@@ -6,21 +6,22 @@
   <title>You Asked the AI a Question. It Answered From 2023. — Depth</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../css/depth/tokens.css">
-<link rel="stylesheet" href="../../css/depth/base.css">
-<link rel="stylesheet" href="../../css/depth/layout/grids.css">
-<link rel="stylesheet" href="../../css/depth/components/nav.css">
-<link rel="stylesheet" href="../../css/depth/components/hero.css">
-<link rel="stylesheet" href="../../css/depth/components/ticker.css">
-<link rel="stylesheet" href="../../css/depth/components/section-head.css">
-<link rel="stylesheet" href="../../css/depth/components/filters.css">
-<link rel="stylesheet" href="../../css/depth/components/cards.css">
-<link rel="stylesheet" href="../../css/depth/components/topics.css">
-<link rel="stylesheet" href="../../css/depth/components/newsletter.css">
-<link rel="stylesheet" href="../../css/depth/components/about.css">
-<link rel="stylesheet" href="../../css/depth/components/footer.css">
-<link rel="stylesheet" href="../../css/depth/components/page.css">
-<link rel="stylesheet" href="../../css/depth/components/article.css">
-<link rel="stylesheet" href="../../css/depth/responsive.css">
+  <link rel="stylesheet" href="../../css/depth/base.css">
+  <link rel="stylesheet" href="../../css/depth/layout/grids.css">
+  <link rel="stylesheet" href="../../css/depth/components/nav.css">
+  <link rel="stylesheet" href="../../css/depth/components/hero.css">
+  <link rel="stylesheet" href="../../css/depth/components/ticker.css">
+  <link rel="stylesheet" href="../../css/depth/components/section-head.css">
+  <link rel="stylesheet" href="../../css/depth/components/filters.css">
+  <link rel="stylesheet" href="../../css/depth/components/cards.css">
+  <link rel="stylesheet" href="../../css/depth/components/topics.css">
+  <link rel="stylesheet" href="../../css/depth/components/newsletter.css">
+  <link rel="stylesheet" href="../../css/depth/components/about.css">
+  <link rel="stylesheet" href="../../css/depth/components/footer.css">
+  <link rel="stylesheet" href="../../css/depth/components/page.css">
+  <link rel="stylesheet" href="../../css/depth/components/article.css">
+  <link rel="stylesheet" href="../../css/depth/components/ai-longform.css">
+  <link rel="stylesheet" href="../../css/depth/responsive.css">
 </head>
 <body class="article-page theme-ai" data-nav="ai-ml">
 <nav>
@@ -42,7 +43,7 @@
   </div>
 </nav>
 
-<section class="article-hero">
+<section class="article-hero" id="top">
   <div class="article-hero-inner">
     <div>
       <div class="breadcrumb">
@@ -53,23 +54,23 @@
         <span>You Asked the AI a Question. It Answered From 2023.</span>
       </div>
       <div class="article-kicker">AI / ML</div>
-      <h1 class="article-title">You Asked the AI a Question. It Answered From 2023.</h1>
-      <p class="article-subtitle">Why model staleness is the default, how to surface confidence gaps, and when retrieval is the only fix.</p>
+      <h1 class="article-title">You Asked the AI a <span class="hl">Question</span>. It Answered From <span class="hl2">2023</span>.</h1>
+      <p class="article-subtitle">Why staleness is the default in model outputs, how to surface confidence gaps, and when retrieval is the only honest fix.</p>
       <div class="article-meta">
         <div class="article-meta-item"><strong>50 min read</strong></div>
         <div class="article-meta-item"><span class="ep-dot"></span>2025</div>
-        <div class="article-meta-item"><span class="ep-dot"></span>Recency · Trust · Retrieval</div>
+        <div class="article-meta-item"><span class="ep-dot"></span>Recency · Safety · Trust</div>
       </div>
     </div>
     <aside class="article-panel">
       <h4>Key Themes</h4>
       <div class="feat-tags">
         <span class="ac-visual-tag">Recency</span>
-<span class="ac-visual-tag">Trust</span>
-<span class="ac-visual-tag">Retrieval</span>
-<span class="ac-visual-tag">Safety</span>
+        <span class="ac-visual-tag">Trust</span>
+        <span class="ac-visual-tag">Retrieval</span>
+        <span class="ac-visual-tag">Safety</span>
       </div>
-      <p>Why model staleness is the default, how to surface confidence gaps, and when retrieval is the only fix.</p>
+      <p>Why staleness is the default in model outputs, how to surface confidence gaps, and when retrieval is the only honest fix.</p>
     </aside>
   </div>
 </section>
@@ -78,30 +79,917 @@
   <aside class="article-aside">
     <h4>On This Page</h4>
     <div class="article-toc">
-      <a href="#context">Context</a>
-      <a href="#under-the-hood">Under the Hood</a>
-      <a href="#failure-modes">Failure Modes</a>
-      <a href="#takeaways">Takeaways</a>
+      <a href="#intro"> 01 — The Frozen Clock Why Your LLM Lives in the Past</a>
+      <a href="#anatomy"> 02 — Anatomy What a Knowledge Cutoff Actually Means</a>
+      <a href="#timeline"> 03 — The Timeline How the Gap Between Training and Reality Grows</a>
+      <a href="#rag-stale"> 04 — The RAG Trap Why RAG Alone Does Not Solve the Freshness Problem</a>
+      <a href="#temporal-detection"> 05 — Detection First Identifying Time-Sensitive Queries</a>
+      <a href="#architecture"> 06 — The Architecture Building a Real-Time Grounding Pipeline</a>
+      <a href="#freshness-score"> 07 — The Freshness Score Combining Relevance and Recency</a>
+      <a href="#ttl"> 08 — The Re-indexing Engine Document TTL and Automated Freshness Maintenance</a>
+      <a href="#prompt-engineering"> 09 — Prompt Engineering Teaching the LLM to Reason About Time</a>
+      <a href="#evaluation"> 10 — Measuring Freshness How to Evaluate Your Pipeline's Temporal Accuracy</a>
+      <a href="#what-to-build"> 11 — Decision Framework What to Build and When</a>
     </div>
   </aside>
   <article class="article-body">
-    <p>Why model staleness is the default, how to surface confidence gaps, and when retrieval is the only fix.</p>
+    <div class="ai-longform">
+<div class="article">
 
-    <h2 id="context">Context</h2>
-    <p>This piece grounds ai / ml decisions in production reality — the edge cases, scaling thresholds, and tradeoffs that rarely make it into tutorials.</p>
+<!--  01 -->
+<section id="intro">
+  <h2><span class="sec-num"> 01 — The Frozen Clock</span>Why Your LLM Lives in the Past</h2>
+  <p class="drop">In 1945, a Japanese soldier named Hiroo Onoda was deployed to a remote Philippine jungle. He continued fighting for <strong>29 years</strong> after World War II ended — because nobody told him the war was over. He was loyal, capable, disciplined, and completely wrong about the state of the world. He was operating on outdated intelligence and had no mechanism to update it.</p>
+  <p>Your LLM is Hiroo Onoda. It is intelligent, articulate, and deeply confident — and its entire model of reality was frozen at a specific moment in time. Ask it about the latest interest rates, a recent merger, a new law, or a product released six months ago, and it will answer with full confidence, drawn entirely from a world that no longer exists.</p>
+  <p>This is the <strong>knowledge cutoff problem</strong> — one of the most underappreciated failure modes in production AI systems. Unlike hallucination or the vector mismatch problem, the cutoff problem is especially insidious because the AI's answer is often <em>historically accurate</em>. It is just no longer true.</p>
 
-    <h2 id="under-the-hood">Under the Hood</h2>
-    <p>We break down the mechanics behind you asked the ai a question. it answered from 2023. and map how those mechanics shape reliability, latency, and operational cost.</p>
+  <div class="stat-row">
+    <div class="stat"><span class="n">~2yr</span><span class="l">Avg gap between training cutoff and user query</span></div>
+    <div class="stat"><span class="n">68%</span><span class="l">Of enterprise RAG queries touch time-sensitive data</span></div>
+    <div class="stat"><span class="n">0</span><span class="l">Errors thrown when LLM answers from stale knowledge</span></div>
+    <div class="stat"><span class="n">∞</span><span class="l">Confidence expressed regardless of data freshness</span></div>
+  </div>
 
-    <blockquote>Depth is about the tradeoffs you only see after shipping.</blockquote>
+  <div class="callout warn">
+    <div class="ico">⚠️</div>
+    <div class="body"><strong>The Stale Confidence Trap:</strong> An LLM answering from training data and one answering from real-time grounded data produce responses that look identical to the user. There is no built-in signal — no asterisk, no timestamp, no warning — that the answer is 2 years out of date.</div>
+  </div>
+</section>
 
-    <h2 id="failure-modes">Failure Modes</h2>
-    <p>The failure modes here are subtle: degraded performance, silent correctness drift, and compounded operational toil. The article focuses on detection and mitigation before the incident page lights up.</p>
+<div class="div">· · ·</div>
 
-    <h2 id="takeaways">Takeaways</h2>
-    <ul>
-      <li>Pay attention to recency — it is usually the first signal of scale-induced instability.</li><li>Pay attention to trust — it is usually the first signal of scale-induced instability.</li><li>Pay attention to retrieval — it is usually the first signal of scale-induced instability.</li>
-    </ul>
+<!--  02 -->
+<section id="anatomy">
+  <h2><span class="sec-num"> 02 — Anatomy</span>What a Knowledge Cutoff Actually Means</h2>
+  <p>The term "knowledge cutoff" is widely misunderstood — even by engineers building on top of LLMs. It does not mean the model knows nothing after a certain date. It means the model's <em>parametric memory</em> — the knowledge baked into its weights during pretraining — was formed from a corpus that ended at a specific point.</p>
+
+  <h3>Parametric vs. Contextual Knowledge</h3>
+  <p><strong>Parametric knowledge</strong> is everything encoded in the model's billions of weights during pretraining. This is static. It cannot be updated without retraining. It has a hard expiry date stamped by the training data cutoff.</p>
+  <p><strong>Contextual knowledge</strong> is everything provided in the prompt at inference time — the system prompt, conversation history, retrieved documents, tool outputs. This is dynamic. It can contain information from five minutes ago. The model processes contextual knowledge with equal or greater weight than its parametric memory — which is the entire premise of RAG.</p>
+
+  <h3>The Three Failure Modes</h3>
+  <p>The cutoff problem manifests in three distinct ways, each requiring a different fix. The cards below break down each failure class by its root cause, frequency, and danger level.</p>
+</section>
+</div>
+
+<!-- DIAGRAM 1 -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="900" height="380" fill="#ffffff" rx="12"/>
+  <text x="450" y="32" fill="#1a1a22" font-size="15" font-weight="700" text-anchor="middle">THREE FAILURE MODES OF THE KNOWLEDGE CUTOFF PROBLEM</text>
+  <rect x="40" y="55" width="250" height="290" rx="12" fill="#fff5f4" stroke="#c0392b" stroke-width="2"/>
+  <rect x="40" y="55" width="250" height="48" rx="12" fill="#c0392b"/>
+  <text x="165" y="74" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">MODE 1</text>
+  <text x="165" y="92" fill="#ffe0de" font-size="11" text-anchor="middle">DIRECT CUTOFF MISS</text>
+  <text x="165" y="130" fill="#1a1a22" font-size="13" text-anchor="middle" font-weight="700">Query asks about</text>
+  <text x="165" y="148" fill="#1a1a22" font-size="13" text-anchor="middle" font-weight="700">post-cutoff events</text>
+  <rect x="58" y="162" width="214" height="70" rx="8" fill="#fff" stroke="#edd"/>
+  <text x="165" y="184" fill="#555" font-size="11" text-anchor="middle">❓ "What did the Fed</text>
+  <text x="165" y="200" fill="#555" font-size="11" text-anchor="middle">decide last month?"</text>
+  <text x="165" y="216" fill="#c0392b" font-size="10" text-anchor="middle">→ Model has NO data</text>
+  <text x="165" y="252" fill="#444" font-size="11" text-anchor="middle">Model either hallucinates</text>
+  <text x="165" y="268" fill="#444" font-size="11" text-anchor="middle">a plausible-sounding</text>
+  <text x="165" y="284" fill="#444" font-size="11" text-anchor="middle">answer or refuses</text>
+  <text x="165" y="318" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">Frequency: COMMON</text>
+  <text x="165" y="335" fill="#c0392b" font-size="10" text-anchor="middle">~35% of cutoff failures</text>
+
+  <rect x="325" y="55" width="250" height="290" rx="12" fill="#fff8f0" stroke="#b06000" stroke-width="2"/>
+  <rect x="325" y="55" width="250" height="48" rx="12" fill="#b06000"/>
+  <text x="450" y="74" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">MODE 2</text>
+  <text x="450" y="92" fill="#ffe8cc" font-size="11" text-anchor="middle">STALE DATA SERVED</text>
+  <text x="450" y="130" fill="#1a1a22" font-size="13" text-anchor="middle" font-weight="700">Query retrieves old</text>
+  <text x="450" y="148" fill="#1a1a22" font-size="13" text-anchor="middle" font-weight="700">RAG documents</text>
+  <rect x="343" y="162" width="214" height="70" rx="8" fill="#fff" stroke="#edddcc"/>
+  <text x="450" y="184" fill="#555" font-size="11" text-anchor="middle">❓ "What's the current</text>
+  <text x="450" y="200" fill="#555" font-size="11" text-anchor="middle">pricing for Product X?"</text>
+  <text x="450" y="216" fill="#b06000" font-size="10" text-anchor="middle">→ RAG returns 2022 doc</text>
+  <text x="450" y="252" fill="#444" font-size="11" text-anchor="middle">Model answers correctly</text>
+  <text x="450" y="268" fill="#444" font-size="11" text-anchor="middle">based on retrieved doc</text>
+  <text x="450" y="284" fill="#444" font-size="11" text-anchor="middle">— but doc is outdated</text>
+  <text x="450" y="318" fill="#b06000" font-size="11" text-anchor="middle" font-weight="700">Frequency: VERY COMMON</text>
+  <text x="450" y="335" fill="#b06000" font-size="10" text-anchor="middle">~48% of cutoff failures</text>
+
+  <rect x="610" y="55" width="250" height="290" rx="12" fill="#f4f8ff" stroke="#1a6ea0" stroke-width="2"/>
+  <rect x="610" y="55" width="250" height="48" rx="12" fill="#1a6ea0"/>
+  <text x="735" y="74" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">MODE 3</text>
+  <text x="735" y="92" fill="#cce4f7" font-size="11" text-anchor="middle">TEMPORAL CONFUSION</text>
+  <text x="735" y="130" fill="#1a1a22" font-size="13" text-anchor="middle" font-weight="700">Model blends old</text>
+  <text x="735" y="148" fill="#1a1a22" font-size="13" text-anchor="middle" font-weight="700">and new incorrectly</text>
+  <rect x="628" y="162" width="214" height="70" rx="8" fill="#fff" stroke="#cce"/>
+  <text x="735" y="184" fill="#555" font-size="11" text-anchor="middle">❓ "Who leads Company X</text>
+  <text x="735" y="200" fill="#555" font-size="11" text-anchor="middle">after the recent change?"</text>
+  <text x="735" y="216" fill="#1a6ea0" font-size="10" text-anchor="middle">→ Partial new + old data</text>
+  <text x="735" y="252" fill="#444" font-size="11" text-anchor="middle">Model correctly knows</text>
+  <text x="735" y="268" fill="#444" font-size="11" text-anchor="middle">change happened but</text>
+  <text x="735" y="284" fill="#444" font-size="11" text-anchor="middle">names wrong successor</text>
+  <text x="735" y="318" fill="#1a6ea0" font-size="11" text-anchor="middle" font-weight="700">Frequency: DANGEROUS</text>
+  <text x="735" y="335" fill="#1a6ea0" font-size="10" text-anchor="middle">~17% — hardest to detect</text>
+</svg>
+<figcaption>Fig. 1 — Three failure modes of the knowledge cutoff problem. Mode 2 (stale RAG documents) is the most common and most preventable with proper pipeline architecture.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<div class="div">· · ·</div>
+
+<!--  03 -->
+<section id="timeline">
+  <h2><span class="sec-num"> 03 — The Timeline</span>How the Gap Between Training and Reality Grows</h2>
+  <p>To appreciate the scale of this problem, you need to understand the full lifecycle of an LLM. At every step, time passes. By the time a user's question arrives, the model's knowledge may already be 18 to 30 months behind reality.</p>
+</section>
+</div>
+
+<!-- DIAGRAM 2 -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="900" height="320" fill="#ffffff" rx="12"/>
+  <text x="450" y="30" fill="#1a1a22" font-size="15" font-weight="700" text-anchor="middle">LLM LIFECYCLE: THE EVER-WIDENING KNOWLEDGE GAP</text>
+  <line x1="60" y1="160" x2="860" y2="160" stroke="#d4d0c8" stroke-width="2"/>
+  <circle cx="120" cy="160" r="10" fill="#c0392b"/>
+  <line x1="120" y1="150" x2="120" y2="80" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="60" y="55" width="120" height="44" rx="6" fill="#fff5f4" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="120" y="73" fill="#c0392b" font-size="10" text-anchor="middle" font-weight="700">DATA CUTOFF</text>
+  <text x="120" y="89" fill="#444" font-size="10" text-anchor="middle">Web crawl ends</text>
+  <rect x="130" y="140" width="120" height="40" rx="6" fill="#ffe8cc" stroke="#b06000" stroke-width="1.5"/>
+  <text x="190" y="156" fill="#b06000" font-size="10" text-anchor="middle" font-weight="700">TRAINING</text>
+  <text x="190" y="170" fill="#b06000" font-size="10" text-anchor="middle">2–4 months</text>
+  <rect x="260" y="140" width="100" height="40" rx="6" fill="#fff8e8" stroke="#b06000" stroke-width="1.5"/>
+  <text x="310" y="156" fill="#b06000" font-size="10" text-anchor="middle" font-weight="700">RLHF / ALIGN</text>
+  <text x="310" y="170" fill="#b06000" font-size="10" text-anchor="middle">1–2 months</text>
+  <rect x="370" y="140" width="100" height="40" rx="6" fill="#fff8e8" stroke="#b06000" stroke-width="1.5"/>
+  <text x="420" y="156" fill="#b06000" font-size="10" text-anchor="middle" font-weight="700">RED TEAM</text>
+  <text x="420" y="170" fill="#b06000" font-size="10" text-anchor="middle">1–3 months</text>
+  <circle cx="490" cy="160" r="10" fill="#1a7a5e"/>
+  <line x1="490" y1="150" x2="490" y2="80" stroke="#1a7a5e" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="430" y="55" width="120" height="44" rx="6" fill="#f0fff8" stroke="#1a7a5e" stroke-width="1.5"/>
+  <text x="490" y="73" fill="#1a7a5e" font-size="10" text-anchor="middle" font-weight="700">PUBLIC RELEASE</text>
+  <text x="490" y="89" fill="#444" font-size="10" text-anchor="middle">~6–10 mo. post-cutoff</text>
+  <rect x="500" y="140" width="200" height="40" rx="6" fill="#e8f4ff" stroke="#1a6ea0" stroke-width="1.5"/>
+  <text x="600" y="156" fill="#1a6ea0" font-size="10" text-anchor="middle" font-weight="700">PRODUCTION DEPLOYMENT</text>
+  <text x="600" y="170" fill="#1a6ea0" font-size="10" text-anchor="middle">12–24 months typical lifespan</text>
+  <circle cx="850" cy="160" r="10" fill="#7d3c98"/>
+  <line x1="850" y1="150" x2="850" y2="80" stroke="#7d3c98" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="790" y="55" width="100" height="44" rx="6" fill="#f9f0ff" stroke="#7d3c98" stroke-width="1.5"/>
+  <text x="840" y="73" fill="#7d3c98" font-size="10" text-anchor="middle" font-weight="700">USER QUERY</text>
+  <text x="840" y="89" fill="#444" font-size="10" text-anchor="middle">TODAY</text>
+  <line x1="120" y1="220" x2="850" y2="220" stroke="#c0392b" stroke-width="2.5"/>
+  <circle cx="120" cy="220" r="4" fill="#c0392b"/>
+  <circle cx="850" cy="220" r="4" fill="#c0392b"/>
+  <rect x="340" y="228" width="230" height="36" rx="6" fill="#fff5f4" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="455" y="244" fill="#c0392b" font-size="12" text-anchor="middle" font-weight="700">KNOWLEDGE GAP: 18–30 MONTHS</text>
+  <text x="455" y="258" fill="#888" font-size="10" text-anchor="middle">Everything in this window → invisible to model</text>
+  <text x="120" y="285" fill="#888" font-size="10" text-anchor="middle">T₀</text>
+  <text x="490" y="285" fill="#888" font-size="10" text-anchor="middle">T₀ + 8mo</text>
+  <text x="850" y="285" fill="#888" font-size="10" text-anchor="middle">T₀ + 26mo</text>
+</svg>
+<figcaption>Fig. 2 — The LLM lifecycle. From data cutoff to a typical production query, 18–30 months of real-world events are completely invisible to the model's parametric memory.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+  <p>The gap is not static — it <em>grows every day</em> the model remains in production. An LLM released in March 2023 had an 8-month gap on day one. By March 2025 — still powering millions of queries — that same model has a 26-month gap. Every API call is a conversation with a ghost from early 2023.</p>
+
+  <div class="pq">
+    <p>"Your LLM isn't hallucinating when it tells you last year's interest rates. It's remembering perfectly. The problem isn't the model's memory — it's that nobody told it time had passed."</p>
+  </div>
+
+  <h3>How Fast Does Your Domain Go Stale?</h3>
+  <p>Not all query domains age at the same rate. The bar chart below shows the relative decay speed for common domains — the longer the bar, the faster that domain becomes stale and the more urgently it needs real-time grounding.</p>
+
+  <!-- COMPARE BARS replacing domain decay table -->
+  <div class="compare-list">
+    <div class="compare-item">
+      <div class="ci-label">💹 Financial markets / crypto</div>
+      <div class="ci-bar-wrap"><div class="ci-bar" style="width:100%;background:#c0392b;">seconds–minutes</div></div>
+      <div class="ci-note" style="color:var(--accent);">🔴 Critical</div>
+    </div>
+    <div class="compare-item">
+      <div class="ci-label">📰 Breaking news / politics</div>
+      <div class="ci-bar-wrap"><div class="ci-bar" style="width:90%;background:#c0392b;">hours</div></div>
+      <div class="ci-note" style="color:var(--accent);">🔴 Critical</div>
+    </div>
+    <div class="compare-item">
+      <div class="ci-label">🛒 Product pricing / availability</div>
+      <div class="ci-bar-wrap"><div class="ci-bar" style="width:75%;background:#b06000;">days</div></div>
+      <div class="ci-note" style="color:var(--accent3);">🟠 High</div>
+    </div>
+    <div class="compare-item">
+      <div class="ci-label">⚖️ Regulatory / legal updates</div>
+      <div class="ci-bar-wrap"><div class="ci-bar" style="width:62%;background:#b06000;">weeks</div></div>
+      <div class="ci-note" style="color:var(--accent3);">🟠 High</div>
+    </div>
+    <div class="compare-item">
+      <div class="ci-label">📦 Software docs / API refs</div>
+      <div class="ci-bar-wrap"><div class="ci-bar" style="width:48%;background:#1a7a9e;">months</div></div>
+      <div class="ci-note" style="color:var(--accent2);">🟡 Medium</div>
+    </div>
+    <div class="compare-item">
+      <div class="ci-label">🔬 Scientific research</div>
+      <div class="ci-bar-wrap"><div class="ci-bar" style="width:38%;background:#1a7a9e;">months</div></div>
+      <div class="ci-note" style="color:var(--accent2);">🟡 Medium</div>
+    </div>
+    <div class="compare-item">
+      <div class="ci-label">🏢 Company org / leadership</div>
+      <div class="ci-bar-wrap"><div class="ci-bar" style="width:30%;background:#1a7a9e;">months</div></div>
+      <div class="ci-note" style="color:var(--accent2);">🟡 Medium</div>
+    </div>
+    <div class="compare-item">
+      <div class="ci-label">📚 Historical facts / science</div>
+      <div class="ci-bar-wrap"><div class="ci-bar" style="width:10%;background:#1a7a5e;">decades</div></div>
+      <div class="ci-note" style="color:var(--accent4);">🟢 Low</div>
+    </div>
+  </div>
+
+<div class="div">· · ·</div>
+
+<!--  04 -->
+<section id="rag-stale">
+  <h2><span class="sec-num"> 04 — The RAG Trap</span>Why RAG Alone Does Not Solve the Freshness Problem</h2>
+  <p>The standard answer to the knowledge cutoff problem is: <em>"Just use RAG."</em> In theory, if your document store is current, your answers will be current. In practice, RAG systems develop their own freshness problems — and because they add a false sense of security, their staleness failures are even harder to detect.</p>
+
+  <h3>The Four Ways RAG Goes Stale</h3>
+  <p>Each card below describes one failure path to a stale RAG response. These can — and often do — occur simultaneously in unmanaged systems.</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="c-label">Failure Path 01</div>
+      <div class="c-title">No Re-indexing Pipeline</div>
+      <div class="c-row"><span class="c-key">Cause</span><span class="c-val red">Index frozen at launch</span></div>
+      <div class="c-row"><span class="c-key">What happens</span><span class="c-val">Source data updates; DB never re-runs</span></div>
+      <div class="c-row"><span class="c-key">Detection</span><span class="c-val">Audit indexed_at timestamps</span></div>
+      <span class="c-badge badge-red">Most Common</span>
+    </div>
+    <div class="card">
+      <div class="c-label">Failure Path 02</div>
+      <div class="c-title">No Document TTL</div>
+      <div class="c-row"><span class="c-key">Cause</span><span class="c-val red">No expiry metadata on docs</span></div>
+      <div class="c-row"><span class="c-key">What happens</span><span class="c-val">Stale chunks live forever in the index</span></div>
+      <div class="c-row"><span class="c-key">Detection</span><span class="c-val">Query age distribution of results</span></div>
+      <span class="c-badge badge-orange">Easily Fixed</span>
+    </div>
+    <div class="card">
+      <div class="c-label">Failure Path 03</div>
+      <div class="c-title">No Freshness Scoring</div>
+      <div class="c-row"><span class="c-key">Cause</span><span class="c-val orange">Ranking by similarity only</span></div>
+      <div class="c-row"><span class="c-key">What happens</span><span class="c-val">2019 doc beats 2024 doc if more similar</span></div>
+      <div class="c-row"><span class="c-key">Detection</span><span class="c-val">Log top-1 doc ages per query</span></div>
+      <span class="c-badge badge-orange">Requires Re-rank</span>
+    </div>
+    <div class="card">
+      <div class="c-label">Failure Path 04</div>
+      <div class="c-title">No Temporal Detection</div>
+      <div class="c-row"><span class="c-key">Cause</span><span class="c-val blue">All queries treated equally</span></div>
+      <div class="c-row"><span class="c-key">What happens</span><span class="c-val">Time-sensitive queries get static treatment</span></div>
+      <div class="c-row"><span class="c-key">Detection</span><span class="c-val">Intent classification layer missing</span></div>
+      <span class="c-badge badge-blue">Structural Gap</span>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="ico">🔬</div>
+    <div class="body"><strong>The Freshness Paradox:</strong> RAG systems are deployed precisely because they are supposed to be "always up to date." This creates a paradox — the expectation of freshness makes stale RAG responses <em>more</em> dangerous than raw LLM cutoff failures, because users and developers assume the retrieval layer guarantees currency. It doesn't. That guarantee must be explicitly engineered.</div>
+  </div>
+</section>
+
+<div class="div">· · ·</div>
+
+<!--  05 -->
+<section id="temporal-detection">
+  <h2><span class="sec-num"> 05 — Detection First</span>Identifying Time-Sensitive Queries</h2>
+  <p>Before you can apply any freshness solution, you need to know <em>which queries actually require fresh data</em>. Not all queries are time-sensitive. The right architecture routes queries to the appropriate freshness tier before any retrieval happens.</p>
+  <p>Temporal query detection is a classification problem. The model must determine whether the query's correct answer depends on <strong>current state</strong> vs. <strong>stable knowledge</strong>. Below are the four signal categories that determine a query's temporal tier.</p>
+</section>
+</div>
+
+<!-- DIAGRAM 4 -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="900" height="360" fill="#ffffff" rx="12"/>
+  <text x="450" y="30" fill="#1a1a22" font-size="15" font-weight="700" text-anchor="middle">TEMPORAL SIGNAL TAXONOMY — CLASSIFYING TIME-SENSITIVE QUERIES</text>
+  <rect x="40" y="55" width="195" height="270" rx="10" fill="#fff5f4" stroke="#c0392b" stroke-width="1.5"/>
+  <rect x="40" y="55" width="195" height="36" rx="10" fill="#c0392b"/>
+  <text x="137" y="78" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">EXPLICIT TIME SIGNALS</text>
+  <text x="137" y="112" fill="#444" font-size="11" text-anchor="middle">"current", "latest", "now"</text>
+  <text x="137" y="130" fill="#444" font-size="11" text-anchor="middle">"today", "this week"</text>
+  <text x="137" y="148" fill="#444" font-size="11" text-anchor="middle">"recent", "new", "2024"</text>
+  <text x="137" y="166" fill="#444" font-size="11" text-anchor="middle">"just announced"</text>
+  <text x="137" y="184" fill="#444" font-size="11" text-anchor="middle">"right now", "as of"</text>
+  <text x="137" y="210" fill="#c0392b" font-size="10" text-anchor="middle" font-weight="700">Confidence: HIGH</text>
+  <text x="137" y="228" fill="#888" font-size="10" text-anchor="middle">Easy to catch with</text>
+  <text x="137" y="244" fill="#888" font-size="10" text-anchor="middle">regex or keyword</text>
+  <text x="137" y="308" fill="#c0392b" font-size="20" text-anchor="middle">🕐</text>
+
+  <rect x="250" y="55" width="195" height="270" rx="10" fill="#fff8f0" stroke="#b06000" stroke-width="1.5"/>
+  <rect x="250" y="55" width="195" height="36" rx="10" fill="#b06000"/>
+  <text x="347" y="78" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">ENTITY-TYPE SIGNALS</text>
+  <text x="347" y="112" fill="#444" font-size="11" text-anchor="middle">Price / cost / rate</text>
+  <text x="347" y="130" fill="#444" font-size="11" text-anchor="middle">CEO / leader / president</text>
+  <text x="347" y="148" fill="#444" font-size="11" text-anchor="middle">Stock / crypto value</text>
+  <text x="347" y="166" fill="#444" font-size="11" text-anchor="middle">Law / regulation / policy</text>
+  <text x="347" y="184" fill="#444" font-size="11" text-anchor="middle">Version / release number</text>
+  <text x="347" y="210" fill="#b06000" font-size="10" text-anchor="middle" font-weight="700">Confidence: MEDIUM-HIGH</text>
+  <text x="347" y="228" fill="#888" font-size="10" text-anchor="middle">Requires NER + domain</text>
+  <text x="347" y="244" fill="#888" font-size="10" text-anchor="middle">decay rate lookup</text>
+  <text x="347" y="308" fill="#b06000" font-size="20" text-anchor="middle">🏢</text>
+
+  <rect x="460" y="55" width="195" height="270" rx="10" fill="#f4f8ff" stroke="#1a6ea0" stroke-width="1.5"/>
+  <rect x="460" y="55" width="195" height="36" rx="10" fill="#1a6ea0"/>
+  <text x="557" y="78" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">IMPLICIT RECENCY</text>
+  <text x="557" y="112" fill="#444" font-size="11" text-anchor="middle">"Is X still available?"</text>
+  <text x="557" y="130" fill="#444" font-size="11" text-anchor="middle">"Does Y support Z?"</text>
+  <text x="557" y="148" fill="#444" font-size="11" text-anchor="middle">"What's the status of..."</text>
+  <text x="557" y="166" fill="#444" font-size="11" text-anchor="middle">"Are they still..."</text>
+  <text x="557" y="184" fill="#444" font-size="11" text-anchor="middle">"Has anything changed"</text>
+  <text x="557" y="210" fill="#1a6ea0" font-size="10" text-anchor="middle" font-weight="700">Confidence: MEDIUM</text>
+  <text x="557" y="228" fill="#888" font-size="10" text-anchor="middle">Requires semantic</text>
+  <text x="557" y="244" fill="#888" font-size="10" text-anchor="middle">intent classification</text>
+  <text x="557" y="308" fill="#1a6ea0" font-size="20" text-anchor="middle">❓</text>
+
+  <rect x="670" y="55" width="195" height="270" rx="10" fill="#f0fff4" stroke="#1a7a5e" stroke-width="1.5"/>
+  <rect x="670" y="55" width="195" height="36" rx="10" fill="#1a7a5e"/>
+  <text x="767" y="78" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">STABLE / HISTORICAL</text>
+  <text x="767" y="112" fill="#444" font-size="11" text-anchor="middle">"Who wrote Hamlet?"</text>
+  <text x="767" y="130" fill="#444" font-size="11" text-anchor="middle">"What is photosynthesis?"</text>
+  <text x="767" y="148" fill="#444" font-size="11" text-anchor="middle">"When was Rome founded?"</text>
+  <text x="767" y="166" fill="#444" font-size="11" text-anchor="middle">"How does TCP/IP work?"</text>
+  <text x="767" y="184" fill="#444" font-size="11" text-anchor="middle">"Define entropy"</text>
+  <text x="767" y="210" fill="#1a7a5e" font-size="10" text-anchor="middle" font-weight="700">No grounding needed</text>
+  <text x="767" y="228" fill="#888" font-size="10" text-anchor="middle">Skip real-time retrieval</text>
+  <text x="767" y="244" fill="#888" font-size="10" text-anchor="middle">to save latency/cost</text>
+  <text x="767" y="308" fill="#1a7a5e" font-size="20" text-anchor="middle">✅</text>
+</svg>
+<figcaption>Fig. 3 — Taxonomy of temporal signals. Routing queries to the correct freshness tier avoids wasting real-time retrieval on stable queries while ensuring fresh answers for time-sensitive ones.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<pre>
+<span class="cm"># Temporal Intent Classifier</span>
+<span class="kw">import</span> re
+<span class="kw">from</span> enum <span class="kw">import</span> Enum
+
+<span class="kw">class</span> <span class="cl">TemporalTier</span>(Enum):
+    REAL_TIME = <span class="st">"real_time"</span>
+    FRESH     = <span class="st">"fresh"</span>
+    RECENT    = <span class="st">"recent"</span>
+    STABLE    = <span class="st">"stable"</span>
+
+REAL_TIME_PATTERNS = [
+    <span class="st">r"\b(current price|live|right now|stock price|crypto)\b"</span>,
+    <span class="st">r"\b(breaking|just happened|today's rate)\b"</span>,
+]
+FRESH_PATTERNS = [
+    <span class="st">r"\b(latest|recent|new|this week|today|announced)\b"</span>,
+    <span class="st">r"\b(current|now|still|anymore|changed)\b"</span>,
+]
+STABLE_PATTERNS = [
+    <span class="st">r"\b(history|historical|ancient|original|founded|invented)\b"</span>,
+    <span class="st">r"\b(definition|what is|how does|explain|theory)\b"</span>,
+]
+HIGH_CHURN_ENTITIES = {<span class="st">"price"</span>, <span class="st">"rate"</span>, <span class="st">"ceo"</span>, <span class="st">"law"</span>, <span class="st">"version"</span>, <span class="st">"policy"</span>}
+
+<span class="kw">def</span> <span class="fn">classify_temporal_tier</span>(query: str, ner_entities: list[str]) -> <span class="cl">TemporalTier</span>:
+    q = query.lower()
+    <span class="kw">if</span> any(re.<span class="fn">search</span>(p, q) <span class="kw">for</span> p <span class="kw">in</span> REAL_TIME_PATTERNS):
+        <span class="kw">return</span> <span class="cl">TemporalTier</span>.REAL_TIME
+    <span class="kw">if</span> any(re.<span class="fn">search</span>(p, q) <span class="kw">for</span> p <span class="kw">in</span> STABLE_PATTERNS):
+        <span class="kw">if not</span> any(re.<span class="fn">search</span>(p, q) <span class="kw">for</span> p <span class="kw">in</span> FRESH_PATTERNS):
+            <span class="kw">return</span> <span class="cl">TemporalTier</span>.STABLE
+    entity_types = {e.lower() <span class="kw">for</span> e <span class="kw">in</span> ner_entities}
+    <span class="kw">if</span> entity_types & HIGH_CHURN_ENTITIES:
+        <span class="kw">return</span> <span class="cl">TemporalTier</span>.FRESH
+    <span class="kw">if</span> any(re.<span class="fn">search</span>(p, q) <span class="kw">for</span> p <span class="kw">in</span> FRESH_PATTERNS):
+        <span class="kw">return</span> <span class="cl">TemporalTier</span>.FRESH
+    <span class="kw">return</span> <span class="cl">TemporalTier</span>.RECENT
+</pre>
+
+<div class="div">· · ·</div>
+
+<!--  06 -->
+<section id="architecture">
+  <h2><span class="sec-num"> 06 — The Architecture</span>Building a Real-Time Grounding Pipeline</h2>
+  <p>Once temporal intent is classified, the query is routed to the appropriate grounding tier. Each tier is calibrated to a different freshness requirement and latency budget.</p>
+</section>
+</div>
+
+<!-- DIAGRAM 5 -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <marker id="ga" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a7a5e"/></marker>
+    <marker id="gb" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1a6ea0"/></marker>
+    <marker id="gc" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#b06000"/></marker>
+    <marker id="gd" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#7d3c98"/></marker>
+    <marker id="ge" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0392b"/></marker>
+  </defs>
+  <rect width="900" height="540" fill="#ffffff" rx="12"/>
+  <text x="450" y="28" fill="#1a1a22" font-size="15" font-weight="700" text-anchor="middle">REAL-TIME GROUNDING PIPELINE — FULL ARCHITECTURE</text>
+  <rect x="340" y="45" width="220" height="50" rx="9" fill="#f0f8ff" stroke="#1a6ea0" stroke-width="2"/>
+  <text x="450" y="66" fill="#1a6ea0" font-size="12" text-anchor="middle" font-weight="700">INCOMING QUERY</text>
+  <text x="450" y="83" fill="#444" font-size="11" text-anchor="middle">"What is the current Fed rate?"</text>
+  <line x1="450" y1="97" x2="450" y2="118" stroke="#1a6ea0" stroke-width="2" marker-end="url(#gb)"/>
+  <rect x="300" y="120" width="300" height="50" rx="9" fill="#fff8f0" stroke="#b06000" stroke-width="2"/>
+  <text x="450" y="142" fill="#b06000" font-size="12" text-anchor="middle" font-weight="700">TEMPORAL INTENT CLASSIFIER</text>
+  <text x="450" y="158" fill="#444" font-size="11" text-anchor="middle">Tier → REAL_TIME</text>
+  <line x1="380" y1="172" x2="160" y2="230" stroke="#c0392b" stroke-width="2" marker-end="url(#ge)"/>
+  <line x1="420" y1="172" x2="350" y2="230" stroke="#1a6ea0" stroke-width="2" marker-end="url(#gb)"/>
+  <line x1="480" y1="172" x2="550" y2="230" stroke="#b06000" stroke-width="2" marker-end="url(#gc)"/>
+  <line x1="520" y1="172" x2="740" y2="230" stroke="#1a7a5e" stroke-width="2" marker-end="url(#ga)"/>
+  <rect x="50" y="232" width="180" height="100" rx="10" fill="#fff5f4" stroke="#c0392b" stroke-width="2"/>
+  <text x="140" y="256" fill="#c0392b" font-size="11" text-anchor="middle" font-weight="700">TIER 1: LIVE APIs</text>
+  <text x="140" y="274" fill="#444" font-size="10" text-anchor="middle">Web search, finance</text>
+  <text x="140" y="290" fill="#444" font-size="10" text-anchor="middle">feeds, news APIs</text>
+  <text x="140" y="306" fill="#444" font-size="10" text-anchor="middle">Latency: 200–800ms</text>
+  <text x="140" y="322" fill="#c0392b" font-size="10" text-anchor="middle">Age: Seconds</text>
+  <rect x="255" y="232" width="180" height="100" rx="10" fill="#f4f8ff" stroke="#1a6ea0" stroke-width="2"/>
+  <text x="345" y="256" fill="#1a6ea0" font-size="11" text-anchor="middle" font-weight="700">TIER 2: FRESH INDEX</text>
+  <text x="345" y="274" fill="#444" font-size="10" text-anchor="middle">Docs indexed &lt;7 days</text>
+  <text x="345" y="290" fill="#444" font-size="10" text-anchor="middle">Re-indexed nightly</text>
+  <text x="345" y="306" fill="#444" font-size="10" text-anchor="middle">Latency: 20–50ms</text>
+  <text x="345" y="322" fill="#1a6ea0" font-size="10" text-anchor="middle">Age: Days</text>
+  <rect x="460" y="232" width="180" height="100" rx="10" fill="#fff8f0" stroke="#b06000" stroke-width="2"/>
+  <text x="550" y="256" fill="#b06000" font-size="11" text-anchor="middle" font-weight="700">TIER 3: RECENT DB</text>
+  <text x="550" y="274" fill="#444" font-size="10" text-anchor="middle">Vector DB filtered</text>
+  <text x="550" y="290" fill="#444" font-size="10" text-anchor="middle">to last 90 days</text>
+  <text x="550" y="306" fill="#444" font-size="10" text-anchor="middle">Latency: 15–30ms</text>
+  <text x="550" y="322" fill="#b06000" font-size="10" text-anchor="middle">Age: Weeks–months</text>
+  <rect x="665" y="232" width="180" height="100" rx="10" fill="#f0fff4" stroke="#1a7a5e" stroke-width="2"/>
+  <text x="755" y="256" fill="#1a7a5e" font-size="11" text-anchor="middle" font-weight="700">TIER 4: PARAMETRIC</text>
+  <text x="755" y="274" fill="#444" font-size="10" text-anchor="middle">LLM internal memory</text>
+  <text x="755" y="290" fill="#444" font-size="10" text-anchor="middle">No retrieval needed</text>
+  <text x="755" y="306" fill="#444" font-size="10" text-anchor="middle">Latency: 0ms</text>
+  <text x="755" y="322" fill="#1a7a5e" font-size="10" text-anchor="middle">Age: Training cutoff</text>
+  <line x1="140" y1="334" x2="280" y2="398" stroke="#c0392b" stroke-width="1.5" marker-end="url(#ge)"/>
+  <line x1="345" y1="334" x2="370" y2="398" stroke="#1a6ea0" stroke-width="1.5" marker-end="url(#gb)"/>
+  <line x1="550" y1="334" x2="490" y2="398" stroke="#b06000" stroke-width="1.5" marker-end="url(#gc)"/>
+  <line x1="755" y1="334" x2="540" y2="398" stroke="#1a7a5e" stroke-width="1.5" marker-end="url(#ga)"/>
+  <rect x="250" y="400" width="400" height="50" rx="9" fill="#f9f0ff" stroke="#7d3c98" stroke-width="2"/>
+  <text x="450" y="421" fill="#7d3c98" font-size="12" text-anchor="middle" font-weight="700">FRESHNESS-WEIGHTED CONTEXT ASSEMBLER</text>
+  <text x="450" y="438" fill="#444" font-size="10" text-anchor="middle">composite_score = α·relevance + β·freshness_score → top-5 with timestamps</text>
+  <line x1="450" y1="452" x2="450" y2="470" stroke="#1a7a5e" stroke-width="2" marker-end="url(#ga)"/>
+  <rect x="280" y="472" width="340" height="40" rx="9" fill="#1a1a22" stroke="#1a1a22" stroke-width="2"/>
+  <text x="450" y="489" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">✅ LLM + TEMPORAL SYSTEM PROMPT</text>
+  <text x="450" y="504" fill="#aaa" font-size="10" text-anchor="middle">Grounded, timestamped, uncertainty-flagged output</text>
+</svg>
+<figcaption>Fig. 4 — Four-tier real-time grounding pipeline. Each tier serves a different temporal requirement. The freshness-weighted context assembler combines results before LLM generation.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<h3>Tier 1: Live API Integration</h3>
+<p>For queries classified as <code>REAL_TIME</code>, the system must fetch data from live external sources. The retrieved content is never cached for reuse across queries — each query triggers a fresh fetch with a strict latency timeout.</p>
+
+<pre>
+<span class="cm"># Tier 1: Real-time web retrieval</span>
+<span class="kw">import</span> httpx, asyncio
+
+<span class="kw">async def</span> <span class="fn">fetch_realtime_context</span>(query: str) -> list[dict]:
+    async with httpx.<span class="cl">AsyncClient</span>() <span class="kw">as</span> client:
+        response = await client.<span class="fn">get</span>(
+            <span class="st">"https://api.search.brave.com/res/v1/web/search"</span>,
+            headers={<span class="st">"X-Subscription-Token"</span>: BRAVE_API_KEY},
+            params={<span class="st">"q"</span>: query, <span class="st">"count"</span>: <span class="nm">5</span>, <span class="st">"freshness"</span>: <span class="st">"pd"</span>},
+            timeout=<span class="nm">3.0</span>
+        )
+        results = response.<span class="fn">json</span>().<span class="fn">get</span>(<span class="st">"web"</span>, {}).<span class="fn">get</span>(<span class="st">"results"</span>, [])
+    <span class="kw">return</span> [
+        {
+            <span class="st">"text"</span>: r[<span class="st">"description"</span>], <span class="st">"url"</span>: r[<span class="st">"url"</span>],
+            <span class="st">"published_at"</span>: r.<span class="fn">get</span>(<span class="st">"age"</span>), <span class="st">"tier"</span>: <span class="st">"real_time"</span>,
+            <span class="st">"freshness_score"</span>: <span class="nm">1.0</span>
+        }
+        <span class="kw">for</span> r <span class="kw">in</span> results
+    ]
+</pre>
+
+<div class="div">· · ·</div>
+
+<!--  07 -->
+<section id="freshness-score">
+  <h2><span class="sec-num"> 07 — The Freshness Score</span>Combining Relevance and Recency</h2>
+  <p>The most important insight in freshness-aware RAG is that <strong>semantic similarity and temporal freshness must be combined into a single ranking score</strong>. A document that is highly relevant but 18 months old is often worse than a slightly less relevant document from last week.</p>
+  <p>The weights between relevance and freshness shift depending on the temporal tier. The four tier weight profiles below show how the balance changes as urgency increases.</p>
+
+  <!-- Tier weight profiles replacing a table -->
+  <div class="card-grid">
+    <div class="card">
+      <div class="c-label">Tier — Real Time</div>
+      <div class="c-title">Freshness Wins</div>
+      <div class="c-row"><span class="c-key">Relevance weight (α)</span><span class="c-val orange">0.30</span></div>
+      <div class="c-row"><span class="c-key">Freshness weight (β)</span><span class="c-val red">0.70</span></div>
+      <div class="c-row"><span class="c-key">Typical domain</span><span class="c-val">Finance, breaking news</span></div>
+      <span class="c-badge badge-red">Fresh = Non-Negotiable</span>
+    </div>
+    <div class="card">
+      <div class="c-label">Tier — Fresh (&lt;7d)</div>
+      <div class="c-title">Equal Weight</div>
+      <div class="c-row"><span class="c-key">Relevance weight (α)</span><span class="c-val orange">0.50</span></div>
+      <div class="c-row"><span class="c-key">Freshness weight (β)</span><span class="c-val orange">0.50</span></div>
+      <div class="c-row"><span class="c-key">Typical domain</span><span class="c-val">Product pricing, legal</span></div>
+      <span class="c-badge badge-orange">Balanced Blend</span>
+    </div>
+    <div class="card">
+      <div class="c-label">Tier — Recent (&lt;90d)</div>
+      <div class="c-title">Relevance Leads</div>
+      <div class="c-row"><span class="c-key">Relevance weight (α)</span><span class="c-val blue">0.70</span></div>
+      <div class="c-row"><span class="c-key">Freshness weight (β)</span><span class="c-val blue">0.30</span></div>
+      <div class="c-row"><span class="c-key">Typical domain</span><span class="c-val">Research, software docs</span></div>
+      <span class="c-badge badge-blue">Relevance First</span>
+    </div>
+    <div class="card">
+      <div class="c-label">Tier — Stable</div>
+      <div class="c-title">Relevance Only</div>
+      <div class="c-row"><span class="c-key">Relevance weight (α)</span><span class="c-val green">1.00</span></div>
+      <div class="c-row"><span class="c-key">Freshness weight (β)</span><span class="c-val green">0.00</span></div>
+      <div class="c-row"><span class="c-key">Typical domain</span><span class="c-val">History, science fundamentals</span></div>
+      <span class="c-badge badge-green">No Decay Applied</span>
+    </div>
+  </div>
+
+<pre>
+<span class="cm"># Freshness-weighted context assembler</span>
+TIER_WEIGHTS = {
+    <span class="cl">TemporalTier</span>.REAL_TIME: (<span class="nm">0.3</span>, <span class="nm">0.7</span>),
+    <span class="cl">TemporalTier</span>.FRESH:     (<span class="nm">0.5</span>, <span class="nm">0.5</span>),
+    <span class="cl">TemporalTier</span>.RECENT:    (<span class="nm">0.7</span>, <span class="nm">0.3</span>),
+    <span class="cl">TemporalTier</span>.STABLE:    (<span class="nm">1.0</span>, <span class="nm">0.0</span>),
+}
+
+<span class="kw">def</span> <span class="fn">assemble_grounded_context</span>(all_docs, tier, top_n=<span class="nm">5</span>):
+    rel_w, fresh_w = TIER_WEIGHTS[tier]
+    <span class="kw">for</span> doc <span class="kw">in</span> all_docs:
+        doc[<span class="st">"composite_score"</span>] = (
+            rel_w   * doc.<span class="fn">get</span>(<span class="st">"similarity"</span>, <span class="nm">0.8</span>) +
+            fresh_w * doc.<span class="fn">get</span>(<span class="st">"freshness_score"</span>, <span class="nm">0.5</span>)
+        )
+    ranked = sorted(all_docs, key=<span class="kw">lambda</span> d: d[<span class="st">"composite_score"</span>], reverse=<span class="kw">True</span>)
+    <span class="kw">for</span> doc <span class="kw">in</span> ranked[:top_n]:
+        doc[<span class="st">"context_text"</span>] = (
+            <span class="st">f"[Source: {doc.get('url','internal')} | Updated: {doc.get('source_updated_at','?')}]\n"</span>
+            <span class="st">f"{doc['text']}"</span>
+        )
+    <span class="kw">return</span> ranked[:top_n]
+
+<span class="kw">def</span> <span class="fn">compute_freshness_score</span>(doc_ts: float, now: float) -> float:
+    age_days = (now - doc_ts) / <span class="nm">86400</span>
+    <span class="kw">return</span> max(<span class="nm">0.1</span>, <span class="nm">1.0</span> * (<span class="nm">0.95</span> ** age_days))  <span class="cm"># 5% decay/day</span>
+</pre>
+
+  <div class="callout tip">
+    <div class="ico">💡</div>
+    <div class="body"><strong>Always Inject Timestamps into the Prompt:</strong> When assembling context for the LLM, always include the document's publication or update date in the context block. This allows the LLM to reason about recency explicitly rather than stating facts without temporal anchoring.</div>
+  </div>
+</section>
+
+<div class="div">· · ·</div>
+
+<!--  08 -->
+<section id="ttl">
+  <h2><span class="sec-num"> 08 — The Re-indexing Engine</span>Document TTL and Automated Freshness Maintenance</h2>
+  <p>Even the best query-time freshness pipeline is worthless if the underlying document store is silently aging. A production system must have an <strong>automated re-indexing engine</strong> that continuously monitors source data for changes and propagates updates to the vector index.</p>
+  <p>TTL settings vary enormously by domain. The timeline below walks through five domain profiles — from the most volatile to the most stable — showing their hard expiry windows and recommended re-check intervals.</p>
+
+  <!-- Domain TTL as vertical steps replacing table -->
+  <div class="steps">
+    <div class="step">
+      <div class="step-num" style="background:#c0392b;">1</div>
+      <div class="step-body">
+        <div class="s-title">💹 Financial &amp; Market Data</div>
+        <p style="font-size:14px;color:#2a2a3a;margin-bottom:10px;">The most volatile domain. Prices, rates, and positions change second by second. Stale data here doesn't just mislead — it can cause financial harm.</p>
+        <div class="s-meta">
+          <span class="s-tag" style="background:rgba(192,57,43,.1);color:var(--accent);border-color:rgba(192,57,43,.3);">TTL: 1 hour</span>
+          <span class="s-tag" style="background:rgba(192,57,43,.07);color:var(--accent);border-color:rgba(192,57,43,.2);">Soft refresh: 5 min</span>
+          <span class="s-tag" style="background:var(--surface2);color:var(--muted);border-color:var(--border);">Trigger: API push + schedule</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#b06000;">2</div>
+      <div class="step-body">
+        <div class="s-title">📰 News &amp; Press Releases</div>
+        <p style="font-size:14px;color:#2a2a3a;margin-bottom:10px;">Stories break within hours. Yesterday's lead is today's background. Any news older than 24 hours should be treated as context, not current fact.</p>
+        <div class="s-meta">
+          <span class="s-tag" style="background:rgba(176,96,0,.1);color:var(--accent3);border-color:rgba(176,96,0,.3);">TTL: 24 hours</span>
+          <span class="s-tag" style="background:rgba(176,96,0,.07);color:var(--accent3);border-color:rgba(176,96,0,.2);">Soft refresh: 1 hour</span>
+          <span class="s-tag" style="background:var(--surface2);color:var(--muted);border-color:var(--border);">Trigger: RSS feed + webhook</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#1a7a9e;">3</div>
+      <div class="step-body">
+        <div class="s-title">🛒 Product &amp; Pricing Docs</div>
+        <p style="font-size:14px;color:#2a2a3a;margin-bottom:10px;">Prices and availability shift weekly. Serving last month's pricing data to a customer is a real support and trust problem.</p>
+        <div class="s-meta">
+          <span class="s-tag" style="background:rgba(26,122,158,.1);color:var(--accent2);border-color:rgba(26,122,158,.3);">TTL: 7 days</span>
+          <span class="s-tag" style="background:rgba(26,122,158,.07);color:var(--accent2);border-color:rgba(26,122,158,.2);">Soft refresh: Daily</span>
+          <span class="s-tag" style="background:var(--surface2);color:var(--muted);border-color:var(--border);">Trigger: CMS webhook</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#7d3c98;">4</div>
+      <div class="step-body">
+        <div class="s-title">⚖️ Legal &amp; Regulatory Docs</div>
+        <p style="font-size:14px;color:#2a2a3a;margin-bottom:10px;">Laws and regulations update monthly or quarterly. Not as volatile as prices, but errors here carry legal risk. Weekly checks are the safe baseline.</p>
+        <div class="s-meta">
+          <span class="s-tag" style="background:rgba(125,60,152,.1);color:var(--accent5);border-color:rgba(125,60,152,.3);">TTL: 30 days</span>
+          <span class="s-tag" style="background:rgba(125,60,152,.07);color:var(--accent5);border-color:rgba(125,60,152,.2);">Soft refresh: Weekly</span>
+          <span class="s-tag" style="background:var(--surface2);color:var(--muted);border-color:var(--border);">Trigger: Gov. site scraper</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#1a7a5e;">5</div>
+      <div class="step-body">
+        <div class="s-title">📦 Technical Docs &amp; API References</div>
+        <p style="font-size:14px;color:#2a2a3a;margin-bottom:10px;">Software changes with each release cycle. Quarterly re-indexing is the minimum. Tie re-indexing to version release events for precision.</p>
+        <div class="s-meta">
+          <span class="s-tag" style="background:rgba(26,122,94,.1);color:var(--accent4);border-color:rgba(26,122,94,.3);">TTL: 90 days</span>
+          <span class="s-tag" style="background:rgba(26,122,94,.07);color:var(--accent4);border-color:rgba(26,122,94,.2);">Soft refresh: Monthly</span>
+          <span class="s-tag" style="background:var(--surface2);color:var(--muted);border-color:var(--border);">Trigger: Release tag webhook</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<pre>
+<span class="cm"># Document TTL Manager</span>
+DOMAIN_TTL = {
+    <span class="st">"financial"</span>: <span class="nm">3600</span>, <span class="st">"news"</span>: <span class="nm">86400</span>, <span class="st">"product"</span>: <span class="nm">604800</span>,
+    <span class="st">"legal"</span>: <span class="nm">2592000</span>, <span class="st">"technical"</span>: <span class="nm">7776000</span>, <span class="st">"historical"</span>: <span class="nm">31536000</span>,
+}
+
+<span class="kw">class</span> <span class="cl">TTLManager</span>:
+    <span class="kw">def</span> <span class="fn">is_expired</span>(self, doc) -> bool:
+        ttl = DOMAIN_TTL.<span class="fn">get</span>(doc.domain, <span class="nm">604800</span>)
+        <span class="kw">return</span> (<span class="fn">time.time</span>() - doc.source_updated_at) > ttl
+
+    <span class="kw">def</span> <span class="fn">has_changed</span>(self, doc, new_content: str) -> bool:
+        new_hash = hashlib.<span class="fn">sha256</span>(new_content.<span class="fn">encode</span>()).<span class="fn">hexdigest</span>()
+        <span class="kw">return</span> new_hash != doc.content_hash
+
+    <span class="kw">async def</span> <span class="fn">evaluate_and_queue</span>(self, doc) -> str:
+        <span class="kw">if</span> self.<span class="fn">is_expired</span>(doc):
+            <span class="kw">await</span> reindex_queue.<span class="fn">push</span>({
+                <span class="st">"doc_id"</span>: doc.doc_id, <span class="st">"url"</span>: doc.source_url,
+                <span class="st">"priority"</span>: <span class="st">"high"</span> <span class="kw">if</span> doc.domain == <span class="st">"financial"</span> <span class="kw">else</span> <span class="st">"normal"</span>
+            })
+            <span class="kw">return</span> <span class="st">"queued_expired"</span>
+        <span class="kw">return</span> <span class="st">"fresh"</span>
+</pre>
+</section>
+
+<div class="div">· · ·</div>
+
+<!--  09 -->
+<section id="prompt-engineering">
+  <h2><span class="sec-num"> 09 — Prompt Engineering</span>Teaching the LLM to Reason About Time</h2>
+  <p>Even with a perfectly fresh retrieval pipeline, the LLM must be explicitly instructed to reason about the temporal status of its context. By default, LLMs blend retrieved context with parametric memory without temporal discrimination — producing responses that are partially current and partially stale with no indication of which is which.</p>
+  <p>A well-designed temporal system prompt enforces four specific behaviors. Each is shown below as a numbered instruction block with its purpose.</p>
+</section>
+</div>
+
+<!-- DIAGRAM 8 -->
+<div class="wide">
+<figure class="diagram">
+<svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono', monospace">
+  <rect width="900" height="360" fill="#ffffff" rx="12"/>
+  <text x="450" y="28" fill="#1a1a22" font-size="15" font-weight="700" text-anchor="middle">TEMPORAL SYSTEM PROMPT — ANATOMY OF EACH COMPONENT</text>
+  <rect x="40" y="50" width="390" height="125" rx="10" fill="#f0f8ff" stroke="#1a6ea0" stroke-width="1.5"/>
+  <rect x="40" y="50" width="390" height="32" rx="10" fill="#1a6ea0"/>
+  <text x="235" y="71" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">① ANCHOR THE MODEL IN TIME</text>
+  <text x="235" y="101" fill="#444" font-size="11" text-anchor="middle">Today's date: {current_date}</text>
+  <text x="235" y="118" fill="#444" font-size="11" text-anchor="middle">Your training data ends ~{cutoff_date}.</text>
+  <text x="235" y="135" fill="#444" font-size="11" text-anchor="middle">Treat any training knowledge as potentially outdated.</text>
+  <text x="235" y="162" fill="#1a6ea0" font-size="10" text-anchor="middle">→ Prevents temporal confusion / Onoda syndrome</text>
+  <rect x="470" y="50" width="390" height="125" rx="10" fill="#fff8f0" stroke="#b06000" stroke-width="1.5"/>
+  <rect x="470" y="50" width="390" height="32" rx="10" fill="#b06000"/>
+  <text x="665" y="71" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">② CONTEXT OVER MEMORY RULE</text>
+  <text x="665" y="101" fill="#444" font-size="11" text-anchor="middle">When retrieved docs and training conflict,</text>
+  <text x="665" y="118" fill="#444" font-size="11" text-anchor="middle">ALWAYS prefer the newer retrieved document.</text>
+  <text x="665" y="135" fill="#444" font-size="11" text-anchor="middle">Do not blend conflicting facts from different dates.</text>
+  <text x="665" y="162" fill="#b06000" font-size="10" text-anchor="middle">→ Prevents parametric override of fresh context</text>
+  <rect x="40" y="200" width="390" height="135" rx="10" fill="#f0fff4" stroke="#1a7a5e" stroke-width="1.5"/>
+  <rect x="40" y="200" width="390" height="32" rx="10" fill="#1a7a5e"/>
+  <text x="235" y="221" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">③ MANDATORY TIMESTAMP CITATION</text>
+  <text x="235" y="255" fill="#444" font-size="11" text-anchor="middle">For every time-sensitive claim, cite the source date:</text>
+  <text x="235" y="272" fill="#444" font-size="11" text-anchor="middle">"According to a March 2025 report from [source]..."</text>
+  <text x="235" y="289" fill="#444" font-size="11" text-anchor="middle">Never state current facts without a date anchor.</text>
+  <text x="235" y="322" fill="#1a7a5e" font-size="10" text-anchor="middle">→ Forces temporal transparency in output</text>
+  <rect x="470" y="200" width="390" height="135" rx="10" fill="#fff5f4" stroke="#c0392b" stroke-width="1.5"/>
+  <rect x="470" y="200" width="390" height="32" rx="10" fill="#c0392b"/>
+  <text x="665" y="221" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">④ UNCERTAINTY FLAG MANDATE</text>
+  <text x="665" y="255" fill="#444" font-size="11" text-anchor="middle">If unsure whether info is current, say:</text>
+  <text x="665" y="272" fill="#444" font-size="11" text-anchor="middle">"As of [date], X was true. This may have changed."</text>
+  <text x="665" y="289" fill="#444" font-size="11" text-anchor="middle">Never present potentially stale data as current fact.</text>
+  <text x="665" y="322" fill="#c0392b" font-size="10" text-anchor="middle">→ Prevents confident-but-stale responses</text>
+</svg>
+<figcaption>Fig. 5 — Four components of a temporal system prompt. Together they give the LLM a coherent framework for reasoning about time, source age, and uncertainty.</figcaption>
+</figure>
+</div>
+
+<div class="article">
+
+<pre>
+<span class="cm"># Temporal system prompt builder</span>
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime
+
+<span class="kw">def</span> <span class="fn">build_temporal_system_prompt</span>(domain, model_cutoff=<span class="st">"early 2024"</span>, retrieved_docs=<span class="kw">None</span>):
+    today = datetime.<span class="fn">utcnow</span>().<span class="fn">strftime</span>(<span class="st">"%B %d, %Y"</span>)
+    <span class="kw">return</span> <span class="st">f"""You are a {domain} assistant with access to retrieved documents.
+
+TEMPORAL CONTEXT:
+- Today's date: {today}
+- Your training cutoff: approximately {model_cutoff}
+- Retrieved documents have their update dates clearly marked
+
+STRICT RULES:
+1. ALWAYS prefer retrieved document facts over training memory for current info
+2. NEVER blend facts from documents with different dates
+3. For time-sensitive claims, cite: "According to [date] data from [source]..."
+4. If no retrieved doc covers a time-sensitive query, say:
+   "My training goes up to {model_cutoff}. Please verify at [source]."
+5. If unsure of recency, add: "As of {model_cutoff}, [claim]. This may have changed."
+"""</span>
+</pre>
+
+<div class="div">· · ·</div>
+
+<!--  10 -->
+<section id="evaluation">
+  <h2><span class="sec-num"> 10 — Measuring Freshness</span>How to Evaluate Your Pipeline's Temporal Accuracy</h2>
+  <p>Building a real-time grounding pipeline without a measurement framework is flying blind. The six metric cards below define the key signals to track in production — what each measures, what your target should be, and when to fire an alert.</p>
+
+  <!-- Metric cards replacing evaluation table -->
+  <div class="metric-grid">
+    <div class="metric-card" style="border-color:var(--accent);">
+      <div class="m-name">Temporal Answer Accuracy (TAA)</div>
+      <div class="m-desc">For queries with known ground-truth current answers, % that are correct <em>today</em> — not just historically.</div>
+      <div class="m-targets">
+        <span class="m-t" style="background:rgba(26,122,94,.12);color:var(--accent4);">Target: &gt;94%</span>
+        <span class="m-t" style="background:rgba(192,57,43,.1);color:var(--accent);">Alert: &lt;88%</span>
+      </div>
+    </div>
+    <div class="metric-card" style="border-color:var(--accent2);">
+      <div class="m-name">Freshness Coverage Rate</div>
+      <div class="m-desc">% of REAL_TIME-classified queries that successfully retrieved live data (not fell back to cached).</div>
+      <div class="m-targets">
+        <span class="m-t" style="background:rgba(26,122,94,.12);color:var(--accent4);">Target: &gt;98%</span>
+        <span class="m-t" style="background:rgba(192,57,43,.1);color:var(--accent);">Alert: &lt;90%</span>
+      </div>
+    </div>
+    <div class="metric-card" style="border-color:var(--accent3);">
+      <div class="m-name">Stale Retrieval Rate</div>
+      <div class="m-desc">% of retrieved documents that are older than their domain's configured TTL at the time of retrieval.</div>
+      <div class="m-targets">
+        <span class="m-t" style="background:rgba(26,122,94,.12);color:var(--accent4);">Target: &lt;2%</span>
+        <span class="m-t" style="background:rgba(192,57,43,.1);color:var(--accent);">Alert: &gt;8%</span>
+      </div>
+    </div>
+    <div class="metric-card" style="border-color:var(--accent4);">
+      <div class="m-name">Parametric Fallback Rate</div>
+      <div class="m-desc">% of time-sensitive queries where the LLM answered entirely from training memory with no retrieved grounding.</div>
+      <div class="m-targets">
+        <span class="m-t" style="background:rgba(26,122,94,.12);color:var(--accent4);">Target: &lt;1%</span>
+        <span class="m-t" style="background:rgba(192,57,43,.1);color:var(--accent);">Alert: &gt;5%</span>
+      </div>
+    </div>
+    <div class="metric-card" style="border-color:var(--accent5);">
+      <div class="m-name">Temporal Uncertainty Rate</div>
+      <div class="m-desc">% of responses that correctly flag temporal uncertainty when the source data may be outdated or incomplete.</div>
+      <div class="m-targets">
+        <span class="m-t" style="background:rgba(26,122,94,.12);color:var(--accent4);">Target: 80–100%</span>
+        <span class="m-t" style="background:rgba(192,57,43,.1);color:var(--accent);">Alert: &lt;60%</span>
+      </div>
+    </div>
+    <div class="metric-card" style="border-color:var(--muted);">
+      <div class="m-name">Grounding Latency P95</div>
+      <div class="m-desc">95th percentile end-to-end response latency for real-time-classified queries, including live API fetch time.</div>
+      <div class="m-targets">
+        <span class="m-t" style="background:rgba(26,122,94,.12);color:var(--accent4);">Target: &lt;800ms</span>
+        <span class="m-t" style="background:rgba(192,57,43,.1);color:var(--accent);">Alert: &gt;1500ms</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pq">
+    <p>"A system that answers from 2023 with full confidence and a system that correctly says 'I'm not sure if this is still current' are both preferable to one that answers from 2023 while presenting itself as fully up to date. Calibrated uncertainty is a feature, not a failure."</p>
+  </div>
+</section>
+
+<div class="div">· · ·</div>
+
+<!--  11 -->
+<section id="what-to-build">
+  <h2><span class="sec-num"> 11 — Decision Framework</span>What to Build and When</h2>
+  <p>After everything covered in this article, the practical question remains: what should you actually build? The answer depends on your domain's temporal decay rate, your latency tolerance, and the cost of a stale answer. The five scenario profiles below map directly to the components described in earlier sections.</p>
+
+  <!-- Scenario profiles replacing final table -->
+  <div class="steps">
+    <div class="step">
+      <div class="step-num" style="background:#1a7a5e;">A</div>
+      <div class="step-body">
+        <div class="s-title">Static Knowledge Base (docs, policies)</div>
+        <p style="font-size:14px;color:#2a2a3a;margin-bottom:10px;">The lightest intervention. Add TTL metadata to every document and inject today's date into the system prompt. These two changes alone eliminate the most common confident-but-stale answers.</p>
+        <div class="s-meta">
+          <span class="s-tag" style="background:rgba(26,122,94,.1);color:var(--accent4);border-color:rgba(26,122,94,.3);">Added latency: &lt;5ms</span>
+          <span class="s-tag" style="background:rgba(26,122,94,.07);color:var(--accent4);border-color:rgba(26,122,94,.2);">Engineering cost: Low</span>
+          <span class="s-tag" style="background:var(--surface2);color:var(--muted);border-color:var(--border);">Components: TTL + temporal prompt</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#1a7a9e;">B</div>
+      <div class="step-body">
+        <div class="s-title">Product / Pricing Assistant</div>
+        <p style="font-size:14px;color:#2a2a3a;margin-bottom:10px;">Prices change frequently enough to need filtered vector search. Add the freshness-weighted retrieval layer with a 7-day TTL on product chunks. CMS webhook triggers re-indexing on price changes.</p>
+        <div class="s-meta">
+          <span class="s-tag" style="background:rgba(26,122,158,.1);color:var(--accent2);border-color:rgba(26,122,158,.3);">Added latency: ~20ms</span>
+          <span class="s-tag" style="background:rgba(26,122,158,.07);color:var(--accent2);border-color:rgba(26,122,158,.2);">Engineering cost: Low–Medium</span>
+          <span class="s-tag" style="background:var(--surface2);color:var(--muted);border-color:var(--border);">+ Freshness-filtered vector search</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#b06000;">C</div>
+      <div class="step-body">
+        <div class="s-title">News / Research Assistant</div>
+        <p style="font-size:14px;color:#2a2a3a;margin-bottom:10px;">Requires the temporal classifier plus a live search API for REAL_TIME queries. The classifier routes breaking-news queries away from the vector DB entirely to live search, preventing stale results at the structural level.</p>
+        <div class="s-meta">
+          <span class="s-tag" style="background:rgba(176,96,0,.1);color:var(--accent3);border-color:rgba(176,96,0,.3);">Added latency: 300–600ms</span>
+          <span class="s-tag" style="background:rgba(176,96,0,.07);color:var(--accent3);border-color:rgba(176,96,0,.2);">Engineering cost: Medium</span>
+          <span class="s-tag" style="background:var(--surface2);color:var(--muted);border-color:var(--border);">+ Temporal classifier + live API</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#c0392b;">D</div>
+      <div class="step-body">
+        <div class="s-title">Financial / Market Assistant</div>
+        <p style="font-size:14px;color:#2a2a3a;margin-bottom:10px;">The full pipeline with streaming live data feeds. Market data flows into a hot cache that the retrieval layer reads before touching the vector DB. The composite freshness score weights freshness at 0.70 — relevance is secondary to currency.</p>
+        <div class="s-meta">
+          <span class="s-tag" style="background:rgba(192,57,43,.1);color:var(--accent);border-color:rgba(192,57,43,.3);">Added latency: 100–500ms</span>
+          <span class="s-tag" style="background:rgba(192,57,43,.07);color:var(--accent);border-color:rgba(192,57,43,.2);">Engineering cost: High</span>
+          <span class="s-tag" style="background:var(--surface2);color:var(--muted);border-color:var(--border);">Full pipeline + streaming feeds</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:#7d3c98;">E</div>
+      <div class="step-body">
+        <div class="s-title">Enterprise Knowledge Assistant</div>
+        <p style="font-size:14px;color:#2a2a3a;margin-bottom:10px;">The complete system with webhook-driven re-indexing across all internal knowledge sources. Every document carries TTL metadata, every source triggers re-indexing on update, and the temporal classifier routes across four tiers at query time.</p>
+        <div class="s-meta">
+          <span class="s-tag" style="background:rgba(125,60,152,.1);color:var(--accent5);border-color:rgba(125,60,152,.3);">Added latency: 50–300ms</span>
+          <span class="s-tag" style="background:rgba(125,60,152,.07);color:var(--accent5);border-color:rgba(125,60,152,.2);">Engineering cost: High</span>
+          <span class="s-tag" style="background:var(--surface2);color:var(--muted);border-color:var(--border);">Full pipeline + webhook re-indexing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="ico">✅</div>
+    <div class="body"><strong>Start Here — Two Things You Can Do Today:</strong> First, add <code>source_updated_at</code> timestamps to every document you index. This single metadata field unlocks all freshness filtering with no re-architecture. Second, add today's date and a temporal instruction to your system prompt. These two changes eliminate the most common form of confident-but-stale answers before you build anything else.</div>
+  </div>
+
+  <p>Hiroo Onoda eventually learned the war was over. In 1974, his former commanding officer flew to the Philippine jungle and personally delivered the news. Only then did he lay down his rifle. Your LLM is waiting for the same thing — not a model update or a larger parameter count, but a deliberate, engineered flow of current information that tells it what the world looks like today. That is the real-time grounding pipeline. And it is entirely within your power to build.</p>
+
+  <div class="stat-row">
+    <div class="stat"><span class="n">4</span><span class="l">Temporal retrieval tiers in the full architecture</span></div>
+    <div class="stat"><span class="n">2</span><span class="l">Lines of code for the most important first step</span></div>
+    <div class="stat"><span class="n">94%+</span><span class="l">Target Temporal Answer Accuracy for production</span></div>
+    <div class="stat"><span class="n">0</span><span class="l">Excuses for serving 2023 data in 2025</span></div>
+  </div>
+</section>
+
+<div class="div">· · ·</div>
+
+<section>
+  <h2><span class="sec-num">References</span>Further Reading</h2>
+  <p style="font-size:15px;line-height:2.1;color:#6b6880;">
+    Lewis et al. (2020). <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.</em> NeurIPS 2020.<br>
+    Kasai et al. (2023). <em>RealTime QA: What's the Answer Right Now?</em> NeurIPS 2023.<br>
+    Vu et al. (2023). <em>FreshLLMs: Refreshing Large Language Models with Search Engine Augmentation.</em> arXiv:2310.03214<br>
+    Lazaridou et al. (2022). <em>Internet-Augmented Language Models Through Few-Shot Prompting for Open-Domain QA.</em> arXiv:2203.05115<br>
+    Dhingra et al. (2022). <em>Time-Sensitive Question Answering Dataset.</em> ACL 2022.<br>
+    Chen et al. (2022). <em>FLARE: Active Retrieval Augmented Generation.</em> arXiv:2305.06983<br>
+    Gao et al. (2022). <em>Precise Zero-Shot Dense Retrieval without Relevance Labels (HyDE).</em> arXiv:2212.10496<br>
+    Shi et al. (2023). <em>REPLUG: Retrieval-Augmented Black-Box Language Models.</em> arXiv:2301.12652
+  </p>
+</section>
+
+</div>
+    </div>
 
     <div class="article-cta">
       <h4>Continue Exploring</h4>
